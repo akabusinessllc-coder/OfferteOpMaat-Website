@@ -336,16 +336,8 @@
 <div style="position: relative; max-width: 1180px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px)">
   <span style="position: fixed; inset: 0; z-index: -1; background: radial-gradient(900px 600px at 78% 18%, oklch(0.42 0.14 255 / 0.35), transparent 70%), radial-gradient(700px 500px at 10% 90%, oklch(0.35 0.10 265 / 0.25), transparent 70%), var(--bg)"></span>
 
-  <header style="position: sticky; top: 0; z-index: 20; display: flex; flex-wrap: nowrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding: 16px clamp(20px, 4vw, 48px); margin: 0 calc(-1 * clamp(20px, 4vw, 48px)); background: oklch(0.15 0.018 265 / 0.8); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line)">
+  <header style="display: flex; align-items: center; justify-content: center; padding: 20px clamp(20px, 4vw, 48px); margin: 0 calc(-1 * clamp(20px, 4vw, 48px)); border-bottom: 1px solid var(--line)">
     <a href="#" style="display: inline-flex; align-items: center; gap: 10px; color: #fff; text-decoration: none" style-hover="color: #fff"><img src="assets/90fb7dbf.png" alt="" style="display: block; width: 30px; height: auto"><span style="font-family: Manrope, sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.02em">Offerte<span style="color: oklch(0.66 0.19 252)">Op</span>Maat</span></a>
-    <nav style="display: flex; flex-wrap: nowrap; white-space: nowrap; align-items: center; gap: 10px clamp(14px, 2vw, 26px); font-size: 15px; color: oklch(0.78 0.015 260)">
-      <sc-if value="{{ desktop }}" hint-placeholder-val="{{ true }}"><a href="#werkwijze" style="color: inherit" style-hover="color: var(--ac)">Werkwijze</a></sc-if>
-      <sc-if value="{{ desktop }}" hint-placeholder-val="{{ true }}"><a href="#werk" style="color: inherit" style-hover="color: var(--ac)">Werk</a></sc-if>
-      <sc-if value="{{ desktop }}" hint-placeholder-val="{{ true }}"><a href="#prijs" style="color: inherit" style-hover="color: var(--ac)">Prijs</a></sc-if>
-      <sc-if value="{{ desktop }}" hint-placeholder-val="{{ true }}"><a href="#faq" style="color: inherit" style-hover="color: var(--ac)">Vragen</a></sc-if>
-      <sc-if value="{{ desktop }}" hint-placeholder-val="{{ true }}"><a href="Over%20ons.dc.html" style="color: inherit" style-hover="color: var(--ac)">Over ons</a></sc-if>
-      <a href="#prijs" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 {{ navKnopPad }}; border-radius: 999px; background: var(--ac); color: #fff; font-weight: 600; font-size: {{ navKnopFont }}" style-hover="background: var(--ac2); color: #fff">{{ navKnopTekst }}</a>
-    </nav>
   </header>
 
   <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: clamp(32px, 5vw, 64px); align-items: center; padding: clamp(36px, 6vw, 80px) 0 clamp(32px, 5vw, 56px)">
@@ -355,10 +347,7 @@
       </p>
       <h1 style="margin: 0; max-width: 20ch; font-family: Manrope, sans-serif; font-weight: 800; font-size: clamp(40px, 5.6vw, 76px); line-height: 0.94; letter-spacing: -0.04em; text-wrap: pretty">Zelfde aanvragen.<br><span style="color: var(--ac)">63% meer geaccepteerde klussen.</span></h1>
       <p style="margin: 26px 0 0; max-width: 46ch; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.55; color: oklch(0.78 0.015 260); text-wrap: pretty">Niet harder werken. Niet meer adverteren. Een offerte die verkoopt op het moment dat je klant beslist.</p>
-      <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px">
-        <a href="#prijs" style="display: inline-flex; align-items: center; gap: 10px; min-height: 54px; padding: 0 30px; border-radius: 999px; background: var(--ac); color: #fff; font-weight: 600; font-size: 17px" style-hover="background: var(--ac2); color: #fff">Ja, ik wil meer klussen <span style="font-family: Archivo, sans-serif; font-weight: 600">→</span></a>
-        <a href="#werk" style="display: inline-flex; align-items: center; min-height: 54px; padding: 0 30px; border-radius: 999px; border: 1px solid var(--line2); color: oklch(0.97 0.005 260); font-size: 17px" style-hover="border-color: var(--ac); color: oklch(0.97 0.005 260)">Bekijk wat je krijgt</a>
-      </div>
+      
       <p style="margin: 22px 0 0; font-family: Archivo, sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.03em; color: oklch(0.66 0.015 260)">Binnen één klus terugverdiend · geen abonnement · antwoord binnen 1 werkdag</p>
     </div>
 
@@ -440,14 +429,7 @@
         <p style="margin: 0; padding: 0 4px 4px; font-size: 15px; line-height: 1.5; color: oklch(0.78 0.015 260)">Uitleg, werkwijze, planning en garantie. De klant ziet waarom hij voor jou kiest.</p>
       </div>
     </div>
-    <div style="display: grid; grid-template-columns: {{ featCols }}; gap: 10px">
-      <sc-for list="{{ features }}" as="f" hint-placeholder-count="4">
-        <div style="display: grid; gap: 8px; align-content: start; padding: 16px 18px; border-radius: 14px; border: 1px solid oklch(0.30 0.03 262); background: oklch(0.19 0.024 265 / 0.6)">
-          <span style="display: flex; align-items: center; min-height: 2.6em; gap: 10px; font-size: 15px; font-weight: 600; line-height: 1.3"><svg width="12" height="14" sc-camel-view-box="0 0 12 14" style="flex: none; color: var(--ac2)"><path d="M6 0.5L11.5 7L6 13.5L0.5 7Z" fill="currentColor"></path></svg>{{ f.titel }}</span>
-          <span style="font-size: 13px; line-height: 1.5; color: oklch(0.76 0.015 260)">{{ f.tekst }}</span>
-        </div>
-      </sc-for>
-    </div>
+    
   </section>
 
   <section style="padding: clamp(40px, 6vw, 76px) 0; border-top: 1px solid var(--line)">
@@ -467,6 +449,9 @@
         </sc-if>
         </div>
       </sc-for>
+    </div>
+    <div style="display: flex; justify-content: center; margin-top: 8px">
+      <a href="#prijs" style="display: inline-flex; align-items: center; gap: 10px; min-height: 54px; padding: 0 30px; border-radius: 999px; background: var(--ac); color: #fff; font-weight: 600; font-size: 17px" style-hover="background: var(--ac2); color: #fff">Ja, ik wil meer klussen <span style="font-family: Archivo, sans-serif; font-weight: 600">→</span></a>
     </div>
   </section>
 
