@@ -336,7 +336,7 @@
 <div style="position: relative; max-width: 1180px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px)">
   <span style="position: fixed; inset: 0; z-index: -1; background: radial-gradient(900px 600px at 78% 18%, oklch(0.42 0.14 255 / 0.35), transparent 70%), radial-gradient(700px 500px at 10% 90%, oklch(0.35 0.10 265 / 0.25), transparent 70%), var(--bg)"></span>
 
-  <header style="position: sticky; top: 0; z-index: 20; display: flex; flex-wrap: nowrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding: 16px 0; background: oklch(0.15 0.018 265 / 0.8); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line)">
+  <header style="position: sticky; top: 0; z-index: 20; display: flex; flex-wrap: nowrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding: 16px clamp(20px, 4vw, 48px); margin: 0 calc(-1 * clamp(20px, 4vw, 48px)); background: oklch(0.15 0.018 265 / 0.8); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line)">
     <a href="#" style="display: inline-flex; align-items: center; gap: 10px; color: #fff; text-decoration: none" style-hover="color: #fff"><img src="assets/90fb7dbf.png" alt="" style="display: block; width: 30px; height: auto"><span style="font-family: Manrope, sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.02em">Offerte<span style="color: oklch(0.66 0.19 252)">Op</span>Maat</span></a>
     <nav style="display: flex; flex-wrap: nowrap; white-space: nowrap; align-items: center; gap: 10px clamp(14px, 2vw, 26px); font-size: 15px; color: oklch(0.78 0.015 260)">
       <sc-if value="{{ desktop }}" hint-placeholder-val="{{ true }}"><a href="#werkwijze" style="color: inherit" style-hover="color: var(--ac)">Werkwijze</a></sc-if>
