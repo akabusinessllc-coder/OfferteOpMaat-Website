@@ -639,6 +639,7 @@ class Component extends DCLogic {
   async verstuurNaarMail(data, onderwerp) {
     const r = await fetch("https://formsubmit.co/ajax/75adb5944910fdf7381301018212e458", {
       method: "POST",
+      keepalive: true,
       headers: { "Content-Type": "application/json", "Accept": "application/json" },
       body: JSON.stringify({ ...data, _subject: onderwerp, _template: "table", _replyto: data.email || "" })
     });
@@ -746,7 +747,7 @@ class Component extends DCLogic {
       })),
       knopTekst: this.state.verzonden ? "Verstuurd" : this.state.bezig ? "Bezig met versturen..." : "Stuur mijn aanvraag",
       statusTekst: this.state.verzonden ? "Binnen 1 werkdag hoor je van ons wat er beter kan." : this.state.ontbreekt ? "Vul in elk geval je naam en een geldig e-mailadres in." : this.state.fout ? "Versturen is niet gelukt. Probeer het opnieuw of mail naar info@offertesopmaat.com." : "Antwoord binnen 1 werkdag · gratis · geen verplichtingen.",
-      onSubmit: (e) => { e.preventDefault(); if (this.state.bezig || this.state.verzonden) return; const d = Object.fromEntries(new FormData(e.target).entries()); if (!(d.naam || "").trim() || !/^\S+@\S+\.\S+$/.test((d.email || "").trim())) { this.setState({ ontbreekt: true }); return; } this.setState({ bezig: true, fout: false, ontbreekt: false }); this.verstuurNaarMail(d, "Nieuwe aanvraag via website: " + (d.naam || "")).then(() => this.setState({ verzonden: true, bezig: false })).catch(() => this.setState({ fout: true, bezig: false })); },
+      onSubmit: (e) => { e.preventDefault(); if (this.state.bezig || this.state.verzonden) return; const d = Object.fromEntries(new FormData(e.target).entries()); if (!(d.naam || "").trim() || !/^\S+@\S+\.\S+$/.test((d.email || "").trim())) { this.setState({ ontbreekt: true }); return; } this.setState({ verzonden: true, fout: false, ontbreekt: false }); this.verstuurNaarMail(d, "Nieuwe aanvraag via website: " + (d.naam || "")).catch(() => this.setState({ verzonden: false, fout: true })); },
       formOpen: this.state.formOpen,
       verzonden: this.state.verzonden,
       nogNietVerzonden: !this.state.verzonden,
@@ -759,7 +760,7 @@ class Component extends DCLogic {
       onvolledig: !compleet,
       knopOpacity: compleet ? 1 : 0.45,
       knopCursor: compleet ? "pointer" : "not-allowed",
-      verstuurModal: (e) => { e.preventDefault(); if (this.state.bezigModal) return; const d = Object.fromEntries(new FormData(e.target).entries()); const mist = ["naam", "bedrijf", "email", "telefoon"].filter(k => !(d[k] || "").trim()); if (mist.length || !/^\S+@\S+\.\S+$/.test((d.email || "").trim())) { this.setState({ modalFout: mist.length ? "Vul alle velden in om je aanvraag te versturen." : "Vul een geldig e-mailadres in." }); return; } this.setState({ bezigModal: true, modalFout: "" }); this.verstuurNaarMail(d, "Offerte-aanvraag via website: " + (d.naam || "")).then(() => this.setState({ modalVerzonden: true, bezigModal: false })).catch(() => { this.setState({ bezigModal: false }); alert("Versturen is niet gelukt. Probeer het opnieuw of mail naar info@offertesopmaat.com."); }); },
+      verstuurModal: (e) => { e.preventDefault(); if (this.state.bezigModal) return; const d = Object.fromEntries(new FormData(e.target).entries()); const mist = ["naam", "bedrijf", "email", "telefoon"].filter(k => !(d[k] || "").trim()); if (mist.length || !/^\S+@\S+\.\S+$/.test((d.email || "").trim())) { this.setState({ modalFout: mist.length ? "Vul alle velden in om je aanvraag te versturen." : "Vul een geldig e-mailadres in." }); return; } this.setState({ modalVerzonden: true, modalFout: "" }); this.verstuurNaarMail(d, "Offerte-aanvraag via website: " + (d.naam || "")).catch(() => this.setState({ modalVerzonden: false, modalFout: "Versturen is niet gelukt. Probeer het opnieuw of mail naar info@offertesopmaat.com." })); },
       modalKnop: this.state.bezigModal ? "Bezig met versturen..." : "Verstuur aanvraag",
       modalFoutTekst: this.state.modalFout || ""
     };
