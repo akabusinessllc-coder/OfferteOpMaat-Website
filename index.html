@@ -463,7 +463,7 @@
       </div>
       <p style="margin: 0; max-width: 34ch; font-size: 15px; line-height: 1.55; color: oklch(0.78 0.015 260)">Geen standaardsjabloon. Een hovenier verkoopt anders dan een installateur, dus schrijven we het anders.</p>
     </div>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 20px">
+    <div style="display: grid; grid-template-columns: {{ werkCols }}; gap: 28px 20px">
       <div>
         <div style="position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: var(--bg2); border-radius: 18px">
           <img src="assets/2dd07685.webp" alt="Aannemer" style="display: block; width: 100%; height: 100%; object-fit: cover">
@@ -494,15 +494,50 @@
         <p style="margin: 14px 0 0; font-size: 17px; font-weight: 600">Installatiebedrijf</p>
         <p style="margin: 5px 0 0; font-size: 15px; line-height: 1.5; color: oklch(0.78 0.015 260)">Technische specs naast een prijsblok dat de klant wél begrijpt.</p>
       </div>
+      <div>
+        <div style="position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: var(--bg2); border-radius: 18px">
+          <img src="assets/werk-tuinarchitect.webp" alt="Offerte tuinarchitect" loading="lazy" style="display: block; width: 100%; height: 100%; object-fit: cover">
+          <span style="position: absolute; top: 12px; left: 12px; display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 999px; background: var(--ac); color: #fff; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase">
+            <span style="width: 5px; height: 5px; border-radius: 50%; background: #fff"></span>Rustig &amp; natuurlijk
+          </span>
+        </div>
+        <p style="margin: 14px 0 0; font-size: 17px; font-weight: 600">Tuinarchitect</p>
+        <p style="margin: 5px 0 0; font-size: 15px; line-height: 1.5; color: oklch(0.78 0.015 260)">Een werkwijze in vier stappen, zodat de klant zijn tuin al voor zich ziet.</p>
+      </div>
+      <div>
+        <div style="position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: var(--bg2); border-radius: 18px">
+          <img src="assets/werk-schilder.webp" alt="Offerte schildersbedrijf" loading="lazy" style="display: block; width: 100%; height: 100%; object-fit: cover">
+          <span style="position: absolute; top: 12px; left: 12px; display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 999px; background: var(--ac); color: #fff; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase">
+            <span style="width: 5px; height: 5px; border-radius: 50%; background: #fff"></span>Fris &amp; modern
+          </span>
+        </div>
+        <p style="margin: 14px 0 0; font-size: 17px; font-weight: 600">Schildersbedrijf</p>
+        <p style="margin: 5px 0 0; font-size: 15px; line-height: 1.5; color: oklch(0.78 0.015 260)">Kleuradvies, planning per week en garantie in één oogopslag.</p>
+      </div>
+      <div>
+        <div style="position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: var(--bg2); border-radius: 18px">
+          <img src="assets/werk-dakdekker.webp" alt="Offerte dakdekker" loading="lazy" style="display: block; width: 100%; height: 100%; object-fit: cover">
+          <span style="position: absolute; top: 12px; left: 12px; display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 999px; background: var(--ac); color: #fff; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase">
+            <span style="width: 5px; height: 5px; border-radius: 50%; background: #fff"></span>Stoer &amp; premium
+          </span>
+        </div>
+        <p style="margin: 14px 0 0; font-size: 17px; font-weight: 600">Dakdekker</p>
+        <p style="margin: 5px 0 0; font-size: 15px; line-height: 1.5; color: oklch(0.78 0.015 260)">Garantie en vaste prijs vooraan, waar de klant ze meteen ziet.</p>
+      </div>
     </div>
   </section>
 
   <section id="prijs" style="padding: clamp(40px, 6vw, 80px) 0; border-top: 1px solid var(--line)">
+    <div style="margin-bottom: 32px">
+      <p style="margin: 0 0 14px; font-family: Archivo, sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ac)"><span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 9px; background: var(--ac); vertical-align: middle"></span>Prijs</p>
+      <h2 style="margin: 0; font-family: Manrope, sans-serif; font-weight: 700; font-size: clamp(28px, 3.6vw, 44px); line-height: 1.05; letter-spacing: -0.03em">Wat kost het?</h2>
+    </div>
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); gap: clamp(28px, 4vw, 56px); align-items: center; padding: clamp(30px, 4vw, 52px); background: #fff; color: oklch(0.18 0.02 265); border-radius: 24px; border: 1px solid oklch(0.62 0.19 255 / 0.5); box-shadow: 0 0 0 6px oklch(0.62 0.19 255 / 0.14), 0 30px 80px -30px oklch(0.55 0.2 258 / 0.55)">
       <div>
-        <p style="margin: 0 0 14px; font-family: Archivo, sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ac)"><span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 9px; background: var(--ac); vertical-align: middle"></span>Prijs</p>
+        
         <h2 style="margin: 0; font-family: Manrope, sans-serif; font-weight: 700; font-size: clamp(30px, 3.8vw, 46px); line-height: 1.04; letter-spacing: -0.03em">Reken het zelf even uit</h2>
-        <p style="margin: 18px 0 0; max-width: 42ch; font-size: 17px; line-height: 1.6; color: oklch(0.42 0.02 265); text-wrap: pretty">Eén extra klus die je hierdoor binnenhaalt is al een veelvoud van {{ prijs }}. En het is geen abonnement: je betaalt één keer en verstuurt hem de rest van je carrière. De vraag is niet of dit uit kan, maar hoeveel klussen je nog laat lopen zolang je het niet doet.</p>
+        <p style="margin: 18px 0 0; max-width: 42ch; font-size: 17px; line-height: 1.6; color: oklch(0.42 0.02 265); text-wrap: pretty">Eén extra klus levert je al vele malen meer op dan {{ prijs }}. En je betaalt maar één keer: geen abonnement, geen maandkosten. Je gebruikt je offerte de rest van je carrière.</p>
+        <p style="margin: 14px 0 0; max-width: 42ch; font-size: 17px; line-height: 1.6; font-weight: 600; color: oklch(0.18 0.02 265); text-wrap: pretty">De echte vraag is dus niet wat deze offerte kost. Maar hoeveel klussen je oude offerte je kost, elke week opnieuw.</p>
       </div>
       <div style="display: grid; gap: 22px">
         <p style="margin: 0; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap">
@@ -544,15 +579,16 @@
       <a href="#prijs" style="display: inline-flex; align-items: center; min-height: 52px; margin-top: 26px; padding: 0 24px; border-radius: 999px; border: 1px solid var(--line2); color: #fff; font-weight: 600; font-size: 16px" style-hover="border-color: var(--ac); color: #fff">Plan een gesprek van 15 min →</a>
       <p style="margin: 10px 0 0; font-family: Archivo, sans-serif; font-weight: 600; font-size: 11px; color: oklch(0.6 0.015 260)">[link naar je Calendly invullen]</p>
     </div>
+    <sc-if value="{{ nogNietVerzonden }}" hint-placeholder-val="{{ true }}">
     <form sc-camel-on-submit="{{ onSubmit }}" style="display: grid; gap: 14px; align-content: start">
       <label style="display: grid; gap: 7px; font-family: Archivo, sans-serif; font-weight: 600; font-size: 13px; color: oklch(0.85 0.01 260)">Naam
-        <input type="text" name="naam" placeholder="Jouw naam" style="min-height: 50px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--line2); background: oklch(0.13 0.018 265); color: #fff; font-family: Archivo, sans-serif; font-size: 16px" style-focus="border-color: var(--ac); box-shadow: 0 0 0 3px oklch(0.62 0.19 255 / 0.25); outline: none">
+        <input type="text" name="naam" required placeholder="Jouw naam" style="min-height: 50px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--line2); background: oklch(0.13 0.018 265); color: #fff; font-family: Archivo, sans-serif; font-size: 16px" style-focus="border-color: var(--ac); box-shadow: 0 0 0 3px oklch(0.62 0.19 255 / 0.25); outline: none">
       </label>
       <label style="display: grid; gap: 7px; font-family: Archivo, sans-serif; font-weight: 600; font-size: 13px; color: oklch(0.85 0.01 260)">Bedrijf en vak
         <input type="text" name="bedrijf" placeholder="bv. hovenier, 2 man" style="min-height: 50px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--line2); background: oklch(0.13 0.018 265); color: #fff; font-family: Archivo, sans-serif; font-size: 16px" style-focus="border-color: var(--ac); box-shadow: 0 0 0 3px oklch(0.62 0.19 255 / 0.25); outline: none">
       </label>
       <label style="display: grid; gap: 7px; font-family: Archivo, sans-serif; font-weight: 600; font-size: 13px; color: oklch(0.85 0.01 260)">E-mail
-        <input type="email" name="email" placeholder="naam@bedrijf.nl" style="min-height: 50px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--line2); background: oklch(0.13 0.018 265); color: #fff; font-family: Archivo, sans-serif; font-size: 16px" style-focus="border-color: var(--ac); box-shadow: 0 0 0 3px oklch(0.62 0.19 255 / 0.25); outline: none">
+        <input type="email" name="email" required placeholder="naam@bedrijf.nl" style="min-height: 50px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--line2); background: oklch(0.13 0.018 265); color: #fff; font-family: Archivo, sans-serif; font-size: 16px" style-focus="border-color: var(--ac); box-shadow: 0 0 0 3px oklch(0.62 0.19 255 / 0.25); outline: none">
       </label>
       <label style="display: grid; gap: 7px; font-family: Archivo, sans-serif; font-weight: 600; font-size: 13px; color: oklch(0.85 0.01 260)">Waar loop je nu tegenaan?
         <textarea name="bericht" rows="4" placeholder="Bijvoorbeeld: klanten vragen om bedenktijd en komen dan niet terug." style="padding: 13px 16px; border-radius: 12px; border: 1px solid var(--line2); background: oklch(0.13 0.018 265); color: #fff; font-family: Archivo, sans-serif; font-size: 16px; line-height: 1.5; resize: vertical" style-focus="border-color: var(--ac); box-shadow: 0 0 0 3px oklch(0.62 0.19 255 / 0.25); outline: none"></textarea>
@@ -560,6 +596,17 @@
       <button type="submit" style="min-height: 54px; margin-top: 4px; border-radius: 999px; border: 0; background: var(--ac); color: #fff; font-size: 17px; font-weight: 600; cursor: pointer" style-hover="background: var(--ac2)">{{ knopTekst }}</button>
       <p style="margin: 0; font-family: Archivo, sans-serif; font-weight: 600; font-size: 12px; color: oklch(0.66 0.015 260)">{{ statusTekst }}</p>
     </form>
+    </sc-if>
+    <sc-if value="{{ verzonden }}" hint-placeholder-val="{{ false }}">
+      <div style="display: grid; place-items: center; align-content: center; gap: 18px; min-height: 380px; text-align: center">
+        <svg width="96" height="96" sc-camel-view-box="0 0 88 88" style="animation: omPop 0.5s cubic-bezier(.2,.8,.3,1.2) both">
+          <circle cx="44" cy="44" r="42" fill="oklch(0.62 0.19 255)"></circle>
+          <path d="M26 45 L39 58 L63 32" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="60" stroke-dashoffset="60" style="animation: omDraw 0.45s 0.35s ease-out forwards"></path>
+        </svg>
+        <p style="margin: 0; font-family: Manrope, sans-serif; font-weight: 700; font-size: 24px; letter-spacing: -0.02em; animation: omFade 0.4s 0.6s both">Je aanvraag is verzonden</p>
+        <p style="margin: 0; font-size: 15px; color: oklch(0.78 0.015 260); animation: omFade 0.4s 0.7s both">Binnen 1 werkdag hoor je van ons.</p>
+      </div>
+    </sc-if>
   </section>
 
   <footer style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 28px 0 48px; border-top: 1px solid var(--line); font-family: Archivo, sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 0.04em; color: oklch(0.66 0.015 260)">
@@ -588,7 +635,7 @@
               <circle cx="44" cy="44" r="42" fill="oklch(0.62 0.19 255)"></circle>
               <path d="M26 45 L39 58 L63 32" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="60" stroke-dashoffset="60" style="animation: omDraw 0.45s 0.35s ease-out forwards"></path>
             </svg>
-            <p style="margin: 0; font-family: Manrope, sans-serif; font-weight: 700; font-size: 24px; letter-spacing: -0.02em; animation: omFade 0.4s 0.6s both">Uw aanvraag is verzonden</p>
+            <p style="margin: 0; font-family: Manrope, sans-serif; font-weight: 700; font-size: 24px; letter-spacing: -0.02em; animation: omFade 0.4s 0.6s both">Je aanvraag is verzonden</p>
           </div>
         </sc-if>
       </div>
@@ -602,7 +649,7 @@ class Component extends DCLogic {
   state = { open: 0, verzonden: false, formOpen: false, modalVerzonden: false, velden: {}, stap: 0, vol: false, breed: (document.documentElement.clientWidth || window.innerWidth || 1200) };
   duur = 3200;
   stappenData = [
-    { nr: "01", titel: "15 minuten bellen", tekst: "Jij vertelt over je werk en je klanten. Daarna weten wij precies hoe jouw offerte moet klinken en eruitzien." },
+    { nr: "01", titel: "15 minuten bellen", tekst: "Jij vertelt over je werk en je klanten. Zo weten wij precies hoe jouw offerte moet klinken en eruit moet zien." },
     { nr: "02", titel: "Onze copywriter", tekst: "Een professionele copywriter deelt jouw offerte op psychologisch niveau in en zet jouw vakmanschap om in teksten die je klant overtuigen." },
     { nr: "03", titel: "Onze designers", tekst: "Onze designers gaan aan de slag met jouw herbruikbare custom offerte. Zo oog je als het grootste bedrijf in de vergelijking." },
     { nr: "04", titel: "Jij hebt het laatste woord", tekst: "Je krijgt je offerte opgestuurd. Wat anders moet, passen we aan tot jij er zelf achter staat." },
@@ -616,6 +663,16 @@ class Component extends DCLogic {
       this.raf = requestAnimationFrame(() => requestAnimationFrame(() => this.setState({ vol: true })));
       this.t = setTimeout(() => this.gaNaar((i + 1) % this.stappenData.length), this.duur + 400);
     });
+  }
+
+  async verstuurNaarMail(data, onderwerp) {
+    const r = await fetch("https://formsubmit.co/ajax/info@offertesopmaat.com", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify({ ...data, _subject: onderwerp, _template: "table", _replyto: data.email || "" })
+    });
+    if (!r.ok) throw new Error("mislukt");
+    return r.json();
   }
 
   renderVals() {
@@ -636,6 +693,7 @@ class Component extends DCLogic {
       navKnopPad: desktop ? "22px" : "16px",
       navKnopFont: desktop ? "15px" : "14px",
       navKnopTekst: b > 560 ? "Meer klussen binnenhalen" : "Meer klussen",
+      werkCols: b > 860 ? "repeat(3, minmax(0, 1fr))" : b > 540 ? "repeat(2, minmax(0, 1fr))" : "1fr",
       featCols: b > 1000 ? "repeat(4, minmax(0, 1fr))" : b > 560 ? "repeat(2, minmax(0, 1fr))" : "1fr",
       accentkleur: this.props.accentkleur ?? "Limoen (nu)",
       achtergrond: this.props.achtergrond ?? "Blauwzwart (nu)",
@@ -715,10 +773,12 @@ class Component extends DCLogic {
         teken: this.state.open === i ? "−" : "+",
         toggle: () => this.setState(s => ({ open: s.open === i ? -1 : i }))
       })),
-      knopTekst: this.state.verzonden ? "Verstuurd" : "Stuur mijn aanvraag",
-      statusTekst: this.state.verzonden ? "Binnen 1 werkdag hoor je van ons wat er beter kan." : "Antwoord binnen 1 werkdag · gratis · geen verplichtingen.",
-      onSubmit: (e) => { e.preventDefault(); this.setState({ verzonden: true }); },
+      knopTekst: this.state.verzonden ? "Verstuurd" : this.state.bezig ? "Bezig met versturen..." : "Stuur mijn aanvraag",
+      statusTekst: this.state.verzonden ? "Binnen 1 werkdag hoor je van ons wat er beter kan." : this.state.fout ? "Versturen is niet gelukt. Probeer het opnieuw of mail naar info@offertesopmaat.com." : "Antwoord binnen 1 werkdag · gratis · geen verplichtingen.",
+      onSubmit: (e) => { e.preventDefault(); if (this.state.bezig || this.state.verzonden) return; const d = Object.fromEntries(new FormData(e.target).entries()); this.setState({ bezig: true, fout: false }); this.verstuurNaarMail(d, "Nieuwe aanvraag via website: " + (d.naam || "")).then(() => this.setState({ verzonden: true, bezig: false })).catch(() => this.setState({ fout: true, bezig: false })); },
       formOpen: this.state.formOpen,
+      verzonden: this.state.verzonden,
+      nogNietVerzonden: !this.state.verzonden,
       modalVerzonden: this.state.modalVerzonden,
       nietVerzonden: !this.state.modalVerzonden,
       openForm: (e) => { e && e.preventDefault(); this.setState({ formOpen: true, modalVerzonden: false, velden: {} }); },
@@ -728,7 +788,7 @@ class Component extends DCLogic {
       onvolledig: !compleet,
       knopOpacity: compleet ? 1 : 0.45,
       knopCursor: compleet ? "pointer" : "not-allowed",
-      verstuurModal: (e) => { e.preventDefault(); if (!compleet) return; this.setState({ modalVerzonden: true }); }
+      verstuurModal: (e) => { e.preventDefault(); if (!compleet || this.state.bezigModal) return; const d = { ...this.state.velden }; this.setState({ bezigModal: true }); this.verstuurNaarMail(d, "Offerte-aanvraag via website: " + (d.naam || "")).then(() => this.setState({ modalVerzonden: true, bezigModal: false })).catch(() => { this.setState({ bezigModal: false }); alert("Versturen is niet gelukt. Probeer het opnieuw of mail naar info@offertesopmaat.com."); }); }
     };
   }
 }
