@@ -585,8 +585,8 @@
   </footer>
 
   <sc-if value="{{ formOpen }}" hint-placeholder-val="{{ false }}">
-    <div sc-camel-on-click="{{ sluitForm }}" style="position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 20px; background: oklch(0.08 0.02 265 / 0.72); backdrop-filter: blur(6px); overflow-y: auto">
-      <div sc-camel-on-click="{{ stop }}" style="position: relative; width: 100%; max-width: 440px; padding: clamp(24px, 5vw, 36px); border-radius: 22px; background: var(--bg2); border: 1px solid var(--line2); box-shadow: 0 40px 100px -30px oklch(0.05 0.02 265 / 0.9)">
+    <div sc-camel-on-click="{{ sluitForm }}" style="position: fixed; inset: 0; z-index: 100; display: grid; justify-items: center; padding: 20px; background: oklch(0.08 0.02 265 / 0.72); backdrop-filter: blur(6px); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch">
+      <div sc-camel-on-click="{{ stop }}" style="position: relative; width: 100%; max-width: 440px; margin: auto 0; align-self: center; padding: clamp(24px, 5vw, 36px); border-radius: 22px; background: var(--bg2); border: 1px solid var(--line2); box-shadow: 0 40px 100px -30px oklch(0.05 0.02 265 / 0.9)">
         <button type="button" sc-camel-on-click="{{ sluitForm }}" aria-label="Sluiten" style="position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; border: 0; border-radius: 999px; background: transparent; color: oklch(0.7 0.015 260); font-size: 22px; cursor: pointer" style-hover="background: var(--line)">×</button>
         <sc-if value="{{ nietVerzonden }}" hint-placeholder-val="{{ true }}">
           <h3 style="margin: 0; font-family: Manrope, sans-serif; font-weight: 700; font-size: 26px; letter-spacing: -0.03em">Vraag je offerte aan</h3>
