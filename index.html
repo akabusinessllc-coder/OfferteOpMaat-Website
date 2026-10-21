@@ -637,7 +637,7 @@ class Component extends DCLogic {
   }
 
   async verstuurNaarMail(data, onderwerp) {
-    const r = await fetch("https://formsubmit.co/ajax/info@offertesopmaat.com", {
+    const r = await fetch("https://formsubmit.co/ajax/75adb5944910fdf7381301018212e458", {
       method: "POST",
       headers: { "Content-Type": "application/json", "Accept": "application/json" },
       body: JSON.stringify({ ...data, _subject: onderwerp, _template: "table", _replyto: data.email || "" })
