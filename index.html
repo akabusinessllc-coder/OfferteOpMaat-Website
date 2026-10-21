@@ -596,7 +596,8 @@
             <label style="display: grid; gap: 6px; font-size: 13px; font-weight: 600; color: oklch(0.8 0.015 260)">Bedrijfsnaam<input name="bedrijf" type="text" required="" sc-camel-on-change="{{ zetVeld }}" autocomplete="organization" placeholder="De Vries Bouw" style="min-height: 50px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--line2); background: oklch(0.13 0.018 265); color: #fff; font-size: 16px; outline: none" style-focus="border-color: var(--ac)"></label>
             <label style="display: grid; gap: 6px; font-size: 13px; font-weight: 600; color: oklch(0.8 0.015 260)">E-mail<input name="email" type="email" required="" sc-camel-on-change="{{ zetVeld }}" autocomplete="email" placeholder="jan@devriesbouw.nl" style="min-height: 50px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--line2); background: oklch(0.13 0.018 265); color: #fff; font-size: 16px; outline: none" style-focus="border-color: var(--ac)"></label>
             <label style="display: grid; gap: 6px; font-size: 13px; font-weight: 600; color: oklch(0.8 0.015 260)">Telefoonnummer<input name="telefoon" type="tel" required="" sc-camel-on-change="{{ zetVeld }}" autocomplete="tel" placeholder="06 12345678" style="min-height: 50px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--line2); background: oklch(0.13 0.018 265); color: #fff; font-size: 16px; outline: none" style-focus="border-color: var(--ac)"></label>
-            <button type="submit" disabled="{{ onvolledig }}" style="min-height: 54px; margin-top: 6px; border-radius: 999px; border: 0; background: var(--ac); color: #fff; font-size: 17px; font-weight: 600; cursor: {{ knopCursor }}; opacity: {{ knopOpacity }}; transition: opacity 0.2s">Verstuur aanvraag</button>
+            <button type="submit" style="min-height: 54px; margin-top: 6px; border-radius: 999px; border: 0; background: var(--ac); color: #fff; font-size: 17px; font-weight: 600; cursor: pointer; transition: opacity 0.2s" style-hover="background: var(--ac2)">{{ modalKnop }}</button>
+            <p style="margin: 0; min-height: 18px; text-align: center; font-size: 13px; font-weight: 600; color: oklch(0.72 0.17 25)">{{ modalFoutTekst }}</p>
           </form>
         </sc-if>
         <sc-if value="{{ modalVerzonden }}" hint-placeholder-val="{{ false }}">
@@ -744,21 +745,23 @@ class Component extends DCLogic {
         toggle: () => this.setState(s => ({ open: s.open === i ? -1 : i }))
       })),
       knopTekst: this.state.verzonden ? "Verstuurd" : this.state.bezig ? "Bezig met versturen..." : "Stuur mijn aanvraag",
-      statusTekst: this.state.verzonden ? "Binnen 1 werkdag hoor je van ons wat er beter kan." : this.state.fout ? "Versturen is niet gelukt. Probeer het opnieuw of mail naar info@offertesopmaat.com." : "Antwoord binnen 1 werkdag · gratis · geen verplichtingen.",
-      onSubmit: (e) => { e.preventDefault(); if (this.state.bezig || this.state.verzonden) return; const d = Object.fromEntries(new FormData(e.target).entries()); this.setState({ bezig: true, fout: false }); this.verstuurNaarMail(d, "Nieuwe aanvraag via website: " + (d.naam || "")).then(() => this.setState({ verzonden: true, bezig: false })).catch(() => this.setState({ fout: true, bezig: false })); },
+      statusTekst: this.state.verzonden ? "Binnen 1 werkdag hoor je van ons wat er beter kan." : this.state.ontbreekt ? "Vul in elk geval je naam en een geldig e-mailadres in." : this.state.fout ? "Versturen is niet gelukt. Probeer het opnieuw of mail naar info@offertesopmaat.com." : "Antwoord binnen 1 werkdag · gratis · geen verplichtingen.",
+      onSubmit: (e) => { e.preventDefault(); if (this.state.bezig || this.state.verzonden) return; const d = Object.fromEntries(new FormData(e.target).entries()); if (!(d.naam || "").trim() || !/^\S+@\S+\.\S+$/.test((d.email || "").trim())) { this.setState({ ontbreekt: true }); return; } this.setState({ bezig: true, fout: false, ontbreekt: false }); this.verstuurNaarMail(d, "Nieuwe aanvraag via website: " + (d.naam || "")).then(() => this.setState({ verzonden: true, bezig: false })).catch(() => this.setState({ fout: true, bezig: false })); },
       formOpen: this.state.formOpen,
       verzonden: this.state.verzonden,
       nogNietVerzonden: !this.state.verzonden,
       modalVerzonden: this.state.modalVerzonden,
       nietVerzonden: !this.state.modalVerzonden,
-      openForm: (e) => { e && e.preventDefault(); this.setState({ formOpen: true, modalVerzonden: false, velden: {} }); },
+      openForm: (e) => { e && e.preventDefault(); this.setState({ formOpen: true, modalVerzonden: false, velden: {}, modalFout: "" }); },
       sluitForm: () => this.setState({ formOpen: false }),
       stop: (e) => e.stopPropagation(),
       zetVeld: (e) => { const { name, value } = e.target; this.setState(s => ({ velden: { ...s.velden, [name]: value } })); },
       onvolledig: !compleet,
       knopOpacity: compleet ? 1 : 0.45,
       knopCursor: compleet ? "pointer" : "not-allowed",
-      verstuurModal: (e) => { e.preventDefault(); if (!compleet || this.state.bezigModal) return; const d = { ...this.state.velden }; this.setState({ bezigModal: true }); this.verstuurNaarMail(d, "Offerte-aanvraag via website: " + (d.naam || "")).then(() => this.setState({ modalVerzonden: true, bezigModal: false })).catch(() => { this.setState({ bezigModal: false }); alert("Versturen is niet gelukt. Probeer het opnieuw of mail naar info@offertesopmaat.com."); }); }
+      verstuurModal: (e) => { e.preventDefault(); if (this.state.bezigModal) return; const d = Object.fromEntries(new FormData(e.target).entries()); const mist = ["naam", "bedrijf", "email", "telefoon"].filter(k => !(d[k] || "").trim()); if (mist.length || !/^\S+@\S+\.\S+$/.test((d.email || "").trim())) { this.setState({ modalFout: mist.length ? "Vul alle velden in om je aanvraag te versturen." : "Vul een geldig e-mailadres in." }); return; } this.setState({ bezigModal: true, modalFout: "" }); this.verstuurNaarMail(d, "Offerte-aanvraag via website: " + (d.naam || "")).then(() => this.setState({ modalVerzonden: true, bezigModal: false })).catch(() => { this.setState({ bezigModal: false }); alert("Versturen is niet gelukt. Probeer het opnieuw of mail naar info@offertesopmaat.com."); }); },
+      modalKnop: this.state.bezigModal ? "Bezig met versturen..." : "Verstuur aanvraag",
+      modalFoutTekst: this.state.modalFout || ""
     };
   }
 }
