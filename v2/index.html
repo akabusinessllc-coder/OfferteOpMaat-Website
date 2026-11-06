@@ -620,8 +620,8 @@ class Component extends DCLogic {
     return r.json();
   }
 
-  // Vervang deze link door je echte betaallink (Mollie, Stripe, ...). Laat de betaalprovider na betaling doorsturen naar /v2/intake.html
-  betaalLink = "intake.html";
+  // Bestelknoppen gaan naar de afrekenpagina (bestellen.html). De echte betaallink zet je daar in de knop "Afrekenen".
+  betaalLink = "bestellen.html";
 
   renderVals() {
     const vragen = [
