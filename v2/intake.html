@@ -59,6 +59,8 @@
   .opt.multi input:checked + span::before { box-shadow: none; background: var(--ac) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-6.5' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 13px no-repeat; }
   .opt input:focus-visible + span { box-shadow: 0 0 0 4px oklch(0.62 0.19 255 / 0.25); }
   .opt small { display: block; margin-top: 2px; font-size: 13px; color: var(--mut2); }
+  .oi { flex: none; width: 22px; height: 22px; fill: none; stroke: var(--ac2); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  textarea.anders { min-height: 110px; }
   .anders { display: none; }
   .anders.on { display: block; animation: fade .25s ease; }
   .vibes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
@@ -111,7 +113,7 @@
 <main>
   <div class="paid"><span class="ck"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><b>Bedankt voor je bestelling.</b> Vul nu de intake in, dan gaan we direct voor je aan de slag.</span></div>
   <h1>Vertel ons over jouw bedrijf. Wij maken er een offerte van die verkoopt.</h1>
-  <p class="lead">Hoe beter we jou en je klanten kennen, hoe sterker je offerte. Neem er even de tijd voor: zo'n 10 tot 15 minuten. Geen call nodig.</p>
+  <p class="lead">Hoe beter we je bedrijf kennen, hoe sterker je offerte. Het duurt zo'n 5 tot 10 minuten. Geen call nodig.</p>
 
   <div class="progress"><span id="stapLabel">Start</span><span id="stapTeller"></span></div>
   <div class="bar"><span id="bar"></span></div>
@@ -140,65 +142,54 @@
    type: text | area | choice (1 antwoord) | multi (meerdere) | vibe | colors | file | logo
    anders: true  -> 5e optie "Anders: ..." met eigen invulveld
    ============================================================ */
+var ICONS = {
+  schild: '<path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z"/><path d="M8.5 12l2.3 2.3L16 9.5"/>',
+  lint: '<circle cx="12" cy="8" r="5.2"/><path d="M8.5 12.3L7 21l5-2.6 5 2.6-1.5-8.7"/>',
+  team: '<circle cx="9" cy="8" r="3"/><path d="M3.5 19c.8-3.2 3-4.8 5.5-4.8s4.7 1.6 5.5 4.8"/><circle cx="17" cy="9" r="2.4"/><path d="M15.7 14.6c2-.4 3.8.9 4.5 3.7"/>',
+  chat: '<path d="M4 5h16v10H9l-4 4V5z"/>',
+  lagen: '<path d="M12 3l9 4.5-9 4.5-9-4.5L12 3z"/><path d="M3 12l9 4.5 9-4.5"/><path d="M3 16.5L12 21l9-4.5"/>',
+  glans: '<path d="M6 12c3-.6 4.4-2 5-5 .6 3 2 4.4 5 5-3 .6-4.4 2-5 5-.6-3-2-4.4-5-5z"/><circle cx="18.5" cy="5.5" r="1.1"/>',
+  euro: '<path d="M17 6.5A6.5 6.5 0 1 0 17 17.5"/><path d="M4.5 10.5h9M4.5 13.5h9"/>',
+  klok: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>',
+  check: '<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/>',
+  huis: '<path d="M3.5 11L12 4l8.5 7"/><path d="M6 9.5V20h12V9.5"/><path d="M10 20v-5h4v5"/>',
+  potlood: '<path d="M4 20l1-4L16 5l3 3L8 19l-4 1z"/><path d="M14 7l3 3"/>',
+  plus: '<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>'
+};
+
 var STAPPEN = [
   { titel: 'Start', intro: true },
 
-  { titel: 'Jouw bedrijf', kop: 'Jouw bedrijf', sub: 'De basis, zodat we je offerte op naam zetten en je kunnen bereiken.', vragen: [
+  { titel: 'Je bedrijf', kop: 'Je bedrijf', sub: 'De basis voor de voorkant van je offerte en de kop van elke pagina.', vragen: [
     { type: 'text', name: 'Bedrijfsnaam', label: 'Bedrijfsnaam', req: true, auto: 'organization' },
     { type: 'text', name: 'Naam', label: 'Je naam', req: true, auto: 'name' },
     { type: 'email', name: 'email', label: 'E-mail', req: true, auto: 'email', ph: 'naam@bedrijf.nl' },
     { type: 'tel', name: 'Telefoon', label: 'Telefoon', req: true, auto: 'tel' },
-    { type: 'text', name: 'Website', label: 'Website', ph: 'optioneel' },
-    { type: 'text', name: 'Werkgebied', label: 'Werkgebied', req: true, ph: 'bv. Zaandam en omgeving' },
-    { type: 'choice', name: 'Vak', label: 'Wat is je vak?', req: true, full: true, anders: true, andersPh: 'bv. dakdekker, stukadoor',
-      opties: ['Hovenier', 'Aannemer of klusbedrijf', 'Installateur', 'Schilder'] },
-    { type: 'choice', name: 'Teamgrootte', label: 'Met hoeveel mensen werk je?', full: true,
-      opties: ['Alleen ik', '2 tot 5', '6 tot 10', 'Meer dan 10'] }
+    { type: 'text', name: 'Website', label: 'Website', ph: 'www.jouwbedrijf.nl', full: true },
+    { type: 'text', name: 'Type bedrijf en specialiteit', label: 'Type bedrijf / specialiteit', req: true, full: true, ph: 'bv. Timmer- en renovatiespecialist, hovenier gespecialiseerd in tuinontwerp' },
+    { type: 'choice', name: 'Werkt voor', label: 'Voor wie werk je?', req: true, full: true, opties: ['Particulieren', 'Bedrijven', 'Allebei'] }
   ]},
 
-  { titel: 'Je klant', kop: 'Je klant', sub: 'Je offerte praat tegen één persoon: je klant. Hoe beter we hem kennen, hoe beter we hem overtuigen.', vragen: [
-    { type: 'choice', name: 'Belangrijkste klant', label: 'Wie is je belangrijkste klant?', req: true, full: true, anders: true,
-      opties: ['Particuliere huiseigenaren', 'Bedrijven en kantoren', "VvE's en verhuurders", 'Overheid en instellingen'] },
-    { type: 'area', name: 'Typische klussen', label: 'Welke klussen offreer je het meest?', req: true, full: true, hint: 'Bijvoorbeeld: complete tuinaanleg met bestrating, badkamerrenovaties, dakrenovaties.' },
-    { type: 'choice', name: 'Gemiddeld offertebedrag', label: 'Hoe groot is een gemiddelde offerte?', full: true,
-      opties: ['Tot € 2.500', '€ 2.500 tot € 10.000', '€ 10.000 tot € 25.000', 'Meer dan € 25.000'] },
-    { type: 'choice', name: 'Acceptatie nu', label: 'Hoeveel van je offertes worden nu getekend?', full: true,
-      opties: ['Minder dan 25%', '25% tot 50%', '50% tot 75%', 'Meer dan 75%'] },
-    { type: 'choice', name: 'Waar klant op let', label: 'Waar let jouw klant het meest op als hij kiest?', req: true, full: true, anders: true,
-      opties: ['De prijs', 'Kwaliteit en vakmanschap', 'Hoe snel je kunt starten', 'Zekerheid en garantie'] },
-    { type: 'choice', name: 'Grootste angst klant', label: 'Waar is je klant het bangst voor voordat hij tekent?', req: true, full: true, anders: true,
-      opties: ['Dat het duurder uitvalt dan afgesproken', 'Dat het niet op tijd af is', 'Dat het resultaat tegenvalt', 'Dat hij een onbetrouwbaar bedrijf kiest'] },
-    { type: 'choice', name: 'Gevoel na offerte', label: 'Welk gevoel moet je klant hebben als hij je offerte heeft gelezen?', req: true, full: true, anders: true,
-      opties: ['"Die snapt precies wat ik wil"', '"Hier zit ik veilig"', '"Dit wordt topkwaliteit"', '"Dit is eerlijk geprijsd"'] }
+  { titel: 'Sterke punten', kop: 'Waarom kiezen klanten voor jou?', sub: 'Dit wordt de pagina "Waarom kiezen voor jouw bedrijf". Elk punt krijgt het pictogram dat je ernaast ziet.', vragen: [
+    { type: 'multi', name: 'Sterke punten', label: 'Kies je sterkste punten', hint: 'Maximaal 6.', max: 6, req: true, full: true, anders: true, andersPh: 'Welk sterk punt mist er?',
+      opties: [['Verzekerd', 'schild'], ['Garantie', 'lint'], ['Eigen vast team', 'team'], ['Duidelijke communicatie', 'chat'], ['Kwaliteitsmaterialen', 'lagen'], ['Netjes en schoon werken', 'glans'], ['Vaste prijs', 'euro'], ['Snel beschikbaar', 'klok'], ['Erkend of gecertificeerd', 'check'], ['Familiebedrijf', 'huis'], ['Advies en ontwerp', 'potlood']] },
+    { type: 'area', name: 'Wat maakt je sterk', label: 'Wat maakt jouw bedrijf echt sterk?', req: true, full: true, hint: 'Vertel het alsof je het aan een klant uitlegt. Steekwoorden mag ook.' },
+    { type: 'choice', name: 'Teamgrootte', label: 'Met hoeveel mensen werk je?', req: true, full: true, opties: ['Alleen ik', '2 tot 5', '6 tot 10', 'Meer dan 10'] },
+    { type: 'choice', name: 'Garantie', label: 'Welke garantie geef je?', req: true, full: true, anders: true, opties: ['Geen vaste garantie', '1 jaar', '2 tot 5 jaar', '10 jaar of meer'] }
   ]},
 
-  { titel: 'Jouw verhaal', kop: 'Jouw verhaal', sub: 'Hier halen we je verkoopteksten uit. Schrijf het zoals je het aan een klant zou vertellen. Steekwoorden mag ook.', vragen: [
-    { type: 'area', name: 'Beter dan concurrenten', label: 'Wat doe jij beter dan je concurrenten? Wees zo concreet mogelijk.', req: true, full: true, hint: 'Niet "kwaliteit", maar bijvoorbeeld: "ik sta zelf op elke klus", "we ruimen elke dag op", "vaste prijs, geen meerwerk".' },
-    { type: 'area', name: 'Waarom begonnen', label: 'Waarom ben je dit bedrijf begonnen?', full: true },
-    { type: 'area', name: 'Wat klanten zeggen', label: 'Wat zeggen klanten na afloop vaak tegen je?', full: true, hint: 'Letterlijke complimenten zijn goud waard.' },
-    { type: 'area', name: 'Trotse klus', label: 'Op welke klus ben je het meest trots, en waarom?', full: true },
-    { type: 'multi', name: 'Waar offertes verloren gaan', label: 'Waar verlies je nu offertes aan?', hint: 'Meerdere antwoorden mogelijk.', full: true, anders: true,
-      opties: ['Een goedkopere concurrent', 'Klant laat niets meer van zich horen', 'Klant wil bedenktijd en komt niet terug', 'Mijn offerte is niet duidelijk genoeg'] },
-    { type: 'area', name: 'Vragen en twijfels', label: 'Welke vragen of twijfels hoor je het vaakst van klanten?', full: true, hint: 'Bijvoorbeeld: "Waarom ben je duurder?", "Wanneer kun je starten?", "Wat als er meerwerk is?"' }
+  { titel: 'Werkwijze', kop: 'Hoe je werkt', sub: 'Voor de werkwijze, de betalingsregeling en wat er in je offerte komt.', vragen: [
+    { type: 'choice', name: 'Werkwijze', label: 'Onze standaard werkwijze is: 1. Opname · 2. Offerte · 3. Planning · 4. Uitvoering · 5. Oplevering. Klopt dit voor jou?', req: true, full: true,
+      opties: ['Ja, zo werk ik'], anders: true, andersLabel: 'Ik pas het aan', andersArea: true, andersPh: 'Beschrijf je stappen, bijvoorbeeld: 1. Gratis opname op locatie, 2. Ontwerp, …' },
+    { type: 'choice', name: 'Betalingsregeling', label: 'Hoe laat je klanten betalen?', req: true, full: true, anders: true, opties: ['Alles na oplevering', 'Deel vooraf, rest bij oplevering', 'In termijnen', 'Alles vooraf'] },
+    { type: 'multi', name: 'Moet erin', label: 'Wat moet er 100% in je offerte?', hint: 'Meerdere antwoorden mogelijk.', full: true, anders: true,
+      opties: ['Planning', 'Betalingsregeling', 'Garantie', "Projectfoto's", 'Reviews', 'Algemene voorwaarden'] },
+    { type: 'area', name: 'Moet er niet in', label: 'Wat moet er juist níet in?', ph: 'optioneel', full: true }
   ]},
 
-  { titel: 'Werkwijze', kop: 'Werkwijze en zekerheden', sub: 'Een klant die weet wat er na zijn handtekening gebeurt, tekent sneller.', vragen: [
-    { type: 'area', name: 'Werkwijze', label: 'Hoe verloopt een klus bij jou, van aanvraag tot oplevering?', full: true, hint: 'In een paar stappen. Bijvoorbeeld: opname, ontwerp, planning, uitvoering, oplevering.' },
-    { type: 'choice', name: 'Garantie', label: 'Welke garantie geef je?', req: true, full: true, anders: true,
-      opties: ['Geen vaste garantie', '1 jaar', '2 tot 5 jaar', '10 jaar of meer'] },
-    { type: 'choice', name: 'Betaling', label: 'Hoe laat je klanten betalen?', req: true, full: true, anders: true,
-      opties: ['Alles na oplevering', 'Deel vooraf, rest bij oplevering', 'In termijnen per fase', 'Alles vooraf'] },
-    { type: 'choice', name: 'Geldigheid offerte', label: 'Hoe lang is je offerte geldig?', full: true, anders: true,
-      opties: ['14 dagen', '30 dagen', '60 dagen', '90 dagen'] },
-    { type: 'multi', name: 'Altijd in de offerte', label: 'Wat moet er altijd in je offerte staan?', hint: 'Meerdere antwoorden mogelijk.', full: true, anders: true,
-      opties: ['Een planning', "Foto's van eerder werk", 'Reviews van klanten', "Optionele extra's om bij te kiezen"] },
-    { type: 'text', name: 'Keurmerken', label: 'Keurmerken, certificaten of lidmaatschappen', ph: 'optioneel, bv. VCA, erkend installateur', full: true },
-    { type: 'text', name: 'Reviews link', label: 'Link naar je reviews', ph: 'Google, Werkspot, Trustoo… (optioneel)', full: true }
-  ]},
-
-  { titel: 'Huisstijl', kop: 'Je huisstijl', sub: 'Zo ziet je offerte eruit alsof hij altijd al van jou was.', vragen: [
+  { titel: 'Huisstijl', kop: 'Je huisstijl', sub: 'Zo matchen we de offerte met je bedrijf.', vragen: [
     { type: 'logo', name: 'Logo', label: 'Upload je logo', req: true, full: true },
-    { type: 'colors', name: 'Merkkleuren', label: 'Wat zijn je merkkleuren?', req: true, full: true, hint: 'Kies met het vakje of typ een kleurcode of omschrijving, bijvoorbeeld "donkergroen".' },
+    { type: 'colors', name: 'Merkkleuren', label: 'Wat zijn je merkkleuren?', req: true, full: true, hint: 'Kies met het vakje of typ een kleurcode of omschrijving, bijvoorbeeld "donkergroen".', geen: 'Haal de kleuren uit mijn logo' },
     { type: 'vibe', name: 'Uitstraling', label: 'Hoe zie jij je offerte voor je?', req: true, full: true, anders: true, andersPh: 'Beschrijf de sfeer die je voor je ziet',
       opties: [
         ['Rustig & natuurlijk', 'Zacht, veel ruimte, natuurlijke tinten', ['#E9EEE4', '#7C9A6D', '#2F4A35']],
@@ -206,17 +197,17 @@ var STAPPEN = [
         ['Stoer & premium', 'Donker, krachtig, uitgesproken', ['#1B1A19', '#C4603F', '#EDE6DD']],
         ['Klassiek & vertrouwd', 'Degelijk, warm, tijdloos', ['#F6F1E7', '#8A6A3B', '#2D2A26']]
       ] },
-    { type: 'choice', name: 'Toon', label: 'Welke toon past bij jou?', req: true, full: true, anders: true,
-      opties: ['Persoonlijk en informeel (je/jij)', 'Zakelijk en formeel (u)', 'Kort en krachtig', 'Warm en uitgebreid'] },
-    { type: 'text', name: 'Voorbeeld uitstraling', label: 'Is er een website, merk of offerte waarvan je de uitstraling mooi vindt?', ph: 'optioneel, een link of naam', full: true }
+    { type: 'choice', name: 'Aanspreekvorm', label: 'Spreek je je klanten aan met je/jij of met u?', req: true, full: true, opties: ['Je / jij', 'U'] },
+    { type: 'text', name: 'Slogan', label: 'Slogan of vaste zin voor onderaan', ph: 'optioneel, bv. Kwaliteit, vakmanschap en duidelijke afspraken.', full: true }
   ]},
 
-  { titel: 'Bestanden', kop: 'Bestanden', sub: 'Samen maximaal 10 MB. Grotere bestanden? Zet een link (WeTransfer, Google Drive) in het veld hieronder.', vragen: [
+  { titel: "Foto's", kop: "Foto's en bestanden", sub: 'Samen maximaal 10 MB. Meer of grotere bestanden? Zet een link (WeTransfer, Google Drive) in het veld hieronder.', vragen: [
     { type: 'file', name: 'Huidige offerte', label: 'Je huidige offerte', accept: '.pdf,.doc,.docx,image/*', kies: 'Kies een bestand (pdf, Word of foto)', full: true },
-    { type: 'file', name: 'Foto 1', label: 'Foto van je werk', accept: 'image/*', kies: 'Kies een foto' },
-    { type: 'file', name: 'Foto 2', label: 'Nog een foto van je werk', accept: 'image/*', kies: 'Kies een foto' },
+    { type: 'file', name: 'Omslagfoto', label: 'Foto voor de voorkant', accept: 'image/*', kies: 'Kies je mooiste projectfoto', full: true },
+    { type: 'file', name: 'Projectfoto 1', label: 'Projectfoto', accept: 'image/*', kies: 'Kies een foto' },
+    { type: 'file', name: 'Projectfoto 2', label: 'Projectfoto', accept: 'image/*', kies: 'Kies een foto' },
     { type: 'size' },
-    { type: 'text', name: 'Link bestanden', label: "Link naar meer foto's of grote bestanden", ph: 'optioneel', full: true },
+    { type: 'text', name: 'Link fotos', label: "Link naar meer projectfoto's (tot 6)", ph: 'optioneel, WeTransfer of Google Drive', full: true },
     { type: 'area', name: 'Opmerkingen', label: 'Nog iets wat we moeten weten?', ph: 'optioneel', full: true }
   ]},
 
@@ -230,7 +221,7 @@ var STAPPEN = [
   var terug = document.getElementById('terug'), verder = document.getElementById('verder');
   var err = document.getElementById('err'), bar = document.getElementById('bar');
   var label = document.getElementById('stapLabel'), teller = document.getElementById('stapTeller'), saved = document.getElementById('saved');
-  var KEY = 'oom-intake-v2', MAX = 10 * 1024 * 1024, cur = 0, sending = false, uid = 0;
+  var KEY = 'oom-intake-v3', MAX = 10 * 1024 * 1024, cur = 0, sending = false, uid = 0;
 
   function el(tag, attrs, html) { var e = document.createElement(tag); for (var k in attrs || {}) { if (k === 'class') e.className = attrs[k]; else e.setAttribute(k, attrs[k]); } if (html != null) e.innerHTML = html; return e; }
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
@@ -258,23 +249,26 @@ var STAPPEN = [
       var box = el('div', { class: vibe ? 'vibes' : 'opts', role: multi ? 'group' : 'radiogroup' });
       var list = q.opties.slice(); if (q.anders) list.push(vibe ? ['Anders', 'Iets anders in gedachten', null] : 'Anders');
       list.forEach(function (o, n) {
+        var ico = (!vibe && Array.isArray(o)) ? o[1] : null; if (!vibe && Array.isArray(o)) o = o[0];
         var val = vibe ? o[0] : o, isA = q.anders && n === list.length - 1;
         var lab = el('label', { class: 'opt' + (multi ? ' multi' : '') + (vibe ? ' vibe' : '') });
         var inp = el('input', { type: multi ? 'checkbox' : 'radio', name: multi ? '' : q.name, value: isA ? '__anders' : val, 'data-group': q.name });
         if (multi) inp.removeAttribute('name');
         var inner;
         if (vibe) inner = (o[2] ? '<span class="sw">' + o[2].map(function (c) { return '<i style="background:' + c + '"></i>'; }).join('') + '</span>' : '<span class="sw"><i style="background:conic-gradient(#e66,#eb4,#6c6,#49e,#a6e,#e66)"></i></span>') + '<span><b>' + esc(o[0]) + '</b><small>' + esc(o[1]) + '</small></span>';
-        else inner = esc(isA ? 'Anders, namelijk…' : val);
+        else inner = (ico && ICONS[ico] ? '<svg class="oi" viewBox="0 0 24 24">' + ICONS[ico] + '</svg>' : (q.opties.some(Array.isArray) && isA ? '<svg class="oi" viewBox="0 0 24 24">' + ICONS.plus + '</svg>' : '')) + esc(isA ? (q.andersLabel || 'Anders, namelijk…') : val);
         lab.appendChild(inp); lab.appendChild(el('span', null, inner)); box.appendChild(lab);
       });
       w.appendChild(box);
       if (q.anders) {
-        var a = el('input', { type: 'text', class: 'anders', 'data-anders': q.name, placeholder: q.andersPh || 'Vul je antwoord in', 'aria-label': q.label + ' (anders)' });
+        var a = el(q.andersArea ? 'textarea' : 'input', { class: 'anders', 'data-anders': q.name, placeholder: q.andersPh || 'Vul je antwoord in', 'aria-label': q.label + ' (anders)' }); if (!q.andersArea) a.type = 'text';
         w.appendChild(a);
       }
       if (q.req) w.setAttribute('data-req', '1');
       w.setAttribute('data-kind', multi ? 'multi' : 'single');
       if (multi) w.appendChild(el('input', { type: 'hidden', name: q.name, 'data-join': q.name }));
+      if (q.max) w.setAttribute('data-max', q.max);
+      if (q.andersLabel) w.setAttribute('data-alabel', q.andersLabel === 'Ik pas het aan' ? 'Aangepast' : q.andersLabel);
     } else if (q.type === 'colors') {
       w.innerHTML = '<div style="display:grid;gap:9px">' + labelHtml(q) + '</div>';
       var cs = el('div', { class: 'colors' });
@@ -287,7 +281,7 @@ var STAPPEN = [
         c.appendChild(pick); c.appendChild(txt); cs.appendChild(c);
       });
       w.appendChild(cs);
-      var lk = el('label', { class: 'mini' }, '<input type="checkbox" name="Kleuren" value="Weet ik niet, kies voor mij" data-nocolor="1"> Weet ik niet, kies passende kleuren voor mij');
+      var lk = el('label', { class: 'mini' }, '<input type="checkbox" name="Kleuren" value="' + esc(q.geen || 'Kies voor mij') + '" data-nocolor="1"> ' + esc(q.geen || 'Kies voor mij'));
       w.appendChild(lk); w.setAttribute('data-req', '1'); w.setAttribute('data-kind', 'colors');
     } else if (q.type === 'file' || q.type === 'logo') {
       var logo = q.type === 'logo';
@@ -306,8 +300,8 @@ var STAPPEN = [
     var sec = el('section', { class: 'step', 'data-titel': s.titel });
     if (s.intro) {
       sec.innerHTML = '<h2>Zo werkt de intake</h2><ul class="intro-list">' +
-        '<li><span class="dot">1</span><span><b>Je beantwoordt vragen over je bedrijf, je klanten en je verhaal.</b> Bij keuzevragen kies je een optie, of vul je bij "Anders" je eigen antwoord in.</span></li>' +
-        '<li><span class="dot">2</span><span><b>Je kiest je huisstijl.</b> Logo, merkkleuren en hoe jij je offerte voor je ziet.</span></li>' +
+        '<li><span class="dot">1</span><span><b>Je vertelt over je bedrijf en wat het sterk maakt.</b> Bij keuzevragen kies je een optie, of vul je bij "Anders" je eigen antwoord in.</span></li>' +
+        '<li><span class="dot">2</span><span><b>Je kiest je huisstijl en stuurt je foto\'s mee.</b> Logo, merkkleuren en hoe jij je offerte voor je ziet.</span></li>' +
         '<li><span class="dot">3</span><span><b>Wij gaan direct aan de slag.</b> Binnen 5 werkdagen heb je je offerte.</span></li></ul>' +
         '<p class="sub" style="margin-top:22px">Je antwoorden worden op dit apparaat bewaard. Stop je halverwege, dan ga je later verder waar je was.</p>';
     } else {
@@ -323,7 +317,8 @@ var STAPPEN = [
   form.addEventListener('change', function (e) {
     var t = e.target, g = t.getAttribute('data-group');
     if (g) {
-      var q = t.closest('.q'), a = q.querySelector('[data-anders]');
+      var q = t.closest('.q'), a = q.querySelector('[data-anders]'), mx = +q.getAttribute('data-max');
+      if (mx && t.checked && q.querySelectorAll('input[data-group]:checked').length > mx) { t.checked = false; err.textContent = 'Je kunt maximaal ' + mx + ' punten kiezen. Haal er eerst een weg.'; err.classList.add('on'); return; }
       if (a) { var on = !!q.querySelector('[value="__anders"]:checked'); a.classList.toggle('on', on); if (on && t.value === '__anders' && t.checked) a.focus(); }
       q.classList.remove('invalid');
     }
@@ -388,8 +383,9 @@ var STAPPEN = [
   function choice(n) { var c = form.querySelector('input[data-group="' + n + '"]:checked'); if (!c) return ''; if (c.value === '__anders') { var a = form.querySelector('[data-anders="' + n + '"]'); return 'Anders: ' + (a ? a.value.trim() : ''); } return c.value; }
   function summary() {
     var files = [].filter.call(form.querySelectorAll('input[type=file]'), function (f) { return f.files && f.files[0]; }).length;
-    var kleuren = [1, 2, 3].map(function (n) { return val('Merkkleur ' + n); }).filter(Boolean).join(', ') || (form.querySelector('[data-nocolor]').checked ? 'Laat het aan jullie' : '');
-    var rows = [['Bedrijf', val('Bedrijfsnaam')], ['Contact', val('Naam') + (val('email') ? ' · ' + val('email') : '')], ['Vak', choice('Vak')], ['Uitstraling', choice('Uitstraling')], ['Merkkleuren', kleuren], ['Toon', choice('Toon')], ['Bestanden', files + ' bijgevoegd']];
+    var kleuren = [1, 2, 3].map(function (n) { return val('Merkkleur ' + n); }).filter(Boolean).join(', ') || (form.querySelector('[data-nocolor]').checked ? 'Uit het logo' : '');
+    var punten = [].filter.call(form.querySelectorAll('input[data-group="Sterke punten"]'), function (c) { return c.checked; }).length;
+    var rows = [['Bedrijf', val('Bedrijfsnaam')], ['Contact', val('Naam') + (val('email') ? ' · ' + val('email') : '')], ['Type', val('Type bedrijf en specialiteit')], ['Sterke punten', punten ? punten + ' gekozen' : ''], ['Uitstraling', choice('Uitstraling')], ['Merkkleuren', kleuren], ['Aanspreekvorm', choice('Aanspreekvorm')], ['Bestanden', files + ' bijgevoegd']];
     var box = document.getElementById('summary'); box.innerHTML = '';
     rows.forEach(function (r) { var d = el('div'), a = el('span'), b = el('b'); a.textContent = r[0]; b.textContent = r[1] || '—'; d.appendChild(a); d.appendChild(b); box.appendChild(d); });
   }
@@ -422,7 +418,7 @@ var STAPPEN = [
   function submit() {
     for (var i = 1; i < steps.length; i++) { if (!validate(i)) { show(i); validate(i); return; } }
     [].forEach.call(form.querySelectorAll('input[type=radio][value="__anders"]'), function (r) {
-      var a = form.querySelector('[data-anders="' + r.getAttribute('data-group') + '"]'); r.value = 'Anders: ' + (a ? a.value.trim() : '');
+      var a = form.querySelector('[data-anders="' + r.getAttribute('data-group') + '"]'), lb = r.closest('.q').getAttribute('data-alabel') || 'Anders'; r.value = lb + ': ' + (a ? a.value.trim() : '');
     });
     [].forEach.call(form.querySelectorAll('input[data-join]'), function (h) {
       var g = h.getAttribute('data-join');
