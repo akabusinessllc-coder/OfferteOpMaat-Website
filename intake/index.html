@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Intake | OfferteOpMaat</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="stylesheet" href="fonts.css">
+<style>
+  :root { --bg: oklch(0.15 0.018 265); --bg3: oklch(0.13 0.016 265); --line: oklch(0.27 0.025 265); --line2: oklch(0.34 0.03 265); --ac: oklch(0.62 0.19 255); --ac2: oklch(0.70 0.16 250); --tx: oklch(0.97 0.005 260); --mut: oklch(0.78 0.015 260); --mut2: oklch(0.66 0.015 260); --err: oklch(0.70 0.17 25); --ok: oklch(0.72 0.15 150); }
+  * { box-sizing: border-box; }
+  body::before { content: ""; position: fixed; inset: 0; z-index: -1; background: radial-gradient(900px 600px at 78% 8%, oklch(0.42 0.14 255 / 0.32), transparent 70%), radial-gradient(700px 500px at 10% 95%, oklch(0.35 0.10 265 / 0.22), transparent 70%), var(--bg); }
+  body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--tx); font-family: Archivo, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: var(--ac2); }
+  input, textarea, select, button { font: inherit; color: inherit; }
+  header { display: flex; justify-content: center; padding: 20px; border-bottom: 1px solid var(--line); }
+  .logo { display: inline-flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; font-family: Manrope, sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.02em; }
+  .logo img { width: 30px; height: auto; display: block; }
+  .logo b { color: oklch(0.66 0.19 252); font-weight: 800; }
+  main { max-width: 780px; margin: 0 auto; padding: clamp(24px, 5vw, 50px) 20px 80px; }
+  .paid { display: flex; align-items: center; gap: 12px; margin: 0 0 26px; padding: 13px 16px; border-radius: 14px; background: oklch(0.72 0.15 150 / 0.12); border: 1px solid oklch(0.72 0.15 150 / 0.4); font-size: 15px; line-height: 1.45; }
+  .paid .ck { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--ok); }
+  .paid b { font-weight: 600; }
+  h1 { margin: 0; font-family: Manrope, sans-serif; font-weight: 800; font-size: clamp(32px, 5vw, 50px); line-height: 1; letter-spacing: -0.035em; text-wrap: balance; }
+  .lead { margin: 16px 0 0; max-width: 58ch; font-size: 17px; line-height: 1.6; color: var(--mut); text-wrap: pretty; }
+  .progress { margin: 32px 0 10px; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 13px; color: var(--mut2); font-weight: 600; }
+  .bar { height: 6px; border-radius: 99px; background: var(--line); overflow: hidden; }
+  .bar span { display: block; height: 100%; width: 0; background: var(--ac); border-radius: 99px; transition: width .4s ease; }
+  .card { margin-top: 22px; padding: clamp(22px, 4vw, 38px); border-radius: 22px; background: oklch(0.19 0.024 265 / 0.94); border: 1px solid var(--line2); box-shadow: 0 30px 80px -40px oklch(0.55 0.2 258 / 0.5); }
+  .step { display: none; animation: fade .35s ease; }
+  .step.on { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
+  h2 { margin: 0; font-family: Manrope, sans-serif; font-weight: 700; font-size: clamp(23px, 3vw, 30px); letter-spacing: -0.025em; line-height: 1.1; }
+  .sub { margin: 10px 0 0; color: var(--mut); font-size: 15px; line-height: 1.55; }
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 16px; margin-top: 28px; }
+  .full { grid-column: 1 / -1; }
+  @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+  .q { display: grid; gap: 9px; }
+  .ql { font-size: 15px; font-weight: 600; line-height: 1.35; }
+  .hint { font-size: 13px; color: var(--mut2); line-height: 1.45; margin-top: -3px; }
+  .req { color: var(--ac2); }
+  input[type=text], input[type=email], input[type=tel], textarea { width: 100%; min-height: 50px; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--line2); background: var(--bg3); font-size: 16px; outline: none; transition: border-color .2s, box-shadow .2s; }
+  textarea { min-height: 104px; resize: vertical; line-height: 1.5; }
+  input:focus, textarea:focus { border-color: var(--ac); box-shadow: 0 0 0 4px oklch(0.62 0.19 255 / 0.18); }
+  ::placeholder { color: oklch(0.5 0.015 260); }
+  .invalid, .q.invalid .opts .opt span { border-color: var(--err) !important; }
+  .opts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+  @media (max-width: 520px) { .opts { grid-template-columns: 1fr; } }
+  .opt { position: relative; display: block; }
+  .opt input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; z-index: 1; }
+  .opt > span { display: flex; align-items: center; gap: 11px; height: 100%; min-height: 50px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line2); background: var(--bg3); font-size: 15px; line-height: 1.35; transition: all .15s; }
+  .opt > span::before { content: ""; flex: none; width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--line2); transition: all .15s; }
+  .opt.multi > span::before { border-radius: 5px; }
+  .opt input:checked + span { border-color: var(--ac); background: oklch(0.62 0.19 255 / 0.15); color: #fff; }
+  .opt input:checked + span::before { border-color: var(--ac); background: var(--ac); box-shadow: inset 0 0 0 3px var(--bg3); }
+  .opt.multi input:checked + span::before { box-shadow: none; background: var(--ac) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-6.5' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 13px no-repeat; }
+  .opt input:focus-visible + span { box-shadow: 0 0 0 4px oklch(0.62 0.19 255 / 0.25); }
+  .opt small { display: block; margin-top: 2px; font-size: 13px; color: var(--mut2); }
+  .oi { flex: none; width: 22px; height: 22px; fill: none; stroke: var(--ac2); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  textarea.anders { min-height: 110px; }
+  .anders { display: none; }
+  .anders.on { display: block; animation: fade .25s ease; }
+  .vibes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  @media (max-width: 520px) { .vibes { grid-template-columns: 1fr; } }
+  .vibe > span { align-items: flex-start; flex-direction: column; gap: 10px; padding: 14px; }
+  .vibe > span::before { display: none; }
+  .vibe > span > span:not(.sw) { display: grid; gap: 2px; }
+  .sw { display: flex; gap: 6px; }
+  .sw i { width: 30px; height: 30px; border-radius: 8px; border: 1px solid oklch(1 0 0 / 0.12); }
+  .vibe b { font-weight: 600; font-size: 15px; }
+  .colors { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  @media (max-width: 600px) { .colors { grid-template-columns: 1fr; } }
+  .color { display: flex; align-items: center; gap: 10px; padding: 8px 10px 8px 8px; border-radius: 12px; border: 1px solid var(--line2); background: var(--bg3); }
+  .color input[type=color] { flex: none; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 9px; background: none; cursor: pointer; }
+  .color input[type=color]::-webkit-color-swatch-wrapper { padding: 0; }
+  .color input[type=color]::-webkit-color-swatch { border: 1px solid oklch(1 0 0 / 0.2); border-radius: 9px; }
+  .color input[type=text] { min-height: 40px; padding: 8px 10px; border: 0; background: transparent; box-shadow: none !important; font-size: 15px; }
+  .drop { position: relative; display: flex; align-items: center; gap: 12px; min-height: 58px; padding: 12px 15px; border-radius: 12px; border: 1px dashed var(--line2); background: var(--bg3); cursor: pointer; font-size: 14px; color: var(--mut); transition: border-color .2s; }
+  .drop:hover { border-color: var(--ac); }
+  .drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .drop .ic { flex: none; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 9px; background: oklch(0.62 0.19 255 / 0.18); color: var(--ac2); font-weight: 700; }
+  .drop.has { border-style: solid; border-color: oklch(0.62 0.19 255 / 0.6); color: #fff; }
+  .mini { display: inline-flex; align-items: center; gap: 9px; font-size: 14px; color: var(--mut); cursor: pointer; }
+  .mini input { width: 18px; height: 18px; accent-color: oklch(0.62 0.19 255); }
+  .size { font-size: 13px; color: var(--mut2); margin: 0; }
+  .size.over { color: var(--err); font-weight: 600; }
+  .nav { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 30px; padding-top: 22px; border-top: 1px solid var(--line); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 54px; padding: 0 28px; border-radius: 999px; border: 0; background: var(--ac); color: #fff; font-weight: 600; font-size: 16px; white-space: nowrap; cursor: pointer; transition: background .2s; }
+  @media (max-width: 420px) { .btn { padding: 0 20px; } .saved { display: none; } }
+  .btn:hover { background: var(--ac2); }
+  .btn[disabled] { opacity: .6; cursor: wait; }
+  .ghost { background: transparent; border: 1px solid var(--line2); color: var(--mut); }
+  .ghost:hover { background: transparent; border-color: var(--ac); color: #fff; }
+  .err { display: none; margin: 20px 0 0; padding: 12px 15px; border-radius: 12px; background: oklch(0.70 0.17 25 / 0.12); border: 1px solid oklch(0.70 0.17 25 / 0.45); color: oklch(0.85 0.08 25); font-size: 14px; line-height: 1.5; }
+  .err.on { display: block; }
+  .intro-list { display: grid; gap: 12px; margin: 24px 0 0; padding: 0; list-style: none; }
+  .intro-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 15px; line-height: 1.5; color: var(--mut); }
+  .intro-list b { color: #fff; font-weight: 600; }
+  .dot { flex: none; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--ac); color: #fff; font-size: 13px; font-weight: 700; }
+  .saved { font-size: 12px; color: var(--mut2); }
+  .summary { display: grid; gap: 8px; margin-top: 22px; padding: 18px; border-radius: 14px; background: var(--bg3); border: 1px solid var(--line); font-size: 14px; color: var(--mut); }
+  .summary div { display: flex; justify-content: space-between; gap: 16px; }
+  .summary b { color: #fff; font-weight: 600; text-align: right; }
+  footer { text-align: center; padding: 0 20px 40px; font-size: 13px; color: var(--mut2); }
+</style>
+</head>
+<body>
+<header><a class="logo" href="/"><img src="../assets/90fb7dbf.png" alt=""><span>Offerte<b>Op</b>Maat</span></a></header>
+
+<main>
+  <div class="paid"><span class="ck"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><b>Bedankt voor je bestelling.</b> Vul nu de intake in, dan gaan we direct voor je aan de slag.</span></div>
+  <h1>Vertel ons over jouw bedrijf. Wij maken er een offerte van die verkoopt.</h1>
+  <p class="lead">Hoe beter we je bedrijf kennen, hoe sterker je offerte. Het duurt zo'n 5 tot 10 minuten. Geen call nodig.</p>
+
+  <div class="progress"><span id="stapLabel">Start</span><span id="stapTeller"></span></div>
+  <div class="bar"><span id="bar"></span></div>
+
+  <form id="intake" class="card" action="https://formsubmit.co/75adb5944910fdf7381301018212e458" method="POST" enctype="multipart/form-data" novalidate>
+    <input type="hidden" name="_subject" id="subject" value="Nieuwe intake via website">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_next" value="https://offertesopmaat.com/intake/bedankt.html">
+    <input type="hidden" name="_replyto" id="replyto">
+    <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+    <div id="steps"></div>
+    <p class="err" id="err" role="alert"></p>
+    <div class="nav">
+      <button type="button" class="btn ghost" id="terug">← Terug</button>
+      <span class="saved" id="saved"></span>
+      <button type="button" class="btn" id="verder">Start de intake →</button>
+    </div>
+  </form>
+</main>
+<footer>Vragen? Mail naar <a href="mailto:info@offertesopmaat.com">info@offertesopmaat.com</a></footer>
+
+<script>
+/* ============================================================
+   DE VRAGEN. Pas hier teksten of opties aan.
+   type: text | area | choice (1 antwoord) | multi (meerdere) | vibe | colors | file | logo
+   anders: true  -> 5e optie "Anders: ..." met eigen invulveld
+   ============================================================ */
+var ICONS = {
+  schild: '<path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z"/><path d="M8.5 12l2.3 2.3L16 9.5"/>',
+  lint: '<circle cx="12" cy="8" r="5.2"/><path d="M8.5 12.3L7 21l5-2.6 5 2.6-1.5-8.7"/>',
+  team: '<circle cx="9" cy="8" r="3"/><path d="M3.5 19c.8-3.2 3-4.8 5.5-4.8s4.7 1.6 5.5 4.8"/><circle cx="17" cy="9" r="2.4"/><path d="M15.7 14.6c2-.4 3.8.9 4.5 3.7"/>',
+  chat: '<path d="M4 5h16v10H9l-4 4V5z"/>',
+  lagen: '<path d="M12 3l9 4.5-9 4.5-9-4.5L12 3z"/><path d="M3 12l9 4.5 9-4.5"/><path d="M3 16.5L12 21l9-4.5"/>',
+  glans: '<path d="M6 12c3-.6 4.4-2 5-5 .6 3 2 4.4 5 5-3 .6-4.4 2-5 5-.6-3-2-4.4-5-5z"/><circle cx="18.5" cy="5.5" r="1.1"/>',
+  euro: '<path d="M17 6.5A6.5 6.5 0 1 0 17 17.5"/><path d="M4.5 10.5h9M4.5 13.5h9"/>',
+  klok: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>',
+  check: '<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/>',
+  huis: '<path d="M3.5 11L12 4l8.5 7"/><path d="M6 9.5V20h12V9.5"/><path d="M10 20v-5h4v5"/>',
+  potlood: '<path d="M4 20l1-4L16 5l3 3L8 19l-4 1z"/><path d="M14 7l3 3"/>',
+  plus: '<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>'
+};
+
+var STAPPEN = [
+  { titel: 'Start', intro: true },
+
+  { titel: 'Je bedrijf', kop: 'Je bedrijf', sub: 'De basis voor de voorkant van je offerte en de kop van elke pagina.', vragen: [
+    { type: 'text', name: 'Bedrijfsnaam', label: 'Bedrijfsnaam', req: true, auto: 'organization' },
+    { type: 'text', name: 'Naam', label: 'Je naam', req: true, auto: 'name' },
+    { type: 'email', name: 'email', label: 'E-mail', req: true, auto: 'email', ph: 'naam@bedrijf.nl' },
+    { type: 'tel', name: 'Telefoon', label: 'Telefoon', req: true, auto: 'tel' },
+    { type: 'text', name: 'Website', label: 'Website', ph: 'www.jouwbedrijf.nl', full: true },
+    { type: 'text', name: 'Type bedrijf en specialiteit', label: 'Type bedrijf / specialiteit', req: true, full: true, ph: 'bv. Timmer- en renovatiespecialist, hovenier gespecialiseerd in tuinontwerp' },
+    { type: 'choice', name: 'Werkt voor', label: 'Voor wie werk je?', req: true, full: true, opties: ['Particulieren', 'Bedrijven', 'Allebei'] }
+  ]},
+
+  { titel: 'Sterke punten', kop: 'Waarom kiezen klanten voor jou?', sub: 'Dit wordt de pagina "Waarom kiezen voor jouw bedrijf". Elk punt krijgt het pictogram dat je ernaast ziet.', vragen: [
+    { type: 'multi', name: 'Sterke punten', label: 'Kies je sterkste punten', hint: 'Maximaal 6.', max: 6, req: true, full: true, anders: true, andersPh: 'Welk sterk punt mist er?',
+      opties: [['Verzekerd', 'schild'], ['Garantie', 'lint'], ['Eigen vast team', 'team'], ['Duidelijke communicatie', 'chat'], ['Kwaliteitsmaterialen', 'lagen'], ['Netjes en schoon werken', 'glans'], ['Vaste prijs', 'euro'], ['Snel beschikbaar', 'klok'], ['Erkend of gecertificeerd', 'check'], ['Familiebedrijf', 'huis'], ['Advies en ontwerp', 'potlood']] },
+    { type: 'area', name: 'Wat maakt je sterk', label: 'Wat maakt jouw bedrijf echt sterk?', req: true, full: true, hint: 'Vertel het alsof je het aan een klant uitlegt. Steekwoorden mag ook.' },
+    { type: 'choice', name: 'Teamgrootte', label: 'Met hoeveel mensen werk je?', req: true, full: true, opties: ['Alleen ik', '2 tot 5', '6 tot 10', 'Meer dan 10'] },
+    { type: 'choice', name: 'Garantie', label: 'Welke garantie geef je?', req: true, full: true, anders: true, opties: ['Geen vaste garantie', '1 jaar', '2 tot 5 jaar', '10 jaar of meer'] }
+  ]},
+
+  { titel: 'Werkwijze', kop: 'Hoe je werkt', sub: 'Voor de werkwijze, de betalingsregeling en wat er in je offerte komt.', vragen: [
+    { type: 'choice', name: 'Werkwijze', label: 'Onze standaard werkwijze is: 1. Opname · 2. Offerte · 3. Planning · 4. Uitvoering · 5. Oplevering. Klopt dit voor jou?', req: true, full: true,
+      opties: ['Ja, zo werk ik'], anders: true, andersLabel: 'Ik pas het aan', andersArea: true, andersPh: 'Beschrijf je stappen, bijvoorbeeld: 1. Gratis opname op locatie, 2. Ontwerp, …' },
+    { type: 'choice', name: 'Betalingsregeling', label: 'Hoe laat je klanten betalen?', req: true, full: true, anders: true, opties: ['Alles na oplevering', 'Deel vooraf, rest bij oplevering', 'In termijnen', 'Alles vooraf'] },
+    { type: 'multi', name: 'Moet erin', label: 'Wat moet er 100% in je offerte?', hint: 'Meerdere antwoorden mogelijk.', full: true, anders: true,
+      opties: ['Planning', 'Betalingsregeling', 'Garantie', "Projectfoto's", 'Reviews', 'Algemene voorwaarden'] },
+    { type: 'area', name: 'Moet er niet in', label: 'Wat moet er juist níet in?', ph: 'optioneel', full: true }
+  ]},
+
+  { titel: 'Huisstijl', kop: 'Je huisstijl', sub: 'Zo matchen we de offerte met je bedrijf.', vragen: [
+    { type: 'logo', name: 'Logo', label: 'Upload je logo', req: true, full: true },
+    { type: 'colors', name: 'Merkkleuren', label: 'Wat zijn je merkkleuren?', req: true, full: true, hint: 'Kies met het vakje of typ een kleurcode of omschrijving, bijvoorbeeld "donkergroen".', geen: 'Haal de kleuren uit mijn logo' },
+    { type: 'vibe', name: 'Uitstraling', label: 'Hoe zie jij je offerte voor je?', req: true, full: true, anders: true, andersPh: 'Beschrijf de sfeer die je voor je ziet',
+      opties: [
+        ['Rustig & natuurlijk', 'Zacht, veel ruimte, natuurlijke tinten', ['#E9EEE4', '#7C9A6D', '#2F4A35']],
+        ['Fris & modern', 'Strak, licht, heldere accenten', ['#F4F7FB', '#2F6FED', '#0F1B33']],
+        ['Stoer & premium', 'Donker, krachtig, uitgesproken', ['#1B1A19', '#C4603F', '#EDE6DD']],
+        ['Klassiek & vertrouwd', 'Degelijk, warm, tijdloos', ['#F6F1E7', '#8A6A3B', '#2D2A26']]
+      ] },
+    { type: 'choice', name: 'Aanspreekvorm', label: 'Spreek je je klanten aan met je/jij of met u?', req: true, full: true, opties: ['Je / jij', 'U'] },
+    { type: 'text', name: 'Slogan', label: 'Slogan of vaste zin voor onderaan', ph: 'optioneel, bv. Kwaliteit, vakmanschap en duidelijke afspraken.', full: true }
+  ]},
+
+  { titel: "Foto's", kop: "Foto's en bestanden", sub: 'Samen maximaal 10 MB. Meer of grotere bestanden? Zet een link (WeTransfer, Google Drive) in het veld hieronder.', vragen: [
+    { type: 'file', name: 'Huidige offerte', label: 'Je huidige offerte', accept: '.pdf,.doc,.docx,image/*', kies: 'Kies een bestand (pdf, Word of foto)', full: true },
+    { type: 'file', name: 'Omslagfoto', label: 'Foto voor de voorkant', accept: 'image/*', kies: 'Kies je mooiste projectfoto', full: true },
+    { type: 'file', name: 'Projectfoto 1', label: 'Projectfoto', accept: 'image/*', kies: 'Kies een foto' },
+    { type: 'file', name: 'Projectfoto 2', label: 'Projectfoto', accept: 'image/*', kies: 'Kies een foto' },
+    { type: 'size' },
+    { type: 'text', name: 'Link fotos', label: "Link naar meer projectfoto's (tot 6)", ph: 'optioneel, WeTransfer of Google Drive', full: true },
+    { type: 'area', name: 'Opmerkingen', label: 'Nog iets wat we moeten weten?', ph: 'optioneel', full: true }
+  ]},
+
+  { titel: 'Versturen', kop: 'Klaar om te versturen', sub: 'Check je gegevens. Na het versturen gaan we direct aan de slag.', summary: true }
+];
+</script>
+
+<script>
+(function () {
+  var form = document.getElementById('intake'), host = document.getElementById('steps');
+  var terug = document.getElementById('terug'), verder = document.getElementById('verder');
+  var err = document.getElementById('err'), bar = document.getElementById('bar');
+  var label = document.getElementById('stapLabel'), teller = document.getElementById('stapTeller'), saved = document.getElementById('saved');
+  var KEY = 'oom-intake-v3', MAX = 10 * 1024 * 1024, cur = 0, sending = false, uid = 0;
+
+  function el(tag, attrs, html) { var e = document.createElement(tag); for (var k in attrs || {}) { if (k === 'class') e.className = attrs[k]; else e.setAttribute(k, attrs[k]); } if (html != null) e.innerHTML = html; return e; }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
+  function store(fn) { try { return fn(); } catch (e) { return null; } }
+  function labelHtml(q) { return '<span class="ql">' + esc(q.label) + (q.req ? ' <span class="req">*</span>' : '') + '</span>' + (q.hint ? '<span class="hint">' + esc(q.hint) + '</span>' : ''); }
+
+  /* ---------- bouwen ---------- */
+  function build(q) {
+    var w = el('div', { class: 'q' + (q.full || q.type === 'area' ? ' full' : ''), 'data-q': q.name || '' });
+    if (q.type === 'size') { w.className = 'full'; w.appendChild(el('p', { class: 'size', id: 'size' }, 'Totaal: 0 MB van 10 MB')); return w; }
+    var id = 'f' + (++uid);
+    if (q.type === 'text' || q.type === 'email' || q.type === 'tel') {
+      w.innerHTML = '<label for="' + id + '" style="display:grid;gap:9px">' + labelHtml(q) + '</label>';
+      var i = el('input', { type: q.type === 'text' ? 'text' : q.type, id: id, name: q.name, placeholder: q.ph || '', autocomplete: q.auto || 'off' });
+      if (q.type === 'email') i.id = 'email';
+      if (q.req) i.setAttribute('data-req', '1');
+      w.querySelector('label').appendChild(i);
+    } else if (q.type === 'area') {
+      w.innerHTML = '<label for="' + id + '" style="display:grid;gap:9px">' + labelHtml(q) + '</label>';
+      var t = el('textarea', { id: id, name: q.name, placeholder: q.ph || '' }); if (q.req) t.setAttribute('data-req', '1');
+      w.querySelector('label').appendChild(t);
+    } else if (q.type === 'choice' || q.type === 'multi' || q.type === 'vibe') {
+      var multi = q.type === 'multi', vibe = q.type === 'vibe';
+      w.innerHTML = '<div class="ql-wrap" style="display:grid;gap:9px">' + labelHtml(q) + '</div>';
+      var box = el('div', { class: vibe ? 'vibes' : 'opts', role: multi ? 'group' : 'radiogroup' });
+      var list = q.opties.slice(); if (q.anders) list.push(vibe ? ['Anders', 'Iets anders in gedachten', null] : 'Anders');
+      list.forEach(function (o, n) {
+        var ico = (!vibe && Array.isArray(o)) ? o[1] : null; if (!vibe && Array.isArray(o)) o = o[0];
+        var val = vibe ? o[0] : o, isA = q.anders && n === list.length - 1;
+        var lab = el('label', { class: 'opt' + (multi ? ' multi' : '') + (vibe ? ' vibe' : '') });
+        var inp = el('input', { type: multi ? 'checkbox' : 'radio', name: multi ? '' : q.name, value: isA ? '__anders' : val, 'data-group': q.name });
+        if (multi) inp.removeAttribute('name');
+        var inner;
+        if (vibe) inner = (o[2] ? '<span class="sw">' + o[2].map(function (c) { return '<i style="background:' + c + '"></i>'; }).join('') + '</span>' : '<span class="sw"><i style="background:conic-gradient(#e66,#eb4,#6c6,#49e,#a6e,#e66)"></i></span>') + '<span><b>' + esc(o[0]) + '</b><small>' + esc(o[1]) + '</small></span>';
+        else inner = (ico && ICONS[ico] ? '<svg class="oi" viewBox="0 0 24 24">' + ICONS[ico] + '</svg>' : (q.opties.some(Array.isArray) && isA ? '<svg class="oi" viewBox="0 0 24 24">' + ICONS.plus + '</svg>' : '')) + esc(isA ? (q.andersLabel || 'Anders, namelijk…') : val);
+        lab.appendChild(inp); lab.appendChild(el('span', null, inner)); box.appendChild(lab);
+      });
+      w.appendChild(box);
+      if (q.anders) {
+        var a = el(q.andersArea ? 'textarea' : 'input', { class: 'anders', 'data-anders': q.name, placeholder: q.andersPh || 'Vul je antwoord in', 'aria-label': q.label + ' (anders)' }); if (!q.andersArea) a.type = 'text';
+        w.appendChild(a);
+      }
+      if (q.req) w.setAttribute('data-req', '1');
+      w.setAttribute('data-kind', multi ? 'multi' : 'single');
+      if (multi) w.appendChild(el('input', { type: 'hidden', name: q.name, 'data-join': q.name }));
+      if (q.max) w.setAttribute('data-max', q.max);
+      if (q.andersLabel) w.setAttribute('data-alabel', q.andersLabel === 'Ik pas het aan' ? 'Aangepast' : q.andersLabel);
+    } else if (q.type === 'colors') {
+      w.innerHTML = '<div style="display:grid;gap:9px">' + labelHtml(q) + '</div>';
+      var cs = el('div', { class: 'colors' });
+      ['Hoofdkleur', 'Tweede kleur', 'Accentkleur'].forEach(function (nm, n) {
+        var c = el('div', { class: 'color' });
+        var pick = el('input', { type: 'color', value: ['#1f6b3a', '#d9a43a', '#1b1a19'][n], 'aria-label': nm + ' kiezen' });
+        var txt = el('input', { type: 'text', name: 'Merkkleur ' + (n + 1), placeholder: nm, 'data-color': '1' });
+        pick.addEventListener('input', function () { txt.value = pick.value.toUpperCase(); save(); });
+        txt.addEventListener('input', function () { if (/^#[0-9a-f]{6}$/i.test(txt.value.trim())) pick.value = txt.value.trim(); });
+        c.appendChild(pick); c.appendChild(txt); cs.appendChild(c);
+      });
+      w.appendChild(cs);
+      var lk = el('label', { class: 'mini' }, '<input type="checkbox" name="Kleuren" value="' + esc(q.geen || 'Kies voor mij') + '" data-nocolor="1"> ' + esc(q.geen || 'Kies voor mij'));
+      w.appendChild(lk); w.setAttribute('data-req', '1'); w.setAttribute('data-kind', 'colors');
+    } else if (q.type === 'file' || q.type === 'logo') {
+      var logo = q.type === 'logo';
+      w.innerHTML = '<div style="display:grid;gap:9px">' + labelHtml(q) + '</div>';
+      var d = el('label', { class: 'drop' }, '<span class="ic">+</span><span class="nm">' + esc(q.kies || 'Kies je logo (png, jpg, svg of pdf)') + '</span>');
+      var f = el('input', { type: 'file', name: q.name, accept: q.accept || 'image/*,.svg,.pdf,.ai,.eps' });
+      d.appendChild(f); w.appendChild(d);
+      if (logo) { w.appendChild(el('label', { class: 'mini' }, '<input type="checkbox" name="Logo status" value="Heb (nog) geen logo" data-nologo="1"> Ik heb (nog) geen logo')); w.setAttribute('data-req', '1'); w.setAttribute('data-kind', 'logo'); }
+      var nm = d.querySelector('.nm'), orig = nm.textContent;
+      f.addEventListener('change', function () { var x = f.files && f.files[0]; nm.textContent = x ? x.name + ' (' + mb(x.size) + ' MB)' : orig; d.classList.toggle('has', !!x); sizeInfo(); });
+    }
+    return w;
+  }
+
+  var steps = STAPPEN.map(function (s) {
+    var sec = el('section', { class: 'step', 'data-titel': s.titel });
+    if (s.intro) {
+      sec.innerHTML = '<h2>Zo werkt de intake</h2><ul class="intro-list">' +
+        '<li><span class="dot">1</span><span><b>Je vertelt over je bedrijf en wat het sterk maakt.</b> Bij keuzevragen kies je een optie, of vul je bij "Anders" je eigen antwoord in.</span></li>' +
+        '<li><span class="dot">2</span><span><b>Je kiest je huisstijl en stuurt je foto\'s mee.</b> Logo, merkkleuren en hoe jij je offerte voor je ziet.</span></li>' +
+        '<li><span class="dot">3</span><span><b>Wij gaan direct aan de slag.</b> Binnen 5 werkdagen heb je je offerte.</span></li></ul>' +
+        '<p class="sub" style="margin-top:22px">Je antwoorden worden op dit apparaat bewaard. Stop je halverwege, dan ga je later verder waar je was.</p>';
+    } else {
+      sec.appendChild(el('h2', null, esc(s.kop)));
+      if (s.sub) sec.appendChild(el('p', { class: 'sub' }, esc(s.sub)));
+      if (s.vragen) { var g = el('div', { class: 'grid' }); s.vragen.forEach(function (q) { g.appendChild(build(q)); }); sec.appendChild(g); }
+      if (s.summary) sec.appendChild(el('div', { class: 'summary', id: 'summary' }));
+    }
+    host.appendChild(sec); return sec;
+  });
+
+  /* ---------- gedrag ---------- */
+  form.addEventListener('change', function (e) {
+    var t = e.target, g = t.getAttribute('data-group');
+    if (g) {
+      var q = t.closest('.q'), a = q.querySelector('[data-anders]'), mx = +q.getAttribute('data-max');
+      if (mx && t.checked && q.querySelectorAll('input[data-group]:checked').length > mx) { t.checked = false; err.textContent = 'Je kunt maximaal ' + mx + ' punten kiezen. Haal er eerst een weg.'; err.classList.add('on'); return; }
+      if (a) { var on = !!q.querySelector('[value="__anders"]:checked'); a.classList.toggle('on', on); if (on && t.value === '__anders' && t.checked) a.focus(); }
+      q.classList.remove('invalid');
+    }
+    if (t.hasAttribute('data-nologo')) t.closest('.q').querySelector('.drop').style.opacity = t.checked ? 0.45 : 1;
+  });
+
+  function mb(b) { return (b / 1048576).toFixed(1).replace('.', ','); }
+  function totalSize() { var t = 0; [].forEach.call(form.querySelectorAll('input[type=file]'), function (f) { if (f.files && f.files[0]) t += f.files[0].size; }); return t; }
+  function sizeInfo() { var s = document.getElementById('size'), t = totalSize(); if (!s) return; s.textContent = 'Totaal: ' + mb(t) + ' MB van 10 MB' + (t > MAX ? ' (te groot)' : ''); s.classList.toggle('over', t > MAX); }
+
+  function validate(i) {
+    var sec = steps[i], bad = [];
+    [].forEach.call(sec.querySelectorAll('[data-req]'), function (x) {
+      if (x.tagName === 'INPUT' || x.tagName === 'TEXTAREA') {
+        var v = x.value.trim(), ok = v && !(x.type === 'email' && !/^\S+@\S+\.\S+$/.test(v));
+        x.classList.toggle('invalid', !ok); if (!ok) bad.push(x); return;
+      }
+      var kind = x.getAttribute('data-kind'), ok = true;
+      if (kind === 'single' || kind === 'multi') {
+        var checked = x.querySelectorAll('input[data-group]:checked');
+        ok = checked.length > 0;
+        var a = x.querySelector('[data-anders]');
+        if (ok && a && x.querySelector('[value="__anders"]:checked') && !a.value.trim()) { ok = false; a.classList.add('invalid'); } else if (a) a.classList.remove('invalid');
+      } else if (kind === 'colors') {
+        ok = [].some.call(x.querySelectorAll('[data-color]'), function (c) { return c.value.trim(); }) || x.querySelector('[data-nocolor]').checked;
+      } else if (kind === 'logo') {
+        var f = x.querySelector('input[type=file]'); ok = (f.files && f.files[0]) || x.querySelector('[data-nologo]').checked;
+      }
+      x.classList.toggle('invalid', !ok); if (!ok) bad.push(x);
+    });
+    // anders gekozen bij niet-verplichte vragen
+    [].forEach.call(sec.querySelectorAll('.q:not([data-req]) [data-anders]'), function (a) {
+      var q = a.closest('.q'); if (q.querySelector('[value="__anders"]:checked') && !a.value.trim()) { a.classList.add('invalid'); bad.push(a); } else a.classList.remove('invalid');
+    });
+    if (sec.querySelector('#size') && totalSize() > MAX) { err.textContent = 'Je bestanden zijn samen groter dan 10 MB. Kies kleinere bestanden of zet een link in het veld hieronder.'; err.classList.add('on'); return false; }
+    if (bad.length) {
+      var emailBad = bad.some(function (b) { return b.type === 'email' && b.value.trim(); });
+      err.textContent = 'Nog niet alles is ingevuld. Vul de vragen met een * in' + (emailBad ? ' en controleer je e-mailadres' : '') + '. Koos je "Anders"? Vul dan ook je antwoord in.';
+      err.classList.add('on');
+      var first = bad[0]; (first.focus ? first : first.querySelector('input')).focus && (first.focus ? first.focus() : first.querySelector('input').focus());
+      first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return false;
+    }
+    err.classList.remove('on'); return true;
+  }
+
+  function show(i) {
+    cur = i; var last = steps.length - 1;
+    steps.forEach(function (s, n) { s.classList.toggle('on', n === i); });
+    terug.style.visibility = i === 0 ? 'hidden' : 'visible';
+    verder.textContent = i === 0 ? 'Start de intake →' : i === last ? 'Verstuur mijn intake' : 'Volgende →';
+    label.textContent = steps[i].getAttribute('data-titel');
+    teller.textContent = i === 0 ? (last - 1) + ' korte stappen' : 'Stap ' + i + ' van ' + last;
+    bar.style.width = (i / last * 100) + '%';
+    err.classList.remove('on');
+    if (i === last) summary();
+    store(function () { localStorage.setItem(KEY + '-step', String(i)); });
+    if (i > 0) window.scrollTo({ top: form.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' });
+  }
+
+  function val(n) { var e = form.querySelector('[name="' + n + '"]'); return e ? (e.value || '').trim() : ''; }
+  function choice(n) { var c = form.querySelector('input[data-group="' + n + '"]:checked'); if (!c) return ''; if (c.value === '__anders') { var a = form.querySelector('[data-anders="' + n + '"]'); return 'Anders: ' + (a ? a.value.trim() : ''); } return c.value; }
+  function summary() {
+    var files = [].filter.call(form.querySelectorAll('input[type=file]'), function (f) { return f.files && f.files[0]; }).length;
+    var kleuren = [1, 2, 3].map(function (n) { return val('Merkkleur ' + n); }).filter(Boolean).join(', ') || (form.querySelector('[data-nocolor]').checked ? 'Uit het logo' : '');
+    var punten = [].filter.call(form.querySelectorAll('input[data-group="Sterke punten"]'), function (c) { return c.checked; }).length;
+    var rows = [['Bedrijf', val('Bedrijfsnaam')], ['Contact', val('Naam') + (val('email') ? ' · ' + val('email') : '')], ['Type', val('Type bedrijf en specialiteit')], ['Sterke punten', punten ? punten + ' gekozen' : ''], ['Uitstraling', choice('Uitstraling')], ['Merkkleuren', kleuren], ['Aanspreekvorm', choice('Aanspreekvorm')], ['Bestanden', files + ' bijgevoegd']];
+    var box = document.getElementById('summary'); box.innerHTML = '';
+    rows.forEach(function (r) { var d = el('div'), a = el('span'), b = el('b'); a.textContent = r[0]; b.textContent = r[1] || '—'; d.appendChild(a); d.appendChild(b); box.appendChild(d); });
+  }
+
+  /* ---------- bewaren (zonder bestanden) ---------- */
+  function keyOf(e) { if (e.getAttribute('data-group')) return 'g:' + e.getAttribute('data-group') + ':' + e.value; if (e.getAttribute('data-anders')) return 'a:' + e.getAttribute('data-anders'); return e.name ? 'n:' + e.name + (e.type === 'checkbox' ? ':' + e.value : '') : null; }
+  function save() {
+    var data = {};
+    [].forEach.call(form.querySelectorAll('input, textarea'), function (e) {
+      if (e.type === 'file' || e.type === 'hidden' || e.type === 'color' || e.name === '_honey') return;
+      var k = keyOf(e); if (!k) return;
+      data[k] = (e.type === 'checkbox' || e.type === 'radio') ? e.checked : e.value;
+    });
+    store(function () { localStorage.setItem(KEY, JSON.stringify(data)); });
+    saved.textContent = 'Opgeslagen'; clearTimeout(save.t); save.t = setTimeout(function () { saved.textContent = ''; }, 1400);
+  }
+  function restore() {
+    var raw = store(function () { return localStorage.getItem(KEY); }); if (!raw) return; var data; try { data = JSON.parse(raw); } catch (e) { return; }
+    [].forEach.call(form.querySelectorAll('input, textarea'), function (e) {
+      if (e.type === 'file' || e.type === 'hidden' || e.type === 'color') return;
+      var k = keyOf(e); if (!k || !(k in data)) return;
+      if (e.type === 'checkbox' || e.type === 'radio') e.checked = !!data[k]; else e.value = data[k];
+    });
+    [].forEach.call(form.querySelectorAll('[data-anders]'), function (a) { var q = a.closest('.q'); a.classList.toggle('on', !!q.querySelector('[value="__anders"]:checked')); });
+    [].forEach.call(form.querySelectorAll('[data-color]'), function (t) { if (/^#[0-9a-f]{6}$/i.test(t.value)) t.previousSibling.value = t.value; });
+  }
+  form.addEventListener('input', save); form.addEventListener('change', save);
+
+  /* ---------- versturen ---------- */
+  function submit() {
+    for (var i = 1; i < steps.length; i++) { if (!validate(i)) { show(i); validate(i); return; } }
+    [].forEach.call(form.querySelectorAll('input[type=radio][value="__anders"]'), function (r) {
+      var a = form.querySelector('[data-anders="' + r.getAttribute('data-group') + '"]'), lb = r.closest('.q').getAttribute('data-alabel') || 'Anders'; r.value = lb + ': ' + (a ? a.value.trim() : '');
+    });
+    [].forEach.call(form.querySelectorAll('input[data-join]'), function (h) {
+      var g = h.getAttribute('data-join');
+      h.value = [].filter.call(form.querySelectorAll('input[type=checkbox][data-group="' + g + '"]'), function (c) { return c.checked; }).map(function (c) {
+        if (c.value !== '__anders') return c.value; var a = form.querySelector('[data-anders="' + g + '"]'); return 'Anders: ' + (a ? a.value.trim() : '');
+      }).join(', ');
+    });
+    document.getElementById('replyto').value = val('email');
+    document.getElementById('subject').value = 'Nieuwe intake: ' + (val('Bedrijfsnaam') || 'onbekend bedrijf');
+    sending = true; verder.disabled = true; terug.disabled = true; verder.textContent = 'Bezig met versturen…';
+    store(function () { localStorage.removeItem(KEY); localStorage.removeItem(KEY + '-step'); });
+    form.submit();
+  }
+
+  verder.addEventListener('click', function () {
+    if (sending) return;
+    if (cur === steps.length - 1) { submit(); return; }
+    if (cur > 0 && !validate(cur)) return;
+    show(cur + 1);
+  });
+  terug.addEventListener('click', function () { if (cur > 0 && !sending) show(cur - 1); });
+  form.addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.tagName === 'INPUT' && /text|email|tel/.test(e.target.type)) { e.preventDefault(); verder.click(); } });
+  form.addEventListener('submit', function (e) { if (!sending) { e.preventDefault(); verder.click(); } });
+
+  restore();
+  var st = parseInt(store(function () { return localStorage.getItem(KEY + '-step'); }) || '0', 10);
+  show(st > 0 && st < steps.length ? st : 0);
+})();
+</script>
+</body>
+</html>
