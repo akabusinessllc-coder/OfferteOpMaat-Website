@@ -350,6 +350,14 @@ body.v-lijst #lijst, body.v-editor #editor{ display:block; }
   .ed-tekst{ display:none; }
 }
 
+/* naam-venster & naam in editorbalk */
+.m-input{ width:100%; min-height:50px; margin-top:16px; padding:0 14px; border:1.5px solid #ddd; border-radius:10px; font:16px 'Inter',sans-serif; color:#1A1A1A; }
+.m-input:focus{ outline:none; border-color:var(--app-ac); box-shadow:0 0 0 4px rgba(247,183,35,.25); }
+.m-fout{ color:#b42318; font-size:13px; margin-top:8px; min-height:18px; }
+.ed-naam{ background:none; border:none; color:#fff; font:700 14px 'Inter',sans-serif; cursor:pointer; padding:4px 6px; border-radius:6px; max-width:32vw; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ed-naam:hover{ background:#333; }
+.ed-naam span{ color:#999; font-weight:400; margin-left:4px; }
+
 /* editor */
 #editor .ed-pad{ padding:18px 8px 40px; }
 #pdfRoot{ transform-origin:top center; }
@@ -438,7 +446,7 @@ body.v-lijst #lijst, body.v-editor #editor{ display:block; }
       <div><h1>Mijn offertes</h1><p id="lTeller">Alles wordt automatisch bewaard op dit apparaat.</p></div>
       <button class="app-btn pri l-new" id="btnNieuw">+ Nieuwe offerte</button>
     </div>
-    <input class="l-zoek" id="zoek" type="search" placeholder="Zoek op klant, project of offertenummer" style="display:none">
+    <input class="l-zoek" id="zoek" type="search" placeholder="Zoek op naam, klant, project of offertenummer" style="display:none">
     <div class="l-list" id="lijstItems"></div>
     <div class="l-foot">
       <span>Je offertes staan op dit apparaat. Maak af en toe een back-up.</span>
@@ -455,7 +463,7 @@ body.v-lijst #lijst, body.v-editor #editor{ display:block; }
 <div class="app-view" id="editor">
   <div class="app-bar no-print">
     <div class="app-bar-in">
-      <div class="app-acts"><button class="app-btn sec" id="btnTerug">← <span class="ed-tekst">Mijn offertes</span></button><span class="app-status" id="status"></span></div>
+      <div class="app-acts" style="min-width:0"><button class="app-btn sec" id="btnTerug">← <span class="ed-tekst">Mijn offertes</span></button><button class="ed-naam" id="edNaam" title="Naam wijzigen"></button><span class="app-status" id="status"></span></div>
       <div class="app-acts">
         <button class="app-btn sec" id="btnDupl" title="Kopie maken">⧉ <span class="ed-tekst">Dupliceren</span></button>
         <button class="app-btn pri" id="btnPdf">📄 Download PDF</button>
@@ -703,6 +711,14 @@ body.v-lijst #lijst, body.v-editor #editor{ display:block; }
     <li><span class="n">3</span><span><b>Download als PDF en verstuur</b>Alles wordt automatisch bewaard, dus je kunt later altijd verder.</span></li>
   </ol>
   <div class="m-acts"><button class="app-btn lt" id="welkomLater">Later</button><button class="app-btn pri" id="welkomStart">Maak mijn eerste offerte</button></div>
+</div></div>
+
+<div class="m-back" id="mNaam"><div class="m-box">
+  <h2 id="nTitel">Geef je offerte een naam</h2>
+  <p>Alleen voor jezelf, zodat je hem makkelijk terugvindt. Komt niet op de offerte.</p>
+  <input class="m-input" id="nInput" type="text" maxlength="80" placeholder="Bijvoorbeeld: Dakkapel Jansen" autocomplete="off">
+  <div class="m-fout" id="nFout"></div>
+  <div class="m-acts"><button class="app-btn lt" id="nNee">Annuleren</button><button class="app-btn pri" id="nJa">Offerte aanmaken</button></div>
 </div></div>
 
 <div class="m-back" id="mConfirm"><div class="m-box">
@@ -1055,7 +1071,7 @@ document.addEventListener('DOMContentLoaded', () => {
       var q = ($('zoek').value || '').toLowerCase(), box = $('lijstItems');
       $('zoek').style.display = docs.length > 4 ? 'block' : 'none';
       $('lTeller').textContent = docs.length ? docs.length + (docs.length === 1 ? ' offerte' : ' offertes') + ' · automatisch bewaard op dit apparaat' : 'Alles wordt automatisch bewaard op dit apparaat.';
-      var lijst = docs.filter(function(d){ return !q || [d.klant, d.project, d.nummer].join(' ').toLowerCase().indexOf(q) >= 0; });
+      var lijst = docs.filter(function(d){ return !q || [d.naam, d.klant, d.project, d.nummer].join(' ').toLowerCase().indexOf(q) >= 0; });
       if (!docs.length) {
         box.innerHTML = '<div class="l-leeg"><h2>Nog geen offertes</h2><p>Maak je eerste offerte. Klantgegevens en posten invullen, de rest gaat vanzelf.</p><button class="app-btn pri l-new" data-act="nieuw">+ Nieuwe offerte</button></div>';
         return;
@@ -1064,7 +1080,7 @@ document.addEventListener('DOMContentLoaded', () => {
         var gewijzigd = new Date(d.updated).toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' });
         return '<div class="l-item" data-id="' + esc(d.id) + '">' +
           '<span class="l-nr">' + esc(d.nummer || 'Concept') + '</span>' +
-          '<div class="l-main"><div class="l-klant">' + esc(d.klant || 'Nog geen klantnaam') + '</div><div class="l-sub">' + esc(d.project || 'Geen projectomschrijving') + ' · ' + esc(d.datum || '') + ' · gewijzigd ' + esc(gewijzigd) + '</div></div>' +
+          '<div class="l-main"><div class="l-klant">' + esc(d.naam || d.klant || 'Naamloze offerte') + '</div><div class="l-sub">' + esc([d.klant || 'Nog geen klant', d.project, d.datum].filter(Boolean).join(' · ')) + ' · gewijzigd ' + esc(gewijzigd) + '</div></div>' +
           '<div class="l-right"><div class="l-bedrag">' + esc(fmtEUR(d.totaal || 0)) + '</div><div class="l-btw">excl. btw</div>' +
           '<div class="l-acts"><button class="app-btn lt" data-act="dupl">Dupliceren</button><button class="app-btn dg" data-act="del">Verwijderen</button></div></div></div>';
       }).join('') || '<p style="color:#6B6B6B;padding:10px 4px">Geen offertes gevonden.</p>';
@@ -1081,7 +1097,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return store.get(id).then(function(doc){
       if (!doc) { location.hash = ''; return; }
       loading = true; cur = doc; root.innerHTML = doc.html; initOfferte(); setTimeout(function(){ loading = false; }, 0);
-      $('status').textContent = 'Opgeslagen';
+      $('status').textContent = 'Opgeslagen'; toonNaam();
       toon('editor');
     });
   }
@@ -1096,9 +1112,9 @@ document.addEventListener('DOMContentLoaded', () => {
   new MutationObserver(function(muts){ if (muts.every(function(m){ return m.target === root && m.type === 'attributes'; })) return; planBewaar(); }).observe(root, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['style', 'class'] });
   root.addEventListener('input', planBewaar);
 
-  function nieuw(bronHtml, nummerOverschrijven){
+  function nieuw(bronHtml, naam){
     return store.all().then(function(docs){
-      var doc = { id: nieuwId(), html: bronHtml || TPL, created: Date.now(), updated: Date.now() };
+      var doc = { id: nieuwId(), naam: naam || '', html: bronHtml || TPL, created: Date.now(), updated: Date.now() };
       loading = true; root.innerHTML = doc.html;
       var v = velden();
       if (v[4]) v[4].textContent = volgendNummer(docs);
@@ -1110,8 +1126,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   function dupliceer(id){
-    return store.get(id).then(function(doc){ if (doc) return nieuw(doc.html).then(function(){ toast('Kopie gemaakt met een nieuw offertenummer'); }); });
+    return store.get(id).then(function(doc){ if (!doc) return; return vraagNaam('Kopie maken', 'Kopie aanmaken', (doc.naam || doc.klant || 'Offerte') + ' (kopie)').then(function(n){ if (n) return nieuw(doc.html, n).then(function(){ toast('Kopie gemaakt met een nieuw offertenummer'); }); }); });
   }
+  function vraagNaam(titel, knop, standaard){
+    return new Promise(function(res){
+      var m = $('mNaam'), inp = $('nInput');
+      $('nTitel').textContent = titel; $('nJa').textContent = knop; $('nFout').textContent = '';
+      inp.value = standaard || ''; m.classList.add('on'); setTimeout(function(){ inp.focus(); inp.select(); }, 30);
+      function klaar(v){ m.classList.remove('on'); $('nJa').onclick = $('nNee').onclick = inp.onkeydown = null; res(v); }
+      $('nJa').onclick = function(){ var v = inp.value.trim(); if (!v) { $('nFout').textContent = 'Vul een naam in.'; inp.focus(); return; } klaar(v); };
+      $('nNee').onclick = function(){ klaar(null); };
+      inp.onkeydown = function(e){ if (e.key === 'Enter') $('nJa').onclick(); if (e.key === 'Escape') klaar(null); };
+    });
+  }
+  function nieuweOfferte(){ vraagNaam('Geef je offerte een naam', 'Offerte aanmaken', '').then(function(n){ if (n) nieuw(null, n); }); }
+  function toonNaam(){ $('edNaam').innerHTML = esc(cur && cur.naam || 'Naamloze offerte') + '<span>✎</span>'; }
   function bevestig(titel, tekst){
     return new Promise(function(res){
       $('cTitel').textContent = titel; $('cTekst').textContent = tekst; $('mConfirm').classList.add('on');
@@ -1196,7 +1225,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ---------- knoppen ---------- */
-  $('btnNieuw').onclick = function(){ nieuw(); };
+  $('btnNieuw').onclick = nieuweOfferte;
+  $('edNaam').onclick = function(){ vraagNaam('Naam wijzigen', 'Opslaan', cur && cur.naam).then(function(n){ if (n && cur) { cur.naam = n; toonNaam(); bewaar(); } }); };
   $('btnTerug').onclick = function(){ bewaar().then(function(){ location.hash = ''; }); };
   $('btnDupl').onclick = function(){ bewaar().then(function(){ dupliceer(cur.id); }); };
   $('btnPdf').onclick = pdf;
@@ -1207,11 +1237,11 @@ document.addEventListener('DOMContentLoaded', () => {
   $('btnHelp').onclick = function(){ $('mWelkom').classList.add('on'); };
   $('iosOk').onclick = function(){ $('mIos').classList.remove('on'); };
   $('welkomLater').onclick = function(){ $('mWelkom').classList.remove('on'); ls('welkom-' + CFG.slug, '1'); };
-  $('welkomStart').onclick = function(){ $('mWelkom').classList.remove('on'); ls('welkom-' + CFG.slug, '1'); nieuw(); };
+  $('welkomStart').onclick = function(){ $('mWelkom').classList.remove('on'); ls('welkom-' + CFG.slug, '1'); nieuweOfferte(); };
   $('zoek').oninput = renderLijst;
   $('lijstItems').addEventListener('click', function(e){
     var act = e.target.getAttribute('data-act'), item = e.target.closest('.l-item');
-    if (act === 'nieuw') { nieuw(); return; }
+    if (act === 'nieuw') { nieuweOfferte(); return; }
     if (!item) return;
     var id = item.getAttribute('data-id');
     if (act === 'dupl') { e.stopPropagation(); dupliceer(id); return; }
