@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<title>OffertesOpMaat Admin</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap">
+<style>
+/* Layout: werkbank — tellers bovenaan, klantkaarten in een raster, klantdossier schuift rechts in (mobiel: volledig scherm) */
+:root {
+  --bg: #f3f4f8; --surface: #ffffff; --surface2: #eceef4; --line: #dcdfe8; --fg: #141826; --mut: #5d6478; --mut2: #8a90a3;
+  --ac: #2563eb; --ac-soft: #e3ebfd; --ok: #15803d; --ok-soft: #dcf3e4; --warn: #b45309; --warn-soft: #fbeedb; --bad: #b91c1c; --bad-soft: #fbe2e2;
+  --display: Manrope, "Segoe UI", system-ui, sans-serif; --body: Archivo, "Segoe UI", system-ui, sans-serif;
+  --shadow: 0 1px 2px rgb(20 24 38 / .06), 0 8px 24px -12px rgb(20 24 38 / .18);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0d111c; --surface: #151a27; --surface2: #1c2232; --line: #2a3145; --fg: #eef0f6; --mut: #a3aac0; --mut2: #747c94;
+  --ac: #5b8cff; --ac-soft: #1b2a4d; --ok: #4ade80; --ok-soft: #133022; --warn: #fbbf24; --warn-soft: #3a2c10; --bad: #f87171; --bad-soft: #3d1717;
+  --shadow: 0 1px 2px rgb(0 0 0 / .3), 0 8px 24px -12px rgb(0 0 0 / .6); color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0d111c; --surface: #151a27; --surface2: #1c2232; --line: #2a3145; --fg: #eef0f6; --mut: #a3aac0; --mut2: #747c94;
+  --ac: #5b8cff; --ac-soft: #1b2a4d; --ok: #4ade80; --ok-soft: #133022; --warn: #fbbf24; --warn-soft: #3a2c10; --bad: #f87171; --bad-soft: #3d1717;
+  --shadow: 0 1px 2px rgb(0 0 0 / .3), 0 8px 24px -12px rgb(0 0 0 / .6); color-scheme: dark }
+
+* { box-sizing: border-box }
+[hidden] { display: none !important }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 48px }
+button, input, select, textarea { font: inherit; color: inherit }
+button { cursor: pointer }
+:focus-visible { outline: 2px solid var(--ac); outline-offset: 2px }
+.wrap { max-width: 1180px; margin: 0 auto }
+
+header.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-block: 22px 18px }
+.brand { display: flex; align-items: baseline; gap: 10px }
+.brand h1 { margin: 0; font-family: var(--display); font-weight: 800; font-size: 22px; letter-spacing: -.02em }
+.brand h1 b { color: var(--ac) }
+.brand span { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--mut2) }
+.btn { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); font-weight: 600; font-size: 14px }
+.btn:hover { border-color: var(--mut2) }
+.btn.pri { background: var(--ac); border-color: var(--ac); color: #fff }
+.btn.pri:hover { filter: brightness(1.08) }
+.btn.danger { color: var(--bad) }
+.btn.small { min-height: 32px; padding: 0 12px; font-size: 13px }
+
+.stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin-bottom: 18px }
+@media (max-width: 860px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)) } .stats .st:last-child { grid-column: 1 / -1 } }
+.st { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px }
+.st .n { font-family: var(--display); font-weight: 800; font-size: 26px; letter-spacing: -.02em; font-variant-numeric: tabular-nums }
+.st .l { font-size: 13px; color: var(--mut) }
+.st.alert .n { color: var(--bad) }
+
+.alerts { display: grid; gap: 8px; margin-bottom: 16px }
+.alertrow { display: flex; gap: 10px; align-items: center; padding: 10px 14px; border-radius: 12px; background: var(--bad-soft); color: var(--bad); font-weight: 600; font-size: 14px; border: 0; text-align: left; width: 100% }
+.alertrow.warn { background: var(--warn-soft); color: var(--warn) }
+
+.toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 14px }
+.search { flex: 1 1 260px; min-width: 0; height: 42px; padding: 0 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface) }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px }
+.chip { height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-size: 13px; font-weight: 500; color: var(--mut) }
+.chip[aria-pressed="true"] { background: var(--fg); border-color: var(--fg); color: var(--bg) }
+.chip .c { font-variant-numeric: tabular-nums; opacity: .7; margin-left: 4px }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px }
+.card { display: grid; gap: 10px; text-align: left; padding: 16px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); min-width: 0 }
+.card:hover { border-color: var(--mut2) }
+.card .row { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px }
+.card h3 { margin: 0; font-family: var(--display); font-weight: 700; font-size: 17px; letter-spacing: -.01em; overflow-wrap: anywhere }
+.card .who { font-size: 13px; color: var(--mut); overflow-wrap: anywhere }
+.card .meta { display: flex; gap: 6px 14px; flex-wrap: wrap; font-size: 12.5px; color: var(--mut2); font-variant-numeric: tabular-nums }
+.card .meta b { color: var(--bad); font-weight: 600 }
+.card .meta i { font-style: normal; color: var(--warn); font-weight: 600 }
+
+.pill { flex: none; display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; background: var(--surface2); color: var(--mut) }
+.pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor }
+.pill.s-lead { background: var(--surface2); color: var(--mut) }
+.pill.s-actief { background: var(--ac-soft); color: var(--ac) }
+.pill.s-werk { background: var(--warn-soft); color: var(--warn) }
+.pill.s-klaar { background: var(--ok-soft); color: var(--ok) }
+.pill.s-weg { background: var(--surface2); color: var(--mut2) }
+
+.empty { padding: 48px 20px; text-align: center; border: 1px dashed var(--line); border-radius: 14px; color: var(--mut) }
+.empty h2 { margin: 0 0 6px; font-family: var(--display); font-size: 18px; color: var(--fg) }
+.note { font-size: 13px; color: var(--mut2); margin-top: 14px }
+
+/* Dossier */
+.scrim { position: fixed; inset: 0; background: rgb(8 10 18 / .45); z-index: 40 }
+.panel { position: fixed; top: 0; right: 0; bottom: 0; width: min(560px, 100%); z-index: 41; background: var(--bg); border-left: 1px solid var(--line); display: flex; flex-direction: column;
+  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); padding-right: env(safe-area-inset-right, 0px) }
+.panel .ph { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 18px; border-bottom: 1px solid var(--line); background: var(--surface) }
+.panel .ph h2 { margin: 0; font-family: var(--display); font-weight: 800; font-size: 19px; letter-spacing: -.02em; min-width: 0; overflow-wrap: anywhere }
+.panel .pb { overflow-y: auto; padding: 18px; display: grid; gap: 18px; align-content: start }
+.sec { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; display: grid; gap: 12px }
+.sec h4 { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--mut2) }
+.fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px }
+@media (max-width: 520px) { .fields { grid-template-columns: 1fr } }
+.f { display: grid; gap: 4px; min-width: 0 }
+.f.full { grid-column: 1 / -1 }
+.f label { font-size: 12.5px; color: var(--mut); font-weight: 500 }
+.f input, .f select, .f textarea { width: 100%; min-width: 0; height: 38px; padding: 0 10px; border-radius: 9px; border: 1px solid var(--line); background: var(--bg) }
+.f textarea { height: auto; min-height: 90px; padding: 8px 10px; resize: vertical }
+.linkrow { display: flex; gap: 6px; align-items: center }
+.linkrow input { flex: 1 }
+.linkrow a { flex: none; font-size: 13px; font-weight: 600; color: var(--ac); text-decoration: none; padding: 0 6px }
+.saved { font-size: 12px; color: var(--mut2); min-height: 18px }
+
+.todo { display: grid; gap: 6px }
+.ti { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; border-radius: 10px; background: var(--bg); border: 1px solid var(--line) }
+.ti input[type=checkbox] { margin-top: 3px; width: 17px; height: 17px; accent-color: var(--ok); flex: none }
+.ti .tx { flex: 1; min-width: 0; overflow-wrap: anywhere }
+.ti.done .tx { color: var(--mut2); text-decoration: line-through }
+.ti .d { font-size: 11.5px; color: var(--mut2); font-variant-numeric: tabular-nums; white-space: nowrap }
+.ti button { border: 0; background: none; color: var(--mut2); font-size: 18px; line-height: 1; padding: 0 2px }
+.addrow { display: flex; gap: 8px }
+.addrow input { flex: 1; min-width: 0; height: 38px; padding: 0 10px; border-radius: 9px; border: 1px solid var(--line); background: var(--bg) }
+
+.log { display: grid; gap: 8px; font-size: 13.5px }
+.log div { display: grid; grid-template-columns: 88px 1fr; gap: 10px }
+.log time { color: var(--mut2); font-variant-numeric: tabular-nums }
+.confirm { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 10px 12px; border-radius: 10px; background: var(--bad-soft); color: var(--bad); font-size: 14px; font-weight: 600 }
+
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 60; background: var(--fg); color: var(--bg); padding: 10px 16px; border-radius: 10px; font-size: 14px; font-weight: 500 }
+.gate { max-width: 440px; margin: 12vh auto 0; text-align: center; color: var(--mut) }
+.gate h2 { font-family: var(--display); color: var(--fg) }
+@media (prefers-reduced-motion: no-preference) { .panel { animation: slide .18s ease-out } @keyframes slide { from { transform: translateX(24px); opacity: .6 } } }
+.login { max-width: 400px; margin: 10vh auto 0; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 28px 24px; box-shadow: var(--shadow); display: grid; gap: 14px }
+.login h2 { margin: 0; font-family: var(--display); font-weight: 800; font-size: 22px }
+.login p { margin: 0; color: var(--mut); font-size: 14px }
+.login .f input { height: 44px }
+.login .fout { color: var(--bad); font-size: 13.5px; min-height: 18px }
+.copyrow { display: flex; gap: 6px; align-items: center }
+.copyrow input { flex: 1; min-width: 0; height: 38px; padding: 0 10px; border-radius: 9px; border: 1px solid var(--line); background: var(--bg); font-size: 12.5px; color: var(--mut) }
+.hint { font-size: 12.5px; color: var(--mut2) }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><h1>Offertes<b>Op</b>Maat</h1><span>Admin</span></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="btnUit" type="button" hidden>Uitloggen</button><button class="btn pri" id="btnNieuw" type="button" disabled hidden>+ Nieuwe klant</button></div>
+  </header>
+
+  <form class="login" id="login" hidden novalidate>
+    <h2>Inloggen</h2>
+    <p>Alleen voor de beheerder van OffertesOpMaat.</p>
+    <div class="f"><label for="lgNaam">Gebruikersnaam</label><input id="lgNaam" autocomplete="username" autocapitalize="off"></div>
+    <div class="f"><label for="lgPw">Wachtwoord</label><input id="lgPw" type="password" autocomplete="current-password"></div>
+    <div class="fout" id="lgFout"></div>
+    <button class="btn pri" type="submit" id="lgJa" style="justify-content:center;min-height:44px">Inloggen</button>
+  </form>
+  <div id="main" hidden>
+    <section class="stats" aria-label="Overzicht">
+      <div class="st"><div class="n" id="sActief">–</div><div class="l">Lopende klanten</div></div>
+      <div class="st"><div class="n" id="sWerk">–</div><div class="l">In productie of bijschaven</div></div>
+      <div class="st"><div class="n" id="sKlaar">–</div><div class="l">Opgeleverd totaal</div></div>
+      <div class="st"><div class="n" id="sPunten">–</div><div class="l">Open bijschaafpunten</div></div>
+      <div class="st"><div class="n" id="sOmzet">–</div><div class="l">Omzet (betaald)</div></div>
+    </section>
+    <div class="alerts" id="alerts"></div>
+    <div class="toolbar">
+      <input class="search" id="zoek" type="search" placeholder="Zoek op bedrijf, naam, e-mail, telefoon of plaats" aria-label="Zoeken">
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Filter op status"></div>
+    <div id="lijst"><div class="empty"><h2>Klanten laden…</h2>Even geduld, je klantenbestand wordt opgehaald.</div></div>
+    <p class="note" id="note"></p>
+  </div>
+</div>
+
+<div id="paneel" hidden></div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="supabase.js"></script>
+<script>
+const STATUSSEN = [
+  { k: 'aanvraag', t: 'Aanvraag', g: 'lead' },
+  { k: 'gesprek', t: 'Gesprek gepland', g: 'lead' },
+  { k: 'betaald', t: 'Betaald', g: 'actief' },
+  { k: 'intake', t: 'Intake ontvangen', g: 'actief' },
+  { k: 'productie', t: 'In productie', g: 'werk' },
+  { k: 'opgeleverd', t: 'Opgeleverd', g: 'klaar' },
+  { k: 'bijschaven', t: 'Bijschaven', g: 'werk' },
+  { k: 'afgerond', t: 'Afgerond', g: 'klaar' },
+  { k: 'afgehaakt', t: 'Afgehaakt', g: 'weg' },
+];
+const ST = Object.fromEntries(STATUSSEN.map(s => [s.k, s]));
+const DATUMS = [['aanvraag', 'Aanvraag binnen'], ['gesprek', 'Gesprek'], ['betaald', 'Betaald'], ['intake', 'Intake binnen'], ['opgeleverd', 'Opgeleverd']];
+
+let sb = null, apps = {}, klanten = [], filter = 'alle', zoek = '', openId = null, magSchrijven = false, geladen = false;
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const vandaag = () => new Date().toISOString().slice(0, 10);
+const fmtD = d => d ? new Date(d + 'T12:00:00').toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+const dagenSinds = d => d ? Math.floor((Date.now() - new Date(d + 'T00:00:00')) / 864e5) : null;
+const eur = n => '€ ' + Number(n || 0).toLocaleString('nl-NL', { maximumFractionDigits: 0 });
+
+function toast(t) { const el = $('#toast'); el.textContent = t; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 2200) }
+
+// 5-dagen-belofte: telt vanaf intake (of betaald) zolang er nog niet is opgeleverd
+function deadline(k) {
+  if (!['betaald', 'intake', 'productie'].includes(k.status)) return null;
+  const start = k.datums?.intake || k.datums?.betaald; if (!start) return null;
+  return 5 - dagenSinds(start);
+}
+
+function render() {
+  const lopend = klanten.filter(k => !['afgerond', 'afgehaakt', 'opgeleverd'].includes(k.status));
+  $('#sActief').textContent = lopend.length;
+  $('#sWerk').textContent = klanten.filter(k => ['productie', 'bijschaven'].includes(k.status)).length;
+  $('#sKlaar').textContent = klanten.filter(k => k.datums?.opgeleverd).length;
+  const open = klanten.reduce((n, k) => n + (k.punten || []).filter(p => !p.klaar).length, 0);
+  $('#sPunten').textContent = open;
+  $('#sPunten').parentElement.classList.toggle('alert', open > 0);
+  $('#sOmzet').textContent = eur(klanten.filter(k => k.datums?.betaald).reduce((n, k) => n + (Number(k.prijs) || 0), 0));
+
+  const al = [];
+  klanten.forEach(k => { const d = deadline(k); if (d !== null && d <= 1) al.push(`<button class="alertrow${d < 0 ? '' : ' warn'}" data-open="${esc(k.id)}" type="button">${d < 0 ? '⚠ ' + esc(k.bedrijf) + ' is ' + (-d) + ' dag' + (d === -1 ? '' : 'en') + ' over de 5-dagen-belofte' : '⏱ ' + esc(k.bedrijf) + ': nog ' + d + ' dag' + (d === 1 ? '' : 'en') + ' tot de deadline'}</button>`) });
+  $('#alerts').innerHTML = al.join('');
+
+  const telling = s => s === 'alle' ? klanten.length : klanten.filter(k => k.status === s).length;
+  $('#chips').innerHTML = [['alle', 'Alle'], ...STATUSSEN.map(s => [s.k, s.t])]
+    .filter(([k]) => k === 'alle' || telling(k) > 0 || filter === k)
+    .map(([k, t]) => `<button class="chip" type="button" data-f="${k}" aria-pressed="${filter === k}">${t}<span class="c">${telling(k)}</span></button>`).join('');
+
+  const q = zoek.trim().toLowerCase();
+  const lijst = klanten.filter(k => (filter === 'alle' || k.status === filter) &&
+    (!q || [k.bedrijf, k.contact, k.email, k.telefoon, k.plaats, k.branche, k.website].some(v => String(v || '').toLowerCase().includes(q))))
+    .sort((a, b) => String(b.bijgewerkt || '').localeCompare(String(a.bijgewerkt || '')));
+
+  if (!geladen) return;
+  if (!klanten.length) { $('#lijst').innerHTML = `<div class="empty"><h2>Nog geen klanten</h2>Klik op "+ Nieuwe klant" om je eerste klantkaart aan te maken.</div>`; return }
+  if (!lijst.length) { $('#lijst').innerHTML = `<div class="empty"><h2>Niets gevonden</h2>Geen klant past bij deze zoekopdracht of dit filter.</div>`; return }
+  $('#lijst').innerHTML = '<div class="grid">' + lijst.map(k => {
+    const s = ST[k.status] || ST.aanvraag, d = deadline(k), op = (k.punten || []).filter(p => !p.klaar).length;
+    const meta = [];
+    if (k.datums?.opgeleverd) meta.push('Opgeleverd ' + fmtD(k.datums.opgeleverd));
+    else if (k.datums?.aanvraag) meta.push('Aanvraag ' + fmtD(k.datums.aanvraag));
+    if (d !== null) meta.push(d < 0 ? `<b>${-d} dag${d === -1 ? '' : 'en'} te laat</b>` : `Nog ${d} dag${d === 1 ? '' : 'en'}`);
+    if (op) meta.push(`<i>${op} open punt${op === 1 ? '' : 'en'}</i>`);
+    return `<button class="card" type="button" data-open="${esc(k.id)}">
+      <div class="row"><h3>${esc(k.bedrijf || 'Naamloos')}</h3><span class="pill s-${s.g}">${s.t}</span></div>
+      <div class="who">${esc([k.contact, k.branche, k.plaats].filter(Boolean).join(' · ') || 'Nog geen contactgegevens')}</div>
+      <div class="meta">${meta.join('')}</div></button>`;
+  }).join('') + '</div>';
+  if (openId) renderPaneel(false);
+}
+
+// ---------- dossier ----------
+function klant(id) { return klanten.find(k => k.id === id) }
+function openPaneel(id) { openId = id; renderPaneel(true) }
+function sluitPaneel() { openId = null; $('#paneel').hidden = true; $('#paneel').innerHTML = '' }
+
+function renderPaneel(volledig) {
+  const k = klant(openId); if (!k) { sluitPaneel(); return }
+  const p = $('#paneel');
+  if (!volledig && p.contains(document.activeElement) && document.activeElement.matches('input:not([type=checkbox]),textarea')) { renderLijstjes(k); return }
+  const ro = magSchrijven ? '' : 'disabled';
+  const veld = (n, l, type = 'text', full = false) => `<div class="f${full ? ' full' : ''}"><label for="v-${n}">${l}</label><input id="v-${n}" data-veld="${n}" type="${type}" value="${esc(k[n])}" ${ro}></div>`;
+  const link = (n, l) => `<div class="f full"><label for="v-${n}">${l}</label><div class="linkrow"><input id="v-${n}" data-veld="${n}" type="url" value="${esc(k[n])}" placeholder="https://…" ${ro}>${k[n] ? `<a href="${esc(k[n])}" target="_blank" rel="noopener">Open ↗</a>` : ''}</div></div>`;
+  p.innerHTML = `<div class="scrim" data-sluit></div><aside class="panel" role="dialog" aria-modal="true" aria-labelledby="pTitel">
+    <div class="ph"><h2 id="pTitel">${esc(k.bedrijf || 'Naamloos')}</h2><button class="btn small" type="button" data-sluit>Sluiten</button></div>
+    <div class="pb">
+      <div class="sec"><h4>Status</h4>
+        <div class="fields">
+          <div class="f"><label for="v-status">Fase</label><select id="v-status" data-veld="status" ${ro}>${STATUSSEN.map(s => `<option value="${s.k}"${k.status === s.k ? ' selected' : ''}>${s.t}</option>`).join('')}</select></div>
+          <div class="f"><label for="v-prijs">Prijs (€)</label><input id="v-prijs" data-veld="prijs" type="number" min="0" step="1" value="${esc(k.prijs)}" ${ro}></div>
+          ${DATUMS.map(([n, l]) => `<div class="f"><label for="d-${n}">${l}</label><input id="d-${n}" data-datum="${n}" type="date" value="${esc(k.datums?.[n] || '')}" ${ro}></div>`).join('')}
+        </div>
+      </div>
+      <div class="sec"><h4>Bijschaafpunten</h4>
+        <div class="todo" id="todo"></div>
+        ${magSchrijven ? `<form class="addrow" id="addPunt"><input id="nieuwPunt" placeholder="Bijv. logo iets groter op het voorblad" aria-label="Nieuw bijschaafpunt"><button class="btn small pri" type="submit">Toevoegen</button></form>` : ''}
+      </div>
+      <div class="sec"><h4>Bedrijf & contact</h4>
+        <div class="fields">
+          ${veld('bedrijf', 'Bedrijfsnaam', 'text', true)}${veld('contact', 'Contactpersoon')}${veld('telefoon', 'Telefoon', 'tel')}
+          ${veld('email', 'E-mail', 'email')}${veld('plaats', 'Plaats')}${veld('branche', 'Type bedrijf / specialiteit', 'text', true)}${veld('website', 'Website', 'url', true)}
+        </div>
+      </div>
+      <div class="sec"><h4>Oplevering</h4>
+        <div class="fields">${veld('slug', 'App-code (map op de site)', 'text', true)}</div>
+        ${appBlok(k)}
+      </div>
+      <div class="sec"><h4>Notities</h4>
+        <div class="f full"><label for="v-notities">Alles wat je later moet weten: wensen, afspraken, huisstijl, bijzonderheden</label><textarea id="v-notities" data-veld="notities" ${ro}>${esc(k.notities)}</textarea></div>
+      </div>
+      <div class="sec"><h4>Geschiedenis</h4><div class="log" id="log"></div></div>
+      <div class="saved" id="saved"></div>
+      ${magSchrijven ? `<div id="delZone"><button class="btn small danger" type="button" id="btnDel">Klantkaart verwijderen</button></div>` : ''}
+    </div></aside>`;
+  p.hidden = false;
+  renderLijstjes(k);
+}
+
+function renderLijstjes(k) {
+  const t = $('#todo'); if (!t) return;
+  const punten = k.punten || [];
+  t.innerHTML = punten.length ? punten.map(pt => `<div class="ti${pt.klaar ? ' done' : ''}">
+      <input type="checkbox" data-punt="${esc(pt.id)}" ${pt.klaar ? 'checked' : ''} ${magSchrijven ? '' : 'disabled'} aria-label="Afgevinkt">
+      <span class="tx">${esc(pt.tekst)}</span><span class="d">${fmtD(pt.datum)}</span>
+      ${magSchrijven ? `<button type="button" data-delpunt="${esc(pt.id)}" aria-label="Punt verwijderen">×</button>` : ''}</div>`).join('')
+    : '<div class="note" style="margin:0">Geen bijschaafpunten. Voeg hieronder een wens van de klant toe.</div>';
+  $('#log').innerHTML = (k.log || []).slice().reverse().slice(0, 40).map(l => `<div><time>${fmtD(l.datum)}</time><span>${esc(l.tekst)}</span></div>`).join('') || '<div class="note" style="margin:0">Nog geen geschiedenis.</div>';
+}
+
+// ---------- schrijven ----------
+const wachtrij = {};
+async function schrijf(id, patch, melding) {
+  const k = klant(id); if (!k || !sb) return;
+  patch.bijgewerkt = new Date().toISOString();
+  Object.assign(k, JSON.parse(JSON.stringify(patch)));
+  const { id: _i, ...data } = k;
+  const vorige = wachtrij[id] || Promise.resolve();
+  wachtrij[id] = vorige.then(() => sb.from('klanten').update({ data: JSON.parse(JSON.stringify(data)), bijgewerkt: patch.bijgewerkt }).eq('id', id)).then(r => {
+    if (r.error) throw r.error;
+    const s = $('#saved'); if (s) s.textContent = 'Opgeslagen om ' + new Date().toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+    if (melding) toast(melding);
+  }).catch(e => toast(/JWT|auth/i.test(e?.message || '') ? 'Je bent uitgelogd. Log opnieuw in.' : 'Opslaan mislukt. Probeer het opnieuw.'));
+  return wachtrij[id];
+}
+function metLog(k, tekst) { return [...(k.log || []), { datum: vandaag(), tekst }].slice(-200) }
+
+const timers = {};
+document.addEventListener('input', e => {
+  const el = e.target;
+  if (el.id === 'zoek') { zoek = el.value; render(); return }
+  if (!openId || !el.dataset.veld || el.tagName === 'SELECT') return;
+  const id = openId, veld = el.dataset.veld, waarde = el.type === 'number' ? (el.value === '' ? '' : Number(el.value)) : el.value;
+  clearTimeout(timers[veld]); timers[veld] = setTimeout(() => schrijf(id, { [veld]: waarde }), 700);
+  if (veld === 'bedrijf') $('#pTitel').textContent = el.value || 'Naamloos';
+});
+document.addEventListener('change', e => {
+  const el = e.target, k = klant(openId); if (!k) return;
+  if (el.dataset.veld === 'status') {
+    const s = el.value, patch = { status: s, log: metLog(k, 'Status: ' + ST[s].t) };
+    if (DATUMS.some(([n]) => n === s) && !k.datums?.[s]) patch.datums = { ...(k.datums || {}), [s]: vandaag() };
+    schrijf(k.id, patch, 'Status bijgewerkt'); render(); renderPaneel(true);
+  } else if (el.dataset.datum) {
+    schrijf(k.id, { datums: { ...(k.datums || {}), [el.dataset.datum]: el.value } }); render();
+  } else if (el.dataset.punt) {
+    const punten = (k.punten || []).map(p => p.id === el.dataset.punt ? { ...p, klaar: el.checked } : p);
+    const pt = punten.find(p => p.id === el.dataset.punt);
+    schrijf(k.id, { punten, log: metLog(k, (el.checked ? 'Afgevinkt: ' : 'Heropend: ') + pt.tekst) }); renderLijstjes(k); render();
+  }
+});
+document.addEventListener('submit', e => {
+  if (e.target.id !== 'addPunt') return; e.preventDefault();
+  const inp = $('#nieuwPunt'), tekst = inp.value.trim(), k = klant(openId); if (!tekst || !k) return;
+  const punten = [...(k.punten || []), { id: Math.random().toString(36).slice(2, 9), tekst, klaar: false, datum: vandaag() }];
+  const patch = { punten, log: metLog(k, 'Bijschaafpunt: ' + tekst) };
+  if (['opgeleverd', 'afgerond'].includes(k.status)) { patch.status = 'bijschaven'; patch.log = metLog({ log: patch.log }, 'Status: Bijschaven') }
+  inp.value = ''; schrijf(k.id, patch, 'Punt toegevoegd'); renderLijstjes(k); render();
+  if (patch.status) renderPaneel(true);
+});
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-open],[data-sluit],[data-f],[data-delpunt],#btnNieuw,#btnDel,#delJa,#delNee'); if (!t) return;
+  if (t.dataset.open) openPaneel(t.dataset.open);
+  else if (t.hasAttribute('data-sluit')) sluitPaneel();
+  else if (t.dataset.f) { filter = t.dataset.f; render() }
+  else if (t.dataset.delpunt) { const k = klant(openId); schrijf(k.id, { punten: (k.punten || []).filter(p => p.id !== t.dataset.delpunt) }); renderLijstjes(k); render() }
+  else if (t.id === 'btnNieuw') nieuweKlant();
+  else if (t.id === 'btnDel') $('#delZone').innerHTML = `<div class="confirm">Deze klantkaart definitief verwijderen? <button class="btn small danger" id="delJa" type="button">Ja, verwijderen</button><button class="btn small" id="delNee" type="button">Annuleren</button></div>`;
+  else if (t.id === 'delNee') renderPaneel(true);
+  else if (t.id === 'delJa') { const id = openId; sluitPaneel(); klanten = klanten.filter(k => k.id !== id); render(); sb.from('klanten').delete().eq('id', id).then(r => toast(r.error ? 'Verwijderen mislukt' : 'Klantkaart verwijderd')) }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && openId) sluitPaneel() });
+
+async function nieuweKlant() {
+  if (!sb) return;
+  const id = 'k-' + Date.now().toString(36);
+  const k = { bedrijf: '', contact: '', email: '', telefoon: '', plaats: '', branche: '', website: '', status: 'aanvraag', prijs: 300,
+    datums: { aanvraag: vandaag() }, punten: [], notities: '', appUrl: '', klaarUrl: '', slug: '', log: [{ datum: vandaag(), tekst: 'Klantkaart aangemaakt' }],
+    aangemaakt: new Date().toISOString(), bijgewerkt: new Date().toISOString() };
+  try { const r = await sb.from('klanten').insert({ id, data: k }); if (r.error) throw r.error; klanten.push({ id, ...k }); openPaneel(id); setTimeout(() => $('#v-bedrijf')?.focus(), 50) }
+  catch (e) { toast(e?.code === 'quota_exceeded' ? 'Opslag is vol.' : 'Aanmaken mislukt. Probeer het opnieuw.') }
+}
+
+// ---------- app-links per klant ----------
+const SITE = 'https://offertesopmaat.com/app/';
+function appBlok(k) {
+  if (!k.slug) return '<p class="hint">Vul de app-code in zodra de offerte-app gebouwd is, bijvoorbeeld bouwbij-services-k7x2.</p>';
+  const s = apps[k.slug];
+  if (!s) return `<p class="hint">Voor deze app-code bestaat nog geen persoonlijke link.</p><button class="btn small" type="button" id="btnMaakApp">Persoonlijke link aanmaken</button>`;
+  const app = SITE + k.slug + '/#k=' + s, klaar = SITE + k.slug + '/klaar.html#k=' + s;
+  const rij = (l, u, n) => `<div class="f full"><label>${l}</label><div class="copyrow"><input readonly value="${esc(u)}" id="cp-${n}" aria-label="${l}"><button class="btn small" type="button" data-kopieer="cp-${n}">Kopieer</button><a class="btn small" href="${esc(u)}" target="_blank" rel="noopener">Open</a></div></div>`;
+  return `<div class="fields">${rij('Afleverpagina (stuur deze naar de klant)', klaar, 'klaar')}${rij('Offerte-app', app, 'app')}</div>
+    <p class="hint">Iedereen met deze link kan bij de offertes van deze klant. Is de link ergens terechtgekomen waar hij niet hoort? Maak een nieuwe; de oude werkt dan niet meer.</p>
+    <div id="sleutelZone"><button class="btn small danger" type="button" id="btnNieuweSleutel">Nieuwe link maken</button></div>`;
+}
+document.addEventListener('click', async e => {
+  const t = e.target.closest('[data-kopieer],#btnMaakApp,#btnNieuweSleutel,#sleutelJa,#sleutelNee,#btnUit'); if (!t) return;
+  const k = klant(openId);
+  if (t.dataset.kopieer) { const inp = document.getElementById(t.dataset.kopieer); try { await navigator.clipboard.writeText(inp.value); toast('Gekopieerd') } catch { inp.select(); toast('Selecteer en kopieer met Ctrl+C') } }
+  else if (t.id === 'btnMaakApp') { const r = await sb.rpc('admin_nieuwe_app', { p_slug: k.slug, p_bedrijf: k.bedrijf || '' }); if (r.error) { toast(/ongeldige/.test(r.error.message) ? 'Gebruik alleen kleine letters, cijfers en streepjes (min. 6 tekens)' : 'Aanmaken mislukt'); return } apps[k.slug] = r.data; renderPaneel(true); toast('Persoonlijke link aangemaakt') }
+  else if (t.id === 'btnNieuweSleutel') $('#sleutelZone').innerHTML = `<div class="confirm">De oude link stopt direct met werken, ook op de apparaten van de klant. Doorgaan? <button class="btn small danger" id="sleutelJa" type="button">Ja, nieuwe link</button><button class="btn small" id="sleutelNee" type="button">Annuleren</button></div>`;
+  else if (t.id === 'sleutelNee') renderPaneel(true);
+  else if (t.id === 'sleutelJa') { const r = await sb.rpc('admin_nieuwe_sleutel', { p_slug: k.slug }); if (r.error) { toast('Mislukt'); return } apps[k.slug] = r.data; schrijf(k.id, { log: metLog(k, 'Nieuwe persoonlijke link gemaakt') }); renderPaneel(true); toast('Nieuwe link gemaakt. Stuur hem naar de klant.') }
+  else if (t.id === 'btnUit') { await sb.auth.signOut(); location.reload() }
+});
+
+// ---------- inloggen & laden ----------
+async function laad() {
+  const [kr, ar] = await Promise.all([sb.from('klanten').select('id,data'), sb.from('apps').select('slug,sleutel')]);
+  if (kr.error) throw kr.error;
+  klanten = (kr.data || []).map(r => ({ id: r.id, ...r.data }));
+  apps = Object.fromEntries((ar.data || []).map(a => [a.slug, a.sleutel]));
+  geladen = true; render();
+}
+async function naInloggen() {
+  const ok = await sb.rpc('is_admin');
+  if (ok.error || !ok.data) { await sb.auth.signOut(); toonLogin('Dit account heeft geen toegang tot het admin-dashboard.'); return }
+  $('#login').hidden = true; $('#main').hidden = false; $('#btnUit').hidden = false;
+  magSchrijven = true; $('#btnNieuw').disabled = false; $('#btnNieuw').hidden = false;
+  try { await laad() } catch { $('#note').textContent = 'Het klantenbestand kon niet worden geladen. Ververs de pagina.' }
+}
+function toonLogin(fout) { $('#main').hidden = true; $('#btnUit').hidden = true; $('#btnNieuw').disabled = true; $('#btnNieuw').hidden = true; $('#login').hidden = false; $('#lgFout').textContent = fout || ''; setTimeout(() => $('#lgNaam').focus(), 30) }
+$('#login').addEventListener('submit', async e => {
+  e.preventDefault();
+  let naam = $('#lgNaam').value.trim(); const pw = $('#lgPw').value;
+  if (!naam || !pw) { $('#lgFout').textContent = 'Vul je gebruikersnaam en wachtwoord in.'; return }
+  const email = naam.includes('@') ? naam : naam.toLowerCase() + '@offertesopmaat.com';
+  $('#lgJa').disabled = true; $('#lgFout').textContent = '';
+  const r = await sb.auth.signInWithPassword({ email, password: pw });
+  $('#lgJa').disabled = false;
+  if (r.error) { $('#lgFout').textContent = /invalid/i.test(r.error.message) ? 'Gebruikersnaam of wachtwoord klopt niet.' : /rate|many/i.test(r.error.message) ? 'Te veel pogingen. Wacht een paar minuten.' : 'Inloggen lukte niet. Controleer je internetverbinding.'; return }
+  $('#lgPw').value = ''; naInloggen();
+});
+(async () => {
+  sb = window.supabase.createClient('https://sanqgqjfolygzzejbvhq.supabase.co', 'sb_publishable_Sasv3oQdP_mEByJ-lf_ekg_Z4nSJrfT', { auth: { persistSession: true, autoRefreshToken: true, storageKey: 'oom-admin' } });
+  const { data } = await sb.auth.getSession();
+  if (data.session) naInloggen(); else toonLogin();
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && magSchrijven && !openId) laad().catch(() => {}) });
+})();
+</script>
+</body>
+</html>
