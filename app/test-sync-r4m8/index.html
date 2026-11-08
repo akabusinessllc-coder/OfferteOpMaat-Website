@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Test Offertes</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1A1A1A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Test">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<style>
+/* ===== Offerte-stijl van de klant (ongewijzigd) ===== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+:root{
+  --yellow:#F7B723;
+  --yellow-dark:#E8A70F;
+  --black:#1A1A1A;
+  --grey:#6B6B6B;
+  --light-grey:#F5F5F5;
+  --line:#E7E7E7;
+  --page-w:210mm;
+  --page-h:297mm;
+  --pad:16mm;
+}
+@page{ size:210mm 297mm; margin:0; }
+*{ box-sizing:border-box; margin:0; padding:0; }
+*{
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+  color-adjust: exact !important;
+}
+body{ font-family:'Inter', Arial, sans-serif; color:#222; background:#ccc; }
+.page{
+  width:var(--page-w);
+  height:var(--page-h);
+  background:#fff;
+  position:relative;
+  overflow:hidden;
+  page-break-after:always;
+  margin:0 auto 24px auto;
+}
+.page.flow-page{ height:auto; min-height:var(--page-h); overflow:visible; }
+@media print{
+  body{ background:#fff; }
+  .page{ margin:0; box-shadow:none; }
+}
+.page:not(.cover){ padding:10mm 12mm 12mm 12mm; }
+.page.flow-page{ padding-left:6mm; padding-right:6mm; }
+
+/* ---------- shared header ---------- */
+.brandbar{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.brandbar .logo-icon{ width:auto; height:38px; flex:none; }
+.brandname{ font-family:'Poppins',sans-serif; font-weight:800; font-size:19px; letter-spacing:.2px; }
+.brandname .b1{ color:var(--yellow-dark); }
+.brandname .b2{ color:var(--black); }
+.brandtag{ font-size:10.5px; color:var(--grey); font-style:italic; margin-top:-2px; }
+.headerline{ border:none; border-top:2px solid var(--line); margin:10px 0 16px 0; }
+
+/* ---------- page number ---------- */
+.pagenum{ position:absolute; bottom:8mm; left:0; right:0; text-align:center; font-size:10px; color:var(--grey); }
+
+/* ================= COVER (full-bleed foto + diagonale snede) ================= */
+.cover{ padding:0 !important; }
+.cover-photo.ph{
+  position:absolute; inset:0; z-index:1;
+  background:linear-gradient(135deg,#dcdcdc,#ececec) center/cover no-repeat;
+  display:flex; align-items:center; justify-content:center;
+  color:#999; font-weight:700; font-size:14px; letter-spacing:.4px; text-align:center;
+}
+.cover-logo-badge{
+  position:absolute; top:10mm; left:10mm; z-index:5;
+  display:flex; align-items:center; gap:8px;
+  background:rgba(255,255,255,.92); border-radius:6px; padding:6px 12px;
+  box-shadow:0 1px 4px rgba(0,0,0,.15);
+}
+.cover-logo-badge .logo-icon{ height:30px; width:auto; }
+.cover-logo-badge .brandname{ font-size:14px; }
+.cover-logo-badge .brandtag{ font-size:8.5px; }
+.cover-photo.has-img{ color:transparent; }
+.cover-photo .upload-lbl{ z-index:2; }
+
+.cover-panel{
+  position:absolute; inset:0; z-index:3;
+  background:#fff;
+  clip-path: polygon(0 100%, 0 46%, 48% 46%, 62% 100%);
+  padding:143mm 0 0 18mm;
+}
+.cover-panel .accent-rule{ width:50px; height:5px; background:var(--yellow); margin-bottom:6mm; }
+.cover-panel h1{ font-family:'Poppins',sans-serif; font-weight:800; font-size:44px; letter-spacing:.5px; color:var(--black); margin-bottom:8mm; }
+.cover-panel .meta{ display:grid; grid-template-columns:36mm 1fr; row-gap:9px; font-size:14.5px; max-width:90mm; }
+.cover-panel .meta .val{ white-space:nowrap; overflow:visible; }
+.cover-panel .meta .lbl{ font-weight:700; color:#222; }
+.cover-panel .meta .val{ color:#333; }
+.cover-panel .meta .val:empty:before{ content:attr(data-ph); color:#aaa; font-style:italic; }
+
+.cover-footer{
+  position:absolute; left:0; right:0; bottom:0; z-index:4;
+  background:var(--black); color:#fff; padding:8mm 18mm;
+}
+.cover-footer .tag{ font-weight:700; font-size:13px; margin-bottom:3px; }
+.cover-footer .web{ color:var(--yellow); font-size:12.5px; }
+
+/* ================= REASONS / PROCESS (page 2) ================= */
+.page2{ padding:14mm 16mm 12mm 16mm !important; display:flex; flex-direction:column; }
+.page2 .process{ margin-right:-16mm; padding-right:26mm; border-radius:6px 0 0 6px; }
+.page2 .two-col{ flex:1 0 auto; margin-top:6mm; }
+.two-col{ display:grid; grid-template-columns:1fr 0.62fr; gap:16mm; align-items:start; }
+.sec-title{ font-family:'Poppins',sans-serif; font-weight:700; font-size:16px; letter-spacing:.3px; margin-bottom:16px; }
+.reason{ display:flex; gap:14px; margin-bottom:24px; }
+.reason .ic{ width:36px; height:36px; flex:none; }
+.reason .txt .t{ font-weight:700; font-size:13.5px; margin-bottom:4px; }
+.reason .txt .d{ font-size:12px; color:var(--grey); line-height:1.55; }
+
+.process{ background:var(--black); border-radius:6px; padding:20px 20px; }
+.process .sec-title{ color:#fff; margin-bottom:18px; }
+.step{ display:flex; gap:14px; align-items:flex-start; padding:16px 0; border-bottom:1px solid #333; }
+.step:last-child{ border-bottom:none; }
+.step .num{ width:30px; height:30px; border-radius:50%; background:var(--yellow); color:var(--black); font-weight:800; font-size:14px; display:flex; align-items:center; justify-content:center; flex:none; }
+.step .txt .t{ color:#fff; font-weight:700; font-size:13.5px; margin-bottom:4px; }
+.step .txt .d{ color:#bbb; font-size:11.5px; line-height:1.5; }
+
+.page2-foot{ margin:16mm -16mm 0 -16mm; background:var(--black); padding:12mm 16mm; text-align:center; }
+.page2-foot .t1{ color:#fff; font-weight:700; font-size:14px; margin-bottom:4px; }
+.page2-foot .t2{ color:var(--yellow); font-size:12.5px; }
+
+/* ================= QUOTE TABLES (pages 3-4) ================= */
+.page-title{ font-family:'Poppins',sans-serif; font-weight:800; font-size:24px; margin-bottom:12px; }
+.cat{ margin-bottom:16px; break-inside:avoid; page-break-inside:avoid; }
+.cat-head{ background:var(--black); color:#fff; font-weight:700; font-size:11.5px; letter-spacing:.4px; padding:7px 10px; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.cat-head span{ border-radius:3px; }
+.cat-head span:empty:before{ content:attr(data-ph); color:#999; font-style:italic; font-weight:400; }
+.cat-del{ width:20px; height:20px; border-radius:50%; border:1px solid #555; background:transparent; color:#ccc; font-size:12px; line-height:18px; text-align:center; cursor:pointer; flex:none; padding:0; }
+.cat-del:hover{ background:#c0392b; border-color:#c0392b; color:#fff; }
+.addcat{ display:block; margin:4px 0 18px 0; background:none; border:1.5px dashed var(--yellow-dark); color:#8a6d1a; border-radius:5px; font-size:12px; font-weight:600; padding:8px 14px; cursor:pointer; font-family:inherit; }
+.addcat:hover{ background:rgba(247,183,35,.12); }
+table.items{ width:100%; border-collapse:collapse; font-size:11px; table-layout:fixed; }
+.col-desc{ width:58%; } .col-qty{ width:17%; } .col-price{ width:20%; } .col-del{ width:5%; }
+table.items th{ position:relative; }
+.col-resizer{
+  position:absolute; top:0; right:-4px; bottom:0; width:8px; cursor:col-resize; z-index:5;
+}
+.col-resizer:hover, .col-resizer:active{ background:rgba(247,183,35,.4); }
+@media print{ .col-resizer{ display:none; } }
+table.items thead th{ text-align:left; font-size:10px; letter-spacing:.3px; color:#333; padding:6px 10px; border-bottom:2px solid var(--line); }
+table.items thead th.num, table.items tbody td.num{ text-align:center; }
+table.items thead th.price, table.items tbody td.price{ text-align:right; }
+table.items tbody td{ padding:7px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+table.items tbody tr:nth-child(even){ background:var(--light-grey); }
+table.items tfoot td{ padding:7px 10px; font-weight:700; background:var(--yellow); }
+table.items tfoot td.price{ text-align:right; }
+
+.totals-box{ margin-top:6px; }
+.totals-box .row{ display:flex; justify-content:space-between; padding:9px 12px; font-weight:700; font-size:12.5px; }
+.totals-box .row.dark{ background:var(--black); color:#fff; }
+.totals-box .row.final{ background:var(--yellow); color:var(--black); font-size:14px; }
+.note{ font-size:11px; color:#333; line-height:1.6; margin-top:14px; }
+.note b{ font-weight:700; }
+
+/* ================= PLANNING / BETALING (page5) ================= */
+.info-item{ display:flex; gap:14px; margin-bottom:22px; align-items:flex-start; }
+.info-item .ic{ width:36px; height:36px; flex:none; margin-top:1px; }
+.info-item .t{ font-weight:700; font-size:14px; margin-bottom:2px; }
+.info-item .v{ font-size:13px; color:var(--grey); }
+.pay-item{ display:flex; align-items:center; gap:16px; margin-bottom:22px; }
+.pay-badge{ background:#fff; border:3px solid var(--yellow); border-radius:50%; width:58px; height:58px; padding:0; font-weight:800; font-size:14px; color:var(--black); flex:none; display:flex; align-items:center; justify-content:center; text-align:center; }
+.pay-desc{ font-size:13px; line-height:1.4; }
+.small-note{ font-size:10.5px; color:var(--grey); font-style:italic; margin-top:4px; }
+
+.guarantee{ background:var(--black); color:#fff; border-radius:6px; padding:16px 18px; margin-top:16px; display:block; }
+.page4{ padding:10mm 16mm 12mm 16mm !important; display:flex; flex-direction:column; }
+.page4 .guarantee{ margin:92px -16mm 0 -16mm; padding:24px 16mm 30px 16mm; position:relative; overflow:hidden; background:linear-gradient(135deg,#1f1f1f,#141414); }
+.page4 .guarantee::before{ content:""; position:absolute; left:0; right:0; top:0; height:4px; background:linear-gradient(90deg,var(--yellow),var(--yellow-dark)); }
+.page4 .guarantee-head{ display:flex; align-items:center; gap:14px; margin-bottom:16px; position:relative; }
+.page4 .guarantee h3{ font-size:21px; letter-spacing:.3px; }
+.page4 .guarantee .ic{ width:44px; height:44px; flex:none; }
+.page4 .guarantee p{ font-size:14.5px; line-height:1.75; color:#ddd; margin-bottom:22px; max-width:145mm; }
+.page4 .guarantee-grid{ display:grid; grid-template-columns:1fr; row-gap:16px; position:relative; max-width:130mm; }
+.page4 .g-item{ display:flex; align-items:flex-start; gap:12px; }
+.page4 .g-item .gic{ width:22px; height:22px; flex:none; margin-top:2px; color:var(--yellow); }
+.page4 .g-item span{ font-size:15px; line-height:1.5; color:#eee; }
+.page4 .two-col{ margin-top:22mm; }
+.page4 .sec-title{ font-size:24px; margin-bottom:22px; }
+.page4 .info-item{ margin-bottom:36px; gap:18px; }
+.page4 .info-item .ic{ width:42px; height:42px; }
+.page4 .info-item .t{ font-size:19px; margin-bottom:4px; }
+.page4 .info-item .v{ font-size:17.5px; }
+.page4 .pay-item{ margin-bottom:36px; gap:20px; }
+.page4 .pay-badge{ width:78px; height:78px; font-size:19px; border-width:4px; }
+.page4 .pay-desc{ font-size:17.5px; line-height:1.4; }
+.page4 .small-note{ font-size:14px; margin-top:10px; }
+.guarantee .ic{ width:34px; height:34px; flex:none; }
+.guarantee h3{ color:var(--yellow); font-family:'Poppins',sans-serif; font-size:14px; margin-bottom:8px; }
+.guarantee p{ font-size:11.5px; line-height:1.6; color:#ddd; }
+
+/* ================= PROJECTS (page6) ================= */
+.grid6{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:6px; }
+.grid6 .ph{ width:100%; aspect-ratio:1/1; }
+.ph{ background:linear-gradient(135deg,#e6e6e6,#efefef); border-radius:4px; display:flex; align-items:center; justify-content:center; color:#999; font-size:11px; font-weight:600; text-align:center; }
+.ph-wide{ width:100%; aspect-ratio:2.46/1; margin-top:8px; }
+.proj-foot{ background:var(--black); color:var(--yellow); text-align:center; font-size:11.5px; padding:10px; border-radius:4px; margin-top:14px; }
+
+/* fill-field marker */
+.fill{ color:#8a8a8a; }
+
+/* ===================== EDITABLE MODE ===================== */
+.no-print{ }
+@media print{
+  .no-print{ display:none !important; }
+  .toolbar-spacer{ display:none !important; }
+}
+
+.toolbar{
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  background:var(--black); color:#fff; padding:10px 18px;
+  display:flex; align-items:center; justify-content:space-between;
+  font-family:'Inter',sans-serif; box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.toolbar .t1{ font-weight:700; font-size:13.5px; }
+.toolbar .t2{ font-size:11.5px; color:#bbb; margin-top:1px; }
+.toolbar button{
+  border:none; border-radius:5px;
+  font-weight:700; font-size:13px; padding:9px 16px; cursor:pointer; font-family:inherit;
+}
+.toolbar button.btn-primary{ background:var(--yellow); color:var(--black); }
+.toolbar button.btn-primary:hover{ background:var(--yellow-dark); }
+.toolbar button.btn-secondary{ background:#333; color:#fff; }
+.toolbar button.btn-secondary:hover{ background:#444; }
+.toolbar-spacer{ height:56px; }
+
+[contenteditable="true"]{ border-radius:3px; transition:background .15s; cursor:text; }
+[contenteditable="true"]:hover{ background:rgba(247,183,35,.16); }
+[contenteditable="true"]:focus{ outline:1.5px dashed var(--yellow-dark); background:rgba(247,183,35,.12); }
+@media print{
+  [contenteditable="true"]:hover, [contenteditable="true"]:focus{ background:transparent; outline:none; }
+}
+[contenteditable="true"]:empty:before{ content:attr(data-ph); color:#aaa; font-style:italic; }
+
+.rowdel-col{ width:26px; }
+.rowdel{
+  width:20px; height:20px; border-radius:50%; border:none; background:#e6e6e6; color:#777;
+  font-size:12px; line-height:20px; text-align:center; cursor:pointer; padding:0;
+}
+.rowdel:hover{ background:#ffb4b4; color:#a00; }
+.reset-total{
+  width:20px; height:20px; border-radius:50%; border:none; background:rgba(0,0,0,.15); color:#fff;
+  font-size:12px; line-height:20px; text-align:center; cursor:pointer; padding:0; margin-left:6px; vertical-align:middle;
+}
+.reset-total:hover{ background:rgba(0,0,0,.3); }
+.cat-total{ display:inline-block; min-width:20px; }
+.cat-total[data-manual="true"]{ text-decoration:underline dotted; text-underline-offset:3px; }
+.cat.cat-dragging{ opacity:.5; }
+.cat{ position:relative; }
+.gap-handle{
+  height:14px; margin-top:2px; cursor:row-resize; position:relative;
+  display:flex; align-items:center; justify-content:center;
+}
+.gap-handle::before{
+  content:""; width:100%; height:0; border-top:1.5px dashed #d8d8d8;
+}
+.gap-handle:hover::before, .gap-handle.resizing::before{ border-color:var(--yellow-dark); }
+.gap-handle .gap-label{
+  position:absolute; background:#fff; padding:0 6px; font-size:9px; color:#999;
+  opacity:0; transition:opacity .15s; pointer-events:none;
+}
+.gap-handle:hover .gap-label, .gap-handle.resizing .gap-label{ opacity:1; }
+.addrow{
+  margin:6px 0 0 0; background:none; border:1.5px dashed #bbb; color:#555; border-radius:5px;
+  font-size:11px; padding:6px 12px; cursor:pointer; font-family:inherit;
+}
+.addrow:hover{ border-color:var(--yellow-dark); color:var(--yellow-dark); }
+
+.ph{ position:relative; }
+.hero-ph{ position:relative; }
+.upload-lbl{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+}
+.upload-lbl input{ display:none; }
+.upload-hint{ font-size:10px; color:#999; text-align:center; padding:0 10px; }
+.has-img .upload-hint, .has-img .ph-text{ display:none; }
+.has-img{ background-size:cover !important; }
+.draggable-photo.has-img{ cursor:grab; }
+.draggable-photo.has-img.dragging{ cursor:grabbing; }
+@media print{ .draggable-photo{ cursor:default !important; } }
+.upload-lbl.has-img{ background:transparent; }
+
+
+
+/* ===== App-schil ===== */
+:root{ --app-ac: #F7B723; --app-ac2: #E8A70F; --app-dk: #1A1A1A; }
+body.v-lijst{ background:#F4F4F2; }
+body.v-editor{ background:#ccc; }
+.app-view{ display:none; }
+body.v-lijst #lijst, body.v-editor #editor{ display:block; }
+.app-bar{ position:sticky; top:0; z-index:1000; background:var(--app-dk); color:#fff; font-family:'Inter',Arial,sans-serif; box-shadow:0 2px 8px rgba(0,0,0,.25); padding-top:env(safe-area-inset-top); }
+.app-bar-in{ display:flex; align-items:center; justify-content:space-between; gap:12px; max-width:1100px; margin:0 auto; padding:10px 16px; min-height:58px; }
+.app-brand{ display:flex; align-items:center; gap:10px; min-width:0; }
+.app-brand img{ height:34px; width:auto; background:#fff; border-radius:7px; padding:3px 5px; }
+.app-brand b{ font-family:'Poppins',sans-serif; font-weight:700; font-size:16px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.app-brand small{ display:block; font-size:11.5px; color:#bbb; font-weight:400; }
+.app-btn{ display:inline-flex; align-items:center; justify-content:center; gap:7px; min-height:40px; border:none; border-radius:8px; padding:0 14px; font:700 13.5px 'Inter',Arial,sans-serif; cursor:pointer; white-space:nowrap; text-decoration:none; }
+.app-btn.pri{ background:var(--app-ac); color:#1A1A1A; }
+.app-btn.pri:hover{ background:var(--app-ac2); }
+.app-btn.sec{ background:#333; color:#fff; }
+.app-btn.sec:hover{ background:#444; }
+.app-btn.lt{ background:#fff; color:#1A1A1A; border:1px solid #ddd; }
+.app-btn.lt:hover{ border-color:#bbb; }
+.app-btn.dg{ background:#fff; color:#b42318; border:1px solid #f1c4c0; }
+.app-acts{ display:flex; gap:8px; align-items:center; }
+.app-status{ font-size:12px; color:#aaa; white-space:nowrap; }
+.app-hint{ max-width:1100px; margin:0 auto; padding:0 16px 9px; font-size:11.5px; color:#bbb; }
+
+/* lijst */
+.l-wrap{ max-width:1100px; margin:0 auto; padding:26px 16px 60px; font-family:'Inter',Arial,sans-serif; color:#1A1A1A; }
+.l-top{ display:flex; align-items:flex-end; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-bottom:18px; }
+.l-top h1{ font-family:'Poppins',sans-serif; font-weight:800; font-size:28px; letter-spacing:-.3px; }
+.l-top p{ color:#6B6B6B; font-size:14px; margin-top:3px; }
+.l-new{ min-height:48px; padding:0 20px; font-size:15px; }
+.l-zoek{ width:100%; min-height:46px; border:1px solid #ddd; border-radius:10px; padding:0 14px; font:15px 'Inter',sans-serif; margin-bottom:14px; background:#fff; }
+.l-zoek:focus{ outline:2px solid var(--app-ac); border-color:transparent; }
+.l-list{ display:grid; gap:10px; }
+.l-item{ display:grid; grid-template-columns:auto 1fr auto; gap:14px; align-items:center; background:#fff; border:1px solid #e6e6e3; border-radius:12px; padding:14px 16px; cursor:pointer; transition:border-color .15s, box-shadow .15s; }
+.l-item:hover{ border-color:var(--app-ac); box-shadow:0 4px 18px rgba(0,0,0,.06); }
+.l-nr{ font-family:'Poppins',sans-serif; font-weight:700; font-size:12.5px; background:#1A1A1A; color:var(--app-ac); border-radius:7px; padding:6px 9px; white-space:nowrap; }
+.l-main{ min-width:0; }
+.l-klant{ font-weight:700; font-size:15.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.l-sub{ color:#6B6B6B; font-size:13px; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.l-right{ text-align:right; }
+.l-bedrag{ font-weight:700; font-size:15px; white-space:nowrap; }
+.l-btw{ color:#8a8a8a; font-size:11.5px; }
+.l-acts{ display:flex; gap:6px; justify-content:flex-end; margin-top:7px; }
+.l-acts button{ min-height:30px; padding:0 10px; font-size:12px; border-radius:7px; }
+.l-leeg{ text-align:center; background:#fff; border:1.5px dashed #d6d6d2; border-radius:14px; padding:46px 20px; }
+.l-leeg h2{ font-family:'Poppins',sans-serif; font-size:20px; margin-bottom:6px; }
+.l-leeg p{ color:#6B6B6B; font-size:14px; margin-bottom:18px; }
+.l-foot{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between; margin-top:30px; padding-top:18px; border-top:1px solid #e3e3df; font-size:13px; color:#6B6B6B; }
+.l-foot .app-acts{ flex-wrap:wrap; }
+@media (max-width:600px){
+  .l-item{ grid-template-columns:1fr auto; }
+  .l-nr{ grid-column:1 / -1; justify-self:start; }
+  .app-hint{ display:none; }
+  .app-brand small{ display:none; }
+  .ed-tekst{ display:none; }
+}
+
+/* naam-venster & naam in editorbalk */
+.m-input{ width:100%; min-height:50px; margin-top:16px; padding:0 14px; border:1.5px solid #ddd; border-radius:10px; font:16px 'Inter',sans-serif; color:#1A1A1A; }
+.m-input:focus{ outline:none; border-color:var(--app-ac); box-shadow:0 0 0 4px rgba(247,183,35,.25); }
+.m-fout{ color:#b42318; font-size:13px; margin-top:8px; min-height:18px; }
+.ed-naam{ background:none; border:none; color:#fff; font:700 14px 'Inter',sans-serif; cursor:pointer; padding:4px 6px; border-radius:6px; max-width:32vw; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ed-naam:hover{ background:#333; }
+.ed-naam span{ color:#999; font-weight:400; margin-left:4px; }
+
+/* editor */
+#editor .ed-pad{ padding:18px 8px 40px; }
+#pdfRoot{ transform-origin:top center; }
+
+/* modals & toast */
+.m-back{ position:fixed; inset:0; z-index:2000; background:rgba(15,15,15,.55); display:none; align-items:center; justify-content:center; padding:16px; font-family:'Inter',Arial,sans-serif; }
+.m-back.on{ display:flex; }
+.m-box{ background:#fff; color:#1A1A1A; border-radius:16px; max-width:480px; width:100%; padding:26px 24px 22px; box-shadow:0 30px 80px rgba(0,0,0,.35); max-height:calc(100vh - 32px); overflow:auto; }
+.m-box h2{ font-family:'Poppins',sans-serif; font-weight:800; font-size:22px; line-height:1.2; margin-bottom:8px; }
+.m-box p{ font-size:14.5px; color:#555; line-height:1.55; }
+.m-steps{ list-style:none; display:grid; gap:12px; margin:18px 0 20px; }
+.m-steps li{ display:flex; gap:12px; align-items:flex-start; font-size:14px; line-height:1.5; color:#444; }
+.m-steps b{ color:#1A1A1A; display:block; }
+.m-steps .n{ flex:none; width:28px; height:28px; border-radius:50%; background:var(--app-ac); color:#1A1A1A; font-weight:800; display:grid; place-items:center; font-size:13px; }
+.m-logo{ height:46px; width:auto; margin-bottom:14px; }
+.m-acts{ display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap; margin-top:18px; }
+.m-acts .app-btn{ min-height:44px; }
+/* account & sync */
+.acc-btn{ max-width:230px; overflow:hidden; text-overflow:ellipsis; }
+.acc-btn .dot{ width:8px; height:8px; border-radius:50%; background:#8a8a8a; flex:none; }
+.acc-btn.ok .dot{ background:#3fbf6a; }
+.acc-btn.bezig .dot{ background:var(--app-ac); }
+.acc-btn.fout .dot{ background:#e5484d; }
+.sync-banner{ display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; background:#fff; border:1px solid #e6e6e3; border-left:4px solid var(--app-ac); border-radius:12px; padding:12px 14px; margin-bottom:16px; font-size:14px; color:#444; }
+.sync-banner b{ color:#1A1A1A; }
+.m-tabs{ display:flex; gap:6px; margin:16px 0 4px; background:#f1f1ef; padding:4px; border-radius:10px; }
+.m-tabs button{ flex:1; min-height:38px; border:0; border-radius:8px; background:none; font:600 13.5px 'Inter',sans-serif; color:#666; cursor:pointer; }
+.m-tabs button.on{ background:#fff; color:#1A1A1A; box-shadow:0 1px 3px rgba(0,0,0,.1); }
+.m-lbl{ display:block; font-size:13px; font-weight:600; color:#444; margin-top:14px; }
+.m-lbl + .m-input{ margin-top:6px; }
+.m-ok{ color:#1a7f43; font-size:13.5px; margin-top:10px; line-height:1.5; }
+.m-link{ background:none; border:0; color:#555; text-decoration:underline; font:13px 'Inter',sans-serif; cursor:pointer; padding:0; margin-top:10px; }
+.toast{ position:fixed; left:50%; bottom:24px; transform:translateX(-50%) translateY(20px); opacity:0; z-index:3000; background:#1A1A1A; color:#fff; padding:12px 18px; border-radius:10px; font:600 14px 'Inter',sans-serif; transition:all .25s; pointer-events:none; box-shadow:0 10px 30px rgba(0,0,0,.3); }
+.toast.on{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+@media print{
+  .app-bar, .app-view#lijst, .m-back, .toast{ display:none !important; }
+  body{ background:#fff !important; }
+  #editor{ display:block !important; }
+  #editor .ed-pad{ padding:0 !important; }
+  #pdfRoot{ zoom:1 !important; }
+}
+</style>
+</head>
+<body class="v-lijst">
+
+<svg width="0" height="0" style="position:absolute">
+<defs>
+<symbol id="ic-shield" viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z" fill="none" stroke="currentColor" stroke-width="1.6"></path><path d="M8.5 12l2.3 2.3L16 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></symbol>
+<symbol id="ic-ribbon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5.2" fill="none" stroke="currentColor" stroke-width="1.6"></circle><path d="M8.5 12.3L7 21l5-2.6 5 2.6-1.5-8.7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path></symbol>
+<symbol id="ic-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.6"></circle><path d="M3.5 19c.8-3.2 3-4.8 5.5-4.8s4.7 1.6 5.5 4.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path><circle cx="17" cy="9" r="2.4" fill="none" stroke="currentColor" stroke-width="1.6"></circle><path d="M15.7 14.6c2-.4 3.8.9 4.5 3.7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></symbol>
+<symbol id="ic-chat" viewBox="0 0 24 24"><path d="M4 5h16v10H9l-4 4V5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path></symbol>
+<symbol id="ic-layers" viewBox="0 0 24 24"><path d="M12 3l9 4.5-9 4.5-9-4.5L12 3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path><path d="M3 12l9 4.5 9-4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path><path d="M3 16.5L12 21l9-4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path></symbol>
+<symbol id="ic-sparkle" viewBox="0 0 24 24"><path d="M6 12c3-.6 4.4-2 5-5 .6 3 2 4.4 5 5-3 .6-4.4 2-5 5-.6-3-2-4.4-5-5z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"></path><circle cx="18.5" cy="5.5" r="1.1" fill="currentColor"></circle></symbol>
+<symbol id="ic-clipboard" viewBox="0 0 24 24"><rect x="6" y="4" width="12" height="17" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"></rect><rect x="9" y="2.3" width="6" height="3.2" rx="1" fill="none" stroke="currentColor" stroke-width="1.6"></rect><path d="M9 12h6M9 16h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></symbol>
+<symbol id="ic-doc" viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7V3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path><path d="M14 3v4h4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path><path d="M9.5 12h5M9.5 15.5h5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"></path></symbol>
+<symbol id="ic-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"></rect><path d="M3.5 9.5h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></symbol>
+<symbol id="ic-tools" viewBox="0 0 24 24"><path d="M14.7 6.3a3.5 3.5 0 0 0-4.6 4.6L4 17l3 3 6.1-6.1a3.5 3.5 0 0 0 4.6-4.6l-2.3 2.3-2-2 2.3-2.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"></path></symbol>
+<symbol id="ic-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"></circle><path d="M8 12.5l2.5 2.5L16 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></symbol>
+<symbol id="ic-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"></circle><path d="M12 7v5l3.5 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></symbol>
+<symbol id="ic-hardhat" viewBox="0 0 24 24"><path d="M4 16c0-4.4 3.6-8 8-8s8 3.6 8 8" fill="none" stroke="currentColor" stroke-width="1.6"></path><rect x="2.5" y="16" width="19" height="2.6" rx="1" fill="none" stroke="currentColor" stroke-width="1.6"></rect><path d="M12 8V5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></symbol>
+<symbol id="ic-camera" viewBox="0 0 24 24"><path d="M4 8h3l1.5-2h7L17 8h3v11H4V8z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path><circle cx="12" cy="13.5" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"></circle></symbol>
+<symbol id="ic-bee" viewBox="0 0 64 64">
+  <ellipse cx="16" cy="30" rx="15" ry="10" fill="#ececec" stroke="#cfcfcf" stroke-width="1"></ellipse>
+  <ellipse cx="48" cy="30" rx="15" ry="10" fill="#ececec" stroke="#cfcfcf" stroke-width="1"></ellipse>
+  <ellipse cx="32" cy="38" rx="17" ry="18" fill="#F7B723"></ellipse>
+  <path d="M15 30h34v6H15zM15 42h34v6H15z" fill="#1A1A1A"></path>
+  <circle cx="32" cy="16" r="9" fill="#1A1A1A"></circle>
+  <path d="M27 9l-4-6M37 9l4-6" stroke="#1A1A1A" stroke-width="2.4" stroke-linecap="round"></path>
+  <circle cx="23" cy="3" r="2" fill="#1A1A1A"></circle><circle cx="41" cy="3" r="2" fill="#1A1A1A"></circle>
+  <path d="M26 56l6 8 6-8z" fill="#1A1A1A"></path>
+</symbol>
+<symbol id="ic-grip" viewBox="0 0 14 14">
+  <circle cx="4" cy="2.5" r="1.3" fill="currentColor"></circle><circle cx="10" cy="2.5" r="1.3" fill="currentColor"></circle>
+  <circle cx="4" cy="7" r="1.3" fill="currentColor"></circle><circle cx="10" cy="7" r="1.3" fill="currentColor"></circle>
+  <circle cx="4" cy="11.5" r="1.3" fill="currentColor"></circle><circle cx="10" cy="11.5" r="1.3" fill="currentColor"></circle>
+</symbol>
+<symbol id="honeycomb-pattern" viewBox="0 0 300 200">
+  <defs>
+    <pattern id="hexpat" width="34" height="59" patternUnits="userSpaceOnUse" patternTransform="scale(1)">
+      <polygon points="17,0 34,9.8 34,29.5 17,39.3 0,29.5 0,9.8" fill="none" stroke="#F7B723" stroke-width="1.4"></polygon>
+      <polygon points="17,19.6 34,29.4 34,49.1 17,58.9 0,49.1 0,29.4" fill="none" stroke="#F7B723" stroke-width="1.4"></polygon>
+    </pattern>
+  </defs>
+  <rect width="300" height="200" fill="url(#hexpat)"></rect>
+</symbol>
+</defs>
+</svg>
+
+<!-- ================= OVERZICHT ================= -->
+<div class="app-view" id="lijst">
+  <div class="app-bar no-print"><div class="app-bar-in">
+    <div class="app-brand"><img src="img/4c04ea2d.png" alt=""><b>Testomgeving sync<small>Offertes</small></b></div>
+    <div class="app-acts">
+      <button class="app-btn sec acc-btn" id="btnAccount" style="display:none"><span class="dot"></span><span id="accTekst">Inloggen</span></button>
+      <button class="app-btn sec" id="btnInstall" style="display:none">⤓ Installeer app</button>
+      <button class="app-btn sec" id="btnHelp" title="Uitleg">?</button>
+    </div>
+  </div></div>
+  <div class="l-wrap">
+    <div class="l-top">
+      <div><h1>Mijn offertes</h1><p id="lTeller">Alles wordt automatisch bewaard op dit apparaat.</p></div>
+      <button class="app-btn pri l-new" id="btnNieuw">+ Nieuwe offerte</button>
+    </div>
+    <div class="sync-banner" id="syncBanner" style="display:none"><span><b>Op al je apparaten?</b> Log in, dan staan je offertes op je computer én je telefoon.</span><button class="app-btn pri" id="bannerLogin">Inloggen</button></div>
+    <input class="l-zoek" id="zoek" type="search" placeholder="Zoek op naam, klant, project of offertenummer" style="display:none">
+    <div class="l-list" id="lijstItems"></div>
+    <div class="l-foot">
+      <span id="footTekst">Je offertes staan op dit apparaat. Maak af en toe een back-up.</span>
+      <div class="app-acts">
+        <button class="app-btn lt" id="btnBackup">Back-up maken</button>
+        <button class="app-btn lt" id="btnRestore">Back-up terugzetten</button>
+        <input type="file" id="restoreFile" accept=".json,application/json" hidden>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= EDITOR ================= -->
+<div class="app-view" id="editor">
+  <div class="app-bar no-print">
+    <div class="app-bar-in">
+      <div class="app-acts" style="min-width:0"><button class="app-btn sec" id="btnTerug">← <span class="ed-tekst">Mijn offertes</span></button><button class="ed-naam" id="edNaam" title="Naam wijzigen"></button><span class="app-status" id="status"></span></div>
+      <div class="app-acts">
+        <button class="app-btn sec" id="btnDupl" title="Kopie maken">⧉ <span class="ed-tekst">Dupliceren</span></button>
+        <button class="app-btn pri" id="btnPdf">📄 Download PDF</button>
+      </div>
+    </div>
+    <div class="app-hint">Klik op een tekst om te bewerken · klik op een foto-vlak om te uploaden · sleep een foto om hem te verschuiven · totalen tellen automatisch mee</div>
+  </div>
+  <div class="ed-pad"><div id="pdfRoot"></div></div>
+</div>
+
+<template id="offerte-tpl">
+<!-- ============ PAGE 1: COVER ============ -->
+<section class="page cover">
+  <div class="cover-photo ph has-img draggable-photo" id="ph-cover" data-pos-x="41.53327493035937" data-pos-y="52.369677482217675" style="background-image: url(&quot;img/d9427295.jpg&quot;); background-position: 41.5333% 52.3697%;" data-drag-enabled="1">
+    <span class="ph-text">[Foto project — klik om te uploaden]</span>
+    <label class="upload-lbl no-print has-img"><input type="file" accept="image/*" onchange="handlePhoto(this,'ph-cover')"><span class="upload-hint">📷 Klik om foto te uploaden</span></label>
+  </div>
+
+  <div class="cover-logo-badge">
+    <img class="logo-icon" src="img/4c04ea2d.png" alt="BouwBIJ Services logo">
+    <div><div class="brandname"><span class="b1">BOUWBIJ</span> <span class="b2">SERVICES</span></div><div class="brandtag">Timmer- &amp; Renovatiespecialist</div></div>
+  </div>
+
+  <div class="cover-panel">
+    <div class="accent-rule"></div>
+    <h1>OFFERTE</h1>
+    <div class="meta">
+      <div class="lbl">Voor:</div><div class="val" contenteditable="true" data-ph="Naam klant"></div>
+      <div class="lbl">Project:</div><div class="val" contenteditable="true" data-ph="Korte projectomschrijving"></div>
+      <div class="lbl">E-mail:</div><div class="val" contenteditable="true" data-ph="naam@voorbeeld.nl"></div>
+      <div class="lbl">Telefoon:</div><div class="val" contenteditable="true" data-ph="06-12345678"></div>
+      <div class="lbl">Offertenummer:</div><div class="val" contenteditable="true" data-ph="Offertenummer"></div>
+      <div class="lbl">Datum:</div><div class="val" contenteditable="true" data-ph="dd-mm-jjjj"></div>
+    </div>
+  </div>
+
+  <div class="cover-footer">
+    <div class="tag" contenteditable="true">Kwaliteit, vakmanschap en duidelijke afspraken.</div>
+    <div class="web" contenteditable="true">www.bouwbijservices.nl</div>
+  </div>
+</section>
+
+<!-- ============ PAGE 2: WAAROM + WERKWIJZE ============ -->
+<section class="page page2">
+  <div class="brandbar">
+    <img class="logo-icon" src="img/4c04ea2d.png" alt="BouwBIJ Services logo">
+    <div><div class="brandname"><span class="b1">BOUWBIJ</span> <span class="b2">SERVICES</span></div><div class="brandtag">Timmer- &amp; Renovatiespecialist</div></div>
+  </div>
+  <hr class="headerline">
+
+  <div class="two-col">
+    <div>
+      <div class="sec-title" contenteditable="true">WAAROM KIEZEN VOOR BOUWBIJ SERVICES?</div>
+
+      <div class="reason"><svg class="ic" style="color:var(--yellow)"><use href="#ic-shield"></use></svg>
+        <div class="txt"><div class="t" contenteditable="true">Verzekerd aannemersbedrijf</div><div class="d" contenteditable="true">Wij zijn volledig verzekerd, dus u bent verzekerd van een veilige uitvoering.</div></div></div>
+
+      <div class="reason"><svg class="ic" style="color:var(--yellow)"><use href="#ic-ribbon"></use></svg>
+        <div class="txt"><div class="t" contenteditable="true">5 jaar garantie</div><div class="d" contenteditable="true">Standaard 5 jaar garantie op al onze timmerwerkzaamheden.</div></div></div>
+
+      <div class="reason"><svg class="ic" style="color:var(--yellow)"><use href="#ic-users"></use></svg>
+        <div class="txt"><div class="t" contenteditable="true">Ervaren vakmensen</div><div class="d" contenteditable="true">Vast team van 7 ervaren vakmensen voor een perfect resultaat.</div></div></div>
+
+      <div class="reason"><svg class="ic" style="color:var(--yellow)"><use href="#ic-chat"></use></svg>
+        <div class="txt"><div class="t" contenteditable="true">Duidelijke communicatie</div><div class="d" contenteditable="true">Heldere afspraken en korte lijnen gedurende het hele project.</div></div></div>
+
+      <div class="reason"><svg class="ic" style="color:var(--yellow)"><use href="#ic-layers"></use></svg>
+        <div class="txt"><div class="t" contenteditable="true">Hoogwaardige materialen</div><div class="d" contenteditable="true">Alleen kwalitatieve materialen voor een duurzaam eindresultaat.</div></div></div>
+
+      <div class="reason"><svg class="ic" style="color:var(--yellow)"><use href="#ic-sparkle"></use></svg>
+        <div class="txt"><div class="t" contenteditable="true">Nette en schone werkwijze</div><div class="d" contenteditable="true">Wij werken netjes, beschermen uw woning en leveren schoon op.</div></div></div>
+    </div>
+
+    <div class="process">
+      <div class="sec-title" contenteditable="true">ONZE WERKWIJZE</div>
+      <div class="step"><div class="num">1</div><div class="txt"><div class="t" contenteditable="true">Vrijblijvende opname</div><div class="d" contenteditable="true">We bespreken uw wensen en de mogelijkheden.</div></div></div>
+      <div class="step"><div class="num">2</div><div class="txt"><div class="t" contenteditable="true">Offerte</div><div class="d" contenteditable="true">U ontvangt een duidelijke offerte zonder verrassingen.</div></div></div>
+      <div class="step"><div class="num">3</div><div class="txt"><div class="t" contenteditable="true">Planning</div><div class="d" contenteditable="true">Samen plannen we een geschikte startdatum.</div></div></div>
+      <div class="step"><div class="num">4</div><div class="txt"><div class="t" contenteditable="true">Uitvoering</div><div class="d" contenteditable="true">Ons team gaat vakkundig en netjes voor u aan de slag.</div></div></div>
+      <div class="step"><div class="num">5</div><div class="txt"><div class="t" contenteditable="true">Oplevering</div><div class="d" contenteditable="true">Wij streven naar een zorgvuldige oplevering en een resultaat dat volledig aansluit bij de gemaakte afspraken.</div></div></div>
+    </div>
+  </div>
+
+  <div class="page2-foot">
+    <div class="t1" contenteditable="true">Kwaliteit, vakmanschap en duidelijke afspraken.</div>
+    <div class="t2" contenteditable="true">www.bouwbijservices.nl</div>
+  </div>
+  <div class="pagenum">2</div>
+</section>
+
+<!-- ============ PAGE 3: OFFERTE TABEL 1+2 ============ -->
+<!-- ============ PAGE 5: PLANNING / BETALING / GARANTIE ============ -->
+<section class="page page4">
+  <div class="brandbar">
+    <img class="logo-icon" src="img/4c04ea2d.png" alt="BouwBIJ Services logo">
+    <div><div class="brandname"><span class="b1">BOUWBIJ</span> <span class="b2">SERVICES</span></div><div class="brandtag">Timmer- &amp; Renovatiespecialist</div></div>
+  </div>
+  <hr class="headerline">
+
+  <div class="two-col" style="grid-template-columns:1fr 1fr;">
+    <div>
+      <div class="sec-title" contenteditable="true">PLANNING</div>
+      <div class="info-item"><svg class="ic" style="color:var(--yellow)"><use href="#ic-calendar"></use></svg><div><div class="t" contenteditable="true">Start werkzaamheden:</div><div class="v" contenteditable="true">Vanaf <span data-ph="dd-mm-jjjj"></span></div></div></div>
+      <div class="info-item"><svg class="ic" style="color:var(--yellow)"><use href="#ic-clock"></use></svg><div><div class="t" contenteditable="true">Geschatte uitvoeringsduur:</div><div class="v" contenteditable="true" data-ph="X à Y werkdagen"></div></div></div>
+      <div class="info-item"><svg class="ic" style="color:var(--yellow)"><use href="#ic-users"></use></svg><div><div class="t" contenteditable="true">Aantal vakmensen:</div><div class="v" contenteditable="true" data-ph="X - Y"></div></div></div>
+      <div class="info-item"><svg class="ic" style="color:var(--yellow)"><use href="#ic-hardhat"></use></svg><div><div class="t" contenteditable="true">Werkdagen:</div><div class="v" contenteditable="true" data-ph="Maandag t/m vrijdag">Maandag t/m Vrijdag</div></div></div>
+    </div>
+    <div>
+      <div class="sec-title" contenteditable="true">BETALINGSREGELING</div>
+      <div class="pay-item"><div class="pay-badge"><span contenteditable="true">35</span>%</div><div class="pay-desc" contenteditable="true">Bij opdrachtbevestiging (reserveringskosten)</div></div>
+      <div class="pay-item"><div class="pay-badge"><span contenteditable="true">40</span>%</div><div class="pay-desc" contenteditable="true">Tussentijds tijdens de uitvoering</div></div>
+      <div class="pay-item"><div class="pay-badge"><span contenteditable="true">25</span>%</div><div class="pay-desc" contenteditable="true">Bij oplevering</div></div>
+      <div class="small-note" contenteditable="true">Afwijkende betalingsafspraken zijn in overleg mogelijk.</div>
+    </div>
+  </div>
+
+  <div class="guarantee">
+    <div class="guarantee-head">
+      <svg class="ic" style="color:var(--yellow)"><use href="#ic-shield"></use></svg>
+      <h3 contenteditable="true">5 JAAR GARANTIE &amp; ZEKERHEID !!!</h3>
+    </div>
+    <p contenteditable="true">Wij staan volledig achter de kwaliteit van ons vakmanschap. Daarom ontvangt u standaard 5 jaar garantie op onze timmerwerkzaamheden. Daarnaast is BouwBij Services een verzekerd aannemersbedrijf. Zo bent u verzekerd van een professionele en betrouwbare uitvoering.</p>
+    <div class="guarantee-grid">
+      <div class="g-item"><svg class="gic"><use href="#ic-check-circle"></use></svg><span contenteditable="true">Standaard 5 jaar garantie op al onze timmerwerkzaamheden</span></div>
+      <div class="g-item"><svg class="gic"><use href="#ic-shield"></use></svg><span contenteditable="true">Verzekerd aannemersbedrijf voor uw zekerheid</span></div>
+      <div class="g-item"><svg class="gic"><use href="#ic-check-circle"></use></svg><span contenteditable="true">Professionele en betrouwbare uitvoering</span></div>
+    </div>
+  </div>
+  <div class="pagenum">3</div>
+</section>
+
+<!-- ============ PAGE 3+4: OFFERTE (groeit automatisch mee met aantal categorieën) ============ -->
+<section class="page flow-page">
+  <div class="brandbar">
+    <img class="logo-icon" src="img/4c04ea2d.png" alt="BouwBIJ Services logo">
+    <div><div class="brandname"><span class="b1">BOUWBIJ</span> <span class="b2">SERVICES</span></div><div class="brandtag">Timmer- &amp; Renovatiespecialist</div></div>
+  </div>
+  <hr class="headerline">
+  <div class="page-title">OFFERTE</div>
+
+  <div id="categoriesFlow">
+    <div class="cat">
+      <div class="cat-head"><span contenteditable="true" data-ph="Categorie titel">TIMMERWERKZAAMHEDEN</span><button class="cat-del no-print" onclick="delCategory(this)" title="Categorie verwijderen">×</button></div>
+      <table class="items" data-cat-table="">
+        <colgroup><col class="col-desc"><col class="col-qty"><col class="col-price"><col class="col-del"></colgroup><thead><tr><th>OMSCHRIJVING<span class="col-resizer no-print" onmousedown="startColResize(event,this)" ontouchstart="startColResize(event,this)"></span></th><th class="num">HOEVEELHEID<span class="col-resizer no-print" onmousedown="startColResize(event,this)" ontouchstart="startColResize(event,this)"></span></th><th class="price">PRIJS</th><th class="rowdel-col no-print"></th></tr></thead>
+        <tbody>
+          <tr><td contenteditable="true" data-ph="Omschrijving werkzaamheid"></td><td class="num"><span class="qty-val" contenteditable="true">1</span></td><td class="price"><span class="price-val" contenteditable="true">€ 0,00</span></td><td class="rowdel-col no-print"><button class="rowdel" onclick="delRow(this)">×</button></td></tr>
+          <tr><td contenteditable="true" data-ph="Omschrijving werkzaamheid"></td><td class="num"><span class="qty-val" contenteditable="true">1</span></td><td class="price"><span class="price-val" contenteditable="true">€ 0,00</span></td><td class="rowdel-col no-print"><button class="rowdel" onclick="delRow(this)">×</button></td></tr>
+          <tr><td contenteditable="true" data-ph="Omschrijving werkzaamheid"></td><td class="num"><span class="qty-val" contenteditable="true">1</span></td><td class="price"><span class="price-val" contenteditable="true">€ 0,00</span></td><td class="rowdel-col no-print"><button class="rowdel" onclick="delRow(this)">×</button></td></tr>
+        </tbody>
+        <tfoot><tr><td></td><td>Totaal ex. btw</td><td class="price"><span class="cat-total">€ 0,00</span></td><td class="no-print"></td></tr></tfoot>
+      </table>
+      <button class="addrow no-print" onclick="addRow(this)">+ regel toevoegen</button>
+      <div class="gap-handle no-print" onmousedown="startGapResize(event,this)" ontouchstart="startGapResize(event,this)"><span class="gap-label">sleep voor ruimte</span></div>
+    </div>
+
+    <div class="cat" style="margin-bottom: 15px;">
+      <div class="cat-head"><span contenteditable="true" data-ph="Categorie titel">ELECTRA- EN LOODGIETERWERKZAAMHEDEN</span><button class="cat-del no-print" onclick="delCategory(this)" title="Categorie verwijderen">×</button></div>
+      <table class="items" data-cat-table="">
+        <colgroup><col class="col-desc"><col class="col-qty"><col class="col-price"><col class="col-del"></colgroup><thead><tr><th>OMSCHRIJVING<span class="col-resizer no-print" onmousedown="startColResize(event,this)" ontouchstart="startColResize(event,this)"></span></th><th class="num">HOEVEELHEID<span class="col-resizer no-print" onmousedown="startColResize(event,this)" ontouchstart="startColResize(event,this)"></span></th><th class="price">PRIJS</th><th class="rowdel-col no-print"></th></tr></thead>
+        <tbody>
+          <tr><td contenteditable="true" data-ph="Omschrijving werkzaamheid"></td><td class="num"><span class="qty-val" contenteditable="true">1</span></td><td class="price"><span class="price-val" contenteditable="true">€ 0,00</span></td><td class="rowdel-col no-print"><button class="rowdel" onclick="delRow(this)">×</button></td></tr>
+          <tr><td contenteditable="true" data-ph="Omschrijving werkzaamheid"></td><td class="num"><span class="qty-val" contenteditable="true">1</span></td><td class="price"><span class="price-val" contenteditable="true">€ 0,00</span></td><td class="rowdel-col no-print"><button class="rowdel" onclick="delRow(this)">×</button></td></tr>
+        </tbody>
+        <tfoot><tr><td></td><td>Totaal ex. btw</td><td class="price"><span class="cat-total">€ 0,00</span></td><td class="no-print"></td></tr></tfoot>
+      </table>
+      <button class="addrow no-print" onclick="addRow(this)">+ regel toevoegen</button>
+      <div class="gap-handle no-print" onmousedown="startGapResize(event,this)" ontouchstart="startGapResize(event,this)"><span class="gap-label">sleep voor ruimte</span></div>
+    </div>
+
+    <div class="cat">
+      <div class="cat-head"><span contenteditable="true" data-ph="Categorie titel">STUC- EN SCHILDERWERKZAAMHEDEN</span><button class="cat-del no-print" onclick="delCategory(this)" title="Categorie verwijderen">×</button></div>
+      <table class="items" data-cat-table="">
+        <colgroup><col class="col-desc"><col class="col-qty"><col class="col-price"><col class="col-del"></colgroup><thead><tr><th>OMSCHRIJVING<span class="col-resizer no-print" onmousedown="startColResize(event,this)" ontouchstart="startColResize(event,this)"></span></th><th class="num">HOEVEELHEID<span class="col-resizer no-print" onmousedown="startColResize(event,this)" ontouchstart="startColResize(event,this)"></span></th><th class="price">PRIJS</th><th class="rowdel-col no-print"></th></tr></thead>
+        <tbody>
+          <tr><td contenteditable="true" data-ph="Omschrijving werkzaamheid"></td><td class="num"><span class="qty-val" contenteditable="true">1</span></td><td class="price"><span class="price-val" contenteditable="true">€ 0,00</span></td><td class="rowdel-col no-print"><button class="rowdel" onclick="delRow(this)">×</button></td></tr>
+          <tr><td contenteditable="true" data-ph="Omschrijving werkzaamheid"></td><td class="num"><span class="qty-val" contenteditable="true">1</span></td><td class="price"><span class="price-val" contenteditable="true">€ 0,00</span></td><td class="rowdel-col no-print"><button class="rowdel" onclick="delRow(this)">×</button></td></tr>
+        </tbody>
+        <tfoot><tr><td></td><td>Totaal ex. btw</td><td class="price"><span class="cat-total">€ 0,00</span></td><td class="no-print"></td></tr></tfoot>
+      </table>
+      <button class="addrow no-print" onclick="addRow(this)">+ regel toevoegen</button>
+      <div class="gap-handle no-print" onmousedown="startGapResize(event,this)" ontouchstart="startGapResize(event,this)"><span class="gap-label">sleep voor ruimte</span></div>
+    </div>
+  
+  
+</div>
+
+  <button class="addcat no-print" onclick="addCategory()">+ Nieuwe categorie toevoegen</button>
+
+  <div class="note" contenteditable="true">
+    De genoemde prijs is een vaste totaalprijs exclusief btw, inclusief alle materialen en montage.<br>
+    Eventuele aanvullende werkzaamheden bespreken wij altijd vooraf met u.<br><br>
+    Wij hechten veel waarde aan kwaliteit en vakmanschap.<br>
+    Daarom geven wij standaard <b>5 jaar garantie</b> op al ons timmerwerk.
+  </div>
+  <div class="pagenum">4</div>
+</section>
+
+<template id="cat-template">
+    <div class="cat">
+      <div class="cat-head"><span contenteditable="true" data-ph="Categorie titel"></span><button class="cat-del no-print" onclick="delCategory(this)" title="Categorie verwijderen">×</button></div>
+      <table class="items" data-cat-table="">
+        <colgroup><col class="col-desc"><col class="col-qty"><col class="col-price"><col class="col-del"></colgroup><thead><tr><th>OMSCHRIJVING<span class="col-resizer no-print" onmousedown="startColResize(event,this)" ontouchstart="startColResize(event,this)"></span></th><th class="num">HOEVEELHEID<span class="col-resizer no-print" onmousedown="startColResize(event,this)" ontouchstart="startColResize(event,this)"></span></th><th class="price">PRIJS</th><th class="rowdel-col no-print"></th></tr></thead>
+        <tbody>
+          <tr><td contenteditable="true" data-ph="Omschrijving werkzaamheid"></td><td class="num"><span class="qty-val" contenteditable="true">1</span></td><td class="price"><span class="price-val" contenteditable="true">€ 0,00</span></td><td class="rowdel-col no-print"><button class="rowdel" onclick="delRow(this)">×</button></td></tr>
+          <tr><td contenteditable="true" data-ph="Omschrijving werkzaamheid"></td><td class="num"><span class="qty-val" contenteditable="true">1</span></td><td class="price"><span class="price-val" contenteditable="true">€ 0,00</span></td><td class="rowdel-col no-print"><button class="rowdel" onclick="delRow(this)">×</button></td></tr>
+        </tbody>
+        <tfoot><tr><td></td><td>Totaal ex. btw</td><td class="price"><span class="cat-total">€ 0,00</span></td><td class="no-print"></td></tr></tfoot>
+      </table>
+      <button class="addrow no-print" onclick="addRow(this)">+ regel toevoegen</button>
+      <div class="gap-handle no-print" onmousedown="startGapResize(event,this)" ontouchstart="startGapResize(event,this)"><span class="gap-label">sleep voor ruimte</span></div>
+    </div>
+</template>
+
+<!-- ============ PAGE 6: PROJECTEN ============ -->
+<section class="page">
+  <div class="brandbar">
+    <img class="logo-icon" src="img/4c04ea2d.png" alt="BouwBIJ Services logo">
+    <div><div class="brandname"><span class="b1">BOUWBIJ</span> <span class="b2">SERVICES</span></div><div class="brandtag">Timmer- &amp; Renovatiespecialist</div></div>
+  </div>
+  <hr class="headerline">
+  <div class="sec-title" contenteditable="true" style="font-size:16px;"><strong data-start="61" data-end="97" style="letter-spacing: 0.3px;">EEN SELECTIE VAN ONZE GEREALISEERDE PROJECTEN</strong></div>
+  <div class="grid6">
+    <div class="ph has-img draggable-photo" id="ph-1" data-pos-x="100" data-pos-y="78.12227074235807" style="background-image: url(&quot;img/71ba42dd.jpg&quot;); background-position: 100% 78.1223%;" data-drag-enabled="1"><span class="ph-text">[Foto 1]</span><label class="upload-lbl no-print has-img"><input type="file" accept="image/*" onchange="handlePhoto(this,'ph-1')"><span class="upload-hint">📷 Upload</span></label></div>
+    <div class="ph has-img draggable-photo" id="ph-2" data-pos-x="54.27947598253275" data-pos-y="51.222707423580786" style="background-image: url(&quot;img/9b2c03da.jpg&quot;); background-position: 54.2795% 51.2227%;" data-drag-enabled="1"><span class="ph-text">[Foto 2]</span><label class="upload-lbl no-print has-img"><input type="file" accept="image/*" onchange="handlePhoto(this,'ph-2')"><span class="upload-hint">📷 Upload</span></label></div>
+    <div class="ph has-img draggable-photo" id="ph-3" data-pos-x="59.78165938864629" data-pos-y="48.777292576419214" style="background-image: url(&quot;img/d9427295.jpg&quot;); background-position: 59.7817% 48.7773%;" data-drag-enabled="1"><span class="ph-text">[Foto 3]</span><label class="upload-lbl no-print has-img"><input type="file" accept="image/*" onchange="handlePhoto(this,'ph-3')"><span class="upload-hint">📷 Upload</span></label></div>
+    <div class="ph has-img draggable-photo" id="ph-4" data-pos-x="50" data-pos-y="50" style="background-image: url(&quot;img/21fc8296.jpg&quot;); background-position: 50% 50%;" data-drag-enabled="1"><span class="ph-text">[Foto 4]</span><label class="upload-lbl no-print has-img"><input type="file" accept="image/*" onchange="handlePhoto(this,'ph-4')"><span class="upload-hint">📷 Upload</span></label></div>
+    <div class="ph has-img draggable-photo" id="ph-5" data-pos-x="100" data-pos-y="44.49781659388646" style="background-image: url(&quot;img/2abf5b14.jpg&quot;); background-position: 100% 44.4978%;" data-drag-enabled="1"><span class="ph-text">[Foto 5]</span><label class="upload-lbl no-print has-img"><input type="file" accept="image/*" onchange="handlePhoto(this,'ph-5')"><span class="upload-hint">📷 Upload</span></label></div>
+    <div class="ph has-img draggable-photo" id="ph-6" data-pos-x="50" data-pos-y="50" style="background-image: url(&quot;img/172fa646.jpg&quot;); background-position: 50% 50%;" data-drag-enabled="1"><span class="ph-text">[Foto 6]</span><label class="upload-lbl no-print has-img"><input type="file" accept="image/*" onchange="handlePhoto(this,'ph-6')"><span class="upload-hint">📷 Upload</span></label></div>
+  </div>
+  <div class="ph ph-wide has-img draggable-photo" id="ph-7" data-pos-x="49.60170254381383" data-pos-y="39.22193668325223" style="background-image: url(&quot;img/59a70af6.jpg&quot;); background-position: 49.6017% 39.2219%;" data-drag-enabled="1"><span class="ph-text">[Grote foto]</span><label class="upload-lbl no-print has-img"><input type="file" accept="image/*" onchange="handlePhoto(this,'ph-7')"><span class="upload-hint">📷 Upload</span></label></div>
+  <div class="proj-foot">📷 Meer projecten bekijken? Bekijk onze website: www.bouwbijservices.nl</div>
+  <div class="pagenum">5</div>
+</section>
+</template>
+
+<!-- ================= MODALS ================= -->
+<div class="m-back" id="mWelkom"><div class="m-box">
+  <img class="m-logo" src="img/4c04ea2d.png" alt="">
+  <h2>Welkom bij je offerte-app</h2>
+  <p>Je eigen offerte, in de huisstijl van Testomgeving sync. Zo werkt het:</p>
+  <ol class="m-steps">
+    <li><span class="n">1</span><span><b>Zet de app op je beginscherm</b><span id="installUitleg">Dan open je hem met één tik, net als een gewone app.</span></span></li>
+    <li><span class="n">2</span><span><b>Maak een nieuwe offerte</b>Vul de klantgegevens en je posten in. Totalen rekenen vanzelf.</span></li>
+    <li><span class="n">3</span><span><b>Download als PDF en verstuur</b>Alles wordt automatisch bewaard, dus je kunt later altijd verder.</span></li>
+  </ol>
+  <div class="m-acts"><button class="app-btn lt" id="welkomLater">Later</button><button class="app-btn pri" id="welkomStart">Maak mijn eerste offerte</button></div>
+</div></div>
+
+<div class="m-back" id="mNaam"><div class="m-box">
+  <h2 id="nTitel">Geef je offerte een naam</h2>
+  <p>Alleen voor jezelf, zodat je hem makkelijk terugvindt. Komt niet op de offerte.</p>
+  <input class="m-input" id="nInput" type="text" maxlength="80" placeholder="Bijvoorbeeld: Dakkapel Jansen" autocomplete="off">
+  <div class="m-fout" id="nFout"></div>
+  <div class="m-acts"><button class="app-btn lt" id="nNee">Annuleren</button><button class="app-btn pri" id="nJa">Offerte aanmaken</button></div>
+</div></div>
+
+<div class="m-back" id="mConfirm"><div class="m-box">
+  <h2 id="cTitel">Weet je het zeker?</h2>
+  <p id="cTekst"></p>
+  <div class="m-acts"><button class="app-btn lt" id="cNee">Annuleren</button><button class="app-btn dg" id="cJa">Verwijderen</button></div>
+</div></div>
+
+<div class="m-back" id="mIos"><div class="m-box">
+  <h2>Zet de app op je beginscherm</h2>
+  <ol class="m-steps">
+    <li><span class="n">1</span><span>Tik onderin Safari op het <b>Deel-icoon</b> (vierkantje met pijl omhoog).</span></li>
+    <li><span class="n">2</span><span>Scroll en kies <b>"Zet op beginscherm"</b>.</span></li>
+    <li><span class="n">3</span><span>Tik op <b>"Voeg toe"</b>. De app staat nu tussen je andere apps.</span></li>
+  </ol>
+  <div class="m-acts"><button class="app-btn pri" id="iosOk">Begrepen</button></div>
+</div></div>
+
+<div class="m-back" id="mLogin"><div class="m-box">
+  <img class="m-logo" src="img/4c04ea2d.png" alt="">
+  <h2 id="lgTitel">Inloggen</h2>
+  <p id="lgUitleg">Log in met het e-mailadres waarmee je bij ons bekend bent. Je offertes staan dan op al je apparaten.</p>
+  <div class="m-tabs" id="lgTabs"><button type="button" data-tab="in" class="on">Inloggen</button><button type="button" data-tab="nieuw">Eerste keer</button></div>
+  <form id="lgForm" novalidate>
+    <label class="m-lbl" for="lgEmail">E-mailadres</label>
+    <input class="m-input" id="lgEmail" type="email" autocomplete="email" placeholder="naam@bedrijf.nl">
+    <div id="lgPwBlok"><label class="m-lbl" for="lgPw">Wachtwoord</label>
+    <input class="m-input" id="lgPw" type="password" autocomplete="current-password" placeholder="Minimaal 8 tekens"></div>
+    <div class="m-fout" id="lgFout"></div><div class="m-ok" id="lgOk"></div>
+    <button type="button" class="m-link" id="lgVergeten">Wachtwoord vergeten?</button>
+    <div class="m-acts"><button type="button" class="app-btn lt" id="lgNee">Later</button><button type="submit" class="app-btn pri" id="lgJa">Inloggen</button></div>
+  </form>
+</div></div>
+
+<div class="m-back" id="mAccount"><div class="m-box">
+  <h2>Je account</h2>
+  <p>Ingelogd als <b id="accEmail"></b>.</p>
+  <p id="accSync" style="margin-top:8px"></p>
+  <div class="m-acts"><button class="app-btn lt" id="accUit">Uitloggen</button><button class="app-btn lt" id="accNu">Nu synchroniseren</button><button class="app-btn pri" id="accOk">Sluiten</button></div>
+</div></div>
+
+<div class="m-back" id="mNieuwPw"><div class="m-box">
+  <h2>Kies een nieuw wachtwoord</h2>
+  <form id="npForm" novalidate>
+    <label class="m-lbl" for="npPw">Nieuw wachtwoord</label>
+    <input class="m-input" id="npPw" type="password" autocomplete="new-password" placeholder="Minimaal 8 tekens">
+    <div class="m-fout" id="npFout"></div>
+    <div class="m-acts"><button type="submit" class="app-btn pri">Opslaan</button></div>
+  </form>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script src="supabase.js"></script>
+<script>
+/* ===== Offerte-functies van de klant ===== */
+function parsePrice(txt){
+  txt = (txt||'').replace(/[^\d,.-]/g,'').trim();
+  if(!txt) return 0;
+  // Dutch format: '.' = thousands, ',' = decimal
+  txt = txt.replace(/\.(?=\d{3}(\D|$))/g,'').replace(',', '.');
+  const v = parseFloat(txt);
+  return isNaN(v) ? 0 : v;
+}
+function parseQty(txt){
+  const v = parseFloat((txt||'').replace(/[^\d.]/g,''));
+  return isNaN(v) ? 1 : v;
+}
+function fmtEUR(n){
+  return '€ ' + n.toLocaleString('nl-NL', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+
+function startGapResize(e, handle){
+  e.preventDefault();
+  handle.classList.add('resizing');
+  const cat = handle.closest('.cat');
+  const startY = (e.touches && e.touches[0]) ? e.touches[0].clientY : e.clientY;
+  const startMargin = parseFloat(cat.style.marginBottom) || 0;
+  const MAXGAP = 250;
+
+  function getY(ev){ return (ev.touches && ev.touches[0]) ? ev.touches[0].clientY : ev.clientY; }
+  function onMove(ev){
+    const dy = getY(ev) - startY;
+    let newMargin = Math.max(0, Math.min(MAXGAP, startMargin + dy));
+    cat.style.marginBottom = newMargin + 'px';
+    ev.preventDefault();
+  }
+  function onUp(){
+    handle.classList.remove('resizing');
+    window.removeEventListener('mousemove', onMove);
+    window.removeEventListener('mouseup', onUp);
+    window.removeEventListener('touchmove', onMove);
+    window.removeEventListener('touchend', onUp);
+  }
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onUp);
+  window.addEventListener('touchmove', onMove, { passive:false });
+  window.addEventListener('touchend', onUp);
+}
+
+function startColResize(e, handle){
+  e.preventDefault();
+  const th = handle.closest('th');
+  const table = th.closest('table');
+  const colgroup = table.querySelector('colgroup');
+  const ths = Array.from(th.parentElement.children).filter(el => el.tagName === 'TH');
+  const idx = ths.indexOf(th);
+  const cols = colgroup.children;
+  const colA = cols[idx], colB = cols[idx+1];
+  if(!colA || !colB) return;
+
+  const tableWidth = table.getBoundingClientRect().width;
+  const startX = (e.touches && e.touches[0]) ? e.touches[0].clientX : e.clientX;
+  const startWidthA = colA.getBoundingClientRect().width;
+  const startWidthB = colB.getBoundingClientRect().width;
+  const MIN = 42;
+
+  function getX(ev){ return (ev.touches && ev.touches[0]) ? ev.touches[0].clientX : ev.clientX; }
+
+  function onMove(ev){
+    const dx = getX(ev) - startX;
+    let newA = startWidthA + dx;
+    let newB = startWidthB - dx;
+    if(newA < MIN || newB < MIN) return;
+    colA.style.width = (newA / tableWidth * 100) + '%';
+    colB.style.width = (newB / tableWidth * 100) + '%';
+    ev.preventDefault();
+  }
+  function onUp(){
+    window.removeEventListener('mousemove', onMove);
+    window.removeEventListener('mouseup', onUp);
+    window.removeEventListener('touchmove', onMove);
+    window.removeEventListener('touchend', onUp);
+  }
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onUp);
+  window.addEventListener('touchmove', onMove, { passive:false });
+  window.addEventListener('touchend', onUp);
+}
+
+function recalc(){
+  document.querySelectorAll('table[data-cat-table]').forEach(tbl => {
+    let catTotal = 0;
+    tbl.querySelectorAll('tbody tr').forEach(tr => {
+      const qty = parseQty(tr.querySelector('.qty-val')?.textContent);
+      const price = parsePrice(tr.querySelector('.price-val')?.textContent);
+      catTotal += qty * price;
+    });
+    const totCell = tbl.querySelector('tfoot .cat-total');
+    if(totCell) totCell.textContent = fmtEUR(catTotal);
+  });
+}
+
+function markManualTotal(el){
+  el.dataset.manual = 'true';
+}
+function resetCatTotal(btn){
+  const totCell = btn.previousElementSibling;
+  totCell.dataset.manual = 'false';
+  recalc();
+}
+
+function addRow(btn){
+  const wrap = btn.previousElementSibling; // table
+  const tbody = wrap.querySelector('tbody');
+  const rows = tbody.querySelectorAll('tr');
+  const clone = rows[rows.length-1].cloneNode(true);
+  clone.querySelector('[data-ph]').textContent = '';
+  clone.querySelector('.qty-val').textContent = '1';
+  clone.querySelector('.price-val').textContent = '€ 0,00';
+  tbody.appendChild(clone);
+  attachRowListeners(clone);
+  recalc();
+}
+function delRow(btn){
+  const tr = btn.closest('tr');
+  const tbody = tr.closest('tbody');
+  if(tbody.querySelectorAll('tr').length > 1){ tr.remove(); recalc(); }
+}
+function attachRowListeners(tr){
+  tr.querySelectorAll('.qty-val, .price-val').forEach(el => {
+    el.addEventListener('input', recalc);
+    el.addEventListener('blur', recalc);
+  });
+  // prijs netjes opmaken na invullen: "1500" wordt "€ 1.500,00"
+  tr.querySelectorAll('.price-val').forEach(el => {
+    el.addEventListener('blur', () => {
+      if((el.textContent||'').trim()) el.textContent = fmtEUR(parsePrice(el.textContent));
+      recalc();
+    });
+  });
+}
+
+function handlePhoto(input, targetId){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const el = document.getElementById(targetId);
+    el.style.backgroundImage = 'url(' + e.target.result + ')';
+    el.style.backgroundPosition = '50% 50%';
+    el.dataset.posX = 50;
+    el.dataset.posY = 50;
+    el.classList.add('has-img');
+    input.closest('.upload-lbl').classList.add('has-img');
+    enableDragReposition(el);
+  };
+  reader.readAsDataURL(file);
+}
+
+function enableDragReposition(el){
+  if(el.dataset.dragEnabled) return;
+  el.dataset.dragEnabled = '1';
+  el.classList.add('draggable-photo');
+
+  let tracking = false;
+  let moved = false;
+  let startX = 0, startY = 0, startPosX = 50, startPosY = 50;
+  const THRESHOLD = 4;
+
+  function getPoint(e){
+    if(e.touches && e.touches[0]) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    return { x: e.clientX, y: e.clientY };
+  }
+
+  function onDown(e){
+    if(!el.classList.contains('has-img')) return;
+    tracking = true;
+    moved = false;
+    const p = getPoint(e);
+    startX = p.x; startY = p.y;
+    startPosX = parseFloat(el.dataset.posX) || 50;
+    startPosY = parseFloat(el.dataset.posY) || 50;
+  }
+  function onMove(e){
+    if(!tracking) return;
+    const p = getPoint(e);
+    const dx = p.x - startX, dy = p.y - startY;
+    if(!moved && Math.hypot(dx, dy) < THRESHOLD) return;
+    if(!moved){ moved = true; el.classList.add('dragging'); }
+    const rect = el.getBoundingClientRect();
+    const dxPct = (dx / rect.width) * 100;
+    const dyPct = (dy / rect.height) * 100;
+    let newX = startPosX - dxPct * 1.4;
+    let newY = startPosY - dyPct * 1.4;
+    newX = Math.max(0, Math.min(100, newX));
+    newY = Math.max(0, Math.min(100, newY));
+    el.dataset.posX = newX;
+    el.dataset.posY = newY;
+    el.style.backgroundPosition = newX + '% ' + newY + '%';
+    e.preventDefault();
+  }
+  function onUp(){
+    if(tracking && moved){
+      const label = el.querySelector('.upload-lbl');
+      if(label){
+        const suppressClick = ev => { ev.preventDefault(); ev.stopPropagation(); label.removeEventListener('click', suppressClick, true); };
+        label.addEventListener('click', suppressClick, true);
+      }
+    }
+    tracking = false;
+    moved = false;
+    el.classList.remove('dragging');
+  }
+
+  el.addEventListener('mousedown', onDown);
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onUp);
+  el.addEventListener('touchstart', onDown, { passive:true });
+  window.addEventListener('touchmove', onMove, { passive:false });
+  window.addEventListener('touchend', onUp);
+}
+
+function downloadFilledHTML(){
+  // maak een schone kopie van het hele document zodat we de live (ingevulde) staat kunnen wegschrijven
+  const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+  const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'Offerte_ingevuld.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function addCategory(){
+  const tpl = document.getElementById('cat-template');
+  const clone = tpl.content.cloneNode(true);
+  const flow = document.getElementById('categoriesFlow');
+  flow.appendChild(clone);
+  const added = flow.lastElementChild;
+  added.querySelectorAll('tbody tr').forEach(attachRowListeners);
+  recalc();
+  added.querySelector('.cat-head span[contenteditable]')?.focus();
+}
+function delCategory(btn){
+  const flow = document.getElementById('categoriesFlow');
+  if(flow.querySelectorAll('.cat').length <= 1){ return; }
+  btn.closest('.cat').remove();
+  recalc();
+}
+function renumberPages(){
+  // de cover (pagina 1) toont geen paginanummer, dus tellen we vanaf 2
+  document.querySelectorAll('.pagenum').forEach((el,i) => { el.textContent = i+2; });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('table[data-cat-table] tbody tr').forEach(attachRowListeners);
+  document.getElementById('btwRate')?.addEventListener('input', recalc);
+  document.getElementById('btwRate')?.addEventListener('blur', recalc);
+  recalc();
+  renumberPages();
+});
+
+</script>
+
+<script>
+/* ===== App ===== */
+(function(){
+  var CFG = {"slug": "test-sync-r4m8", "bedrijf": "Testomgeving sync", "kortnaam": "Test", "sbUrl": "https://sanqgqjfolygzzejbvhq.supabase.co", "sbKey": "sb_publishable_Sasv3oQdP_mEByJ-lf_ekg_Z4nSJrfT"};
+  var root = document.getElementById('pdfRoot');
+  var TPL = document.getElementById('offerte-tpl').innerHTML;
+  var cur = null, saveT = null, loading = false;
+
+  /* ---------- opslag (IndexedDB, met noodval in geheugen) ---------- */
+  var mem = {}, dbp = null;
+  function db(){
+    if (dbp) return dbp;
+    dbp = new Promise(function(res){
+      try {
+        var r = indexedDB.open('offertes-' + CFG.slug, 1);
+        r.onupgradeneeded = function(){ r.result.createObjectStore('docs', { keyPath: 'id' }); };
+        r.onsuccess = function(){ res(r.result); };
+        r.onerror = function(){ res(null); };
+      } catch (e) { res(null); }
+    });
+    return dbp;
+  }
+  function tx(mode, fn){ return db().then(function(d){ return new Promise(function(res, rej){
+    if (!d) { var o = fn(null); res(o && o.result !== undefined ? o.result : o); return; }
+    var t = d.transaction('docs', mode), st = t.objectStore('docs'), out = fn(st);
+    t.oncomplete = function(){ res(out && out.result !== undefined ? out.result : out); };
+    t.onerror = function(){ rej(t.error); };
+  }); }); }
+  var store = {
+    all: function(){ return tx('readonly', function(st){ return st ? st.getAll() : { result: Object.values(mem) }; }); },
+    get: function(id){ return tx('readonly', function(st){ return st ? st.get(id) : { result: mem[id] }; }); },
+    put: function(doc){ return tx('readwrite', function(st){ if (st) st.put(doc); else mem[doc.id] = doc; }); },
+    del: function(id){ return tx('readwrite', function(st){ if (st) st.delete(id); else delete mem[id]; }); }
+  };
+  function ls(k, v){ try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+
+  /* ---------- hulp ---------- */
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]; }); }
+  function vandaag(){ var d = new Date(); return String(d.getDate()).padStart(2,'0') + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + d.getFullYear(); }
+  function nieuwId(){ return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+  function toast(t){ var e = $('toast'); e.textContent = t; e.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(function(){ e.classList.remove('on'); }, 2200); }
+  function velden(){ return root.querySelectorAll('.cover-panel .meta .val'); }
+  function info(){
+    var v = velden(), tot = 0;
+    root.querySelectorAll('.cat-total').forEach(function(e){ tot += parsePrice(e.textContent); });
+    return { klant: (v[0] && v[0].textContent.trim()) || '', project: (v[1] && v[1].textContent.trim()) || '', nummer: (v[4] && v[4].textContent.trim()) || '', datum: (v[5] && v[5].textContent.trim()) || '', totaal: tot };
+  }
+  function volgendNummer(docs){
+    var j = new Date().getFullYear(), max = 0;
+    docs.forEach(function(d){ var m = /^(\d{4})-(\d+)$/.exec(d.nummer || ''); if (m && +m[1] === j) max = Math.max(max, +m[2]); });
+    return j + '-' + String(max + 1).padStart(3, '0');
+  }
+
+  /* ---------- weergave ---------- */
+  function toon(v){ document.body.className = 'v-' + v; window.scrollTo(0, 0); if (v === 'editor') pasZoom(); }
+  function pasZoom(){
+    var w = document.documentElement.clientWidth, z = Math.min(1, (w - 16) / 812);
+    root.style.zoom = z < 1 ? z : '';
+  }
+  window.addEventListener('resize', function(){ if (document.body.classList.contains('v-editor')) pasZoom(); });
+
+  function renderLijst(){
+    return store.all().then(function(docs){
+      docs = docs.filter(function(d){ return !d.verwijderd; });
+      docs.sort(function(a, b){ return b.updated - a.updated; });
+      var q = ($('zoek').value || '').toLowerCase(), box = $('lijstItems');
+      $('zoek').style.display = docs.length > 4 ? 'block' : 'none';
+      var waar = sync.aan() ? 'gesynchroniseerd met al je apparaten' : 'automatisch bewaard op dit apparaat';
+      $('lTeller').textContent = docs.length ? docs.length + (docs.length === 1 ? ' offerte' : ' offertes') + ' · ' + waar : 'Alles wordt automatisch bewaard' + (sync.aan() ? ' en gesynchroniseerd.' : ' op dit apparaat.');
+      var lijst = docs.filter(function(d){ return !q || [d.naam, d.klant, d.project, d.nummer].join(' ').toLowerCase().indexOf(q) >= 0; });
+      if (!docs.length) {
+        box.innerHTML = '<div class="l-leeg"><h2>Nog geen offertes</h2><p>Maak je eerste offerte. Klantgegevens en posten invullen, de rest gaat vanzelf.</p><button class="app-btn pri l-new" data-act="nieuw">+ Nieuwe offerte</button></div>';
+        return;
+      }
+      box.innerHTML = lijst.map(function(d){
+        var gewijzigd = new Date(d.updated).toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' });
+        return '<div class="l-item" data-id="' + esc(d.id) + '">' +
+          '<span class="l-nr">' + esc(d.nummer || 'Concept') + '</span>' +
+          '<div class="l-main"><div class="l-klant">' + esc(d.naam || d.klant || 'Naamloze offerte') + '</div><div class="l-sub">' + esc([d.klant || 'Nog geen klant', d.project, d.datum].filter(Boolean).join(' · ')) + ' · gewijzigd ' + esc(gewijzigd) + '</div></div>' +
+          '<div class="l-right"><div class="l-bedrag">' + esc(fmtEUR(d.totaal || 0)) + '</div><div class="l-btw">excl. btw</div>' +
+          '<div class="l-acts"><button class="app-btn lt" data-act="dupl">Dupliceren</button><button class="app-btn dg" data-act="del">Verwijderen</button></div></div></div>';
+      }).join('') || '<p style="color:#6B6B6B;padding:10px 4px">Geen offertes gevonden.</p>';
+    });
+  }
+
+  /* ---------- offerte laden / bewaren ---------- */
+  function initOfferte(){
+    root.querySelectorAll('table[data-cat-table] tbody tr').forEach(attachRowListeners);
+    root.querySelectorAll('.has-img').forEach(function(el){ if (el.classList.contains('ph') || el.classList.contains('cover-photo')) { delete el.dataset.dragEnabled; enableDragReposition(el); } });
+    recalc(); renumberPages();
+  }
+  function open(id){
+    return store.get(id).then(function(doc){
+      if (!doc || doc.verwijderd) { location.hash = ''; return; }
+      loading = true; cur = doc; root.innerHTML = doc.html; initOfferte(); setTimeout(function(){ loading = false; }, 0);
+      $('status').textContent = 'Opgeslagen'; toonNaam();
+      toon('editor');
+    });
+  }
+  function bewaar(){
+    if (!cur) return Promise.resolve();
+    var i = info();
+    cur.html = root.innerHTML; cur.klant = i.klant; cur.project = i.project; cur.nummer = i.nummer; cur.datum = i.datum; cur.totaal = i.totaal; cur.updated = Date.now(); cur.dirty = true;
+    $('status').textContent = 'Opslaan…';
+    return store.put(cur).then(function(){ $('status').textContent = 'Opgeslagen ✓'; sync.plan(); }, function(){ $('status').textContent = 'Opslaan mislukt'; toast('Opslaan is niet gelukt. Is de opslag van je apparaat vol?'); });
+  }
+  function planBewaar(){ if (loading || !cur) return; $('status').textContent = 'Wijzigingen…'; clearTimeout(saveT); saveT = setTimeout(bewaar, 600); }
+  new MutationObserver(function(muts){ if (muts.every(function(m){ return m.target === root && m.type === 'attributes'; })) return; planBewaar(); }).observe(root, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['style', 'class'] });
+  root.addEventListener('input', planBewaar);
+
+  function nieuw(bronHtml, naam){
+    return store.all().then(function(docs){
+      var doc = { id: nieuwId(), naam: naam || '', html: bronHtml || TPL, created: Date.now(), updated: Date.now(), dirty: true };
+      loading = true; root.innerHTML = doc.html;
+      var v = velden();
+      if (v[4]) v[4].textContent = volgendNummer(docs);
+      if (v[5]) v[5].textContent = vandaag();
+      doc.html = root.innerHTML; var i = info();
+      doc.klant = i.klant; doc.project = i.project; doc.nummer = i.nummer; doc.datum = i.datum; doc.totaal = i.totaal;
+      setTimeout(function(){ loading = false; }, 0);
+      return store.put(doc).then(function(){ sync.plan(); location.hash = '#/offerte/' + doc.id; return doc; });
+    });
+  }
+  function dupliceer(id){
+    return store.get(id).then(function(doc){ if (!doc) return; return vraagNaam('Kopie maken', 'Kopie aanmaken', (doc.naam || doc.klant || 'Offerte') + ' (kopie)').then(function(n){ if (n) return nieuw(doc.html, n).then(function(){ toast('Kopie gemaakt met een nieuw offertenummer'); }); }); });
+  }
+  function vraagNaam(titel, knop, standaard){
+    return new Promise(function(res){
+      var m = $('mNaam'), inp = $('nInput');
+      $('nTitel').textContent = titel; $('nJa').textContent = knop; $('nFout').textContent = '';
+      inp.value = standaard || ''; m.classList.add('on'); setTimeout(function(){ inp.focus(); inp.select(); }, 30);
+      function klaar(v){ m.classList.remove('on'); $('nJa').onclick = $('nNee').onclick = inp.onkeydown = null; res(v); }
+      $('nJa').onclick = function(){ var v = inp.value.trim(); if (!v) { $('nFout').textContent = 'Vul een naam in.'; inp.focus(); return; } klaar(v); };
+      $('nNee').onclick = function(){ klaar(null); };
+      inp.onkeydown = function(e){ if (e.key === 'Enter') $('nJa').onclick(); if (e.key === 'Escape') klaar(null); };
+    });
+  }
+  /* verwijderen = markeren, zodat het ook op andere apparaten verdwijnt */
+  function verwijder(id){
+    return store.get(id).then(function(d){ if (!d) return; d.verwijderd = true; d.html = ''; d.updated = Date.now(); d.dirty = true; return store.put(d).then(function(){ sync.plan(); }); });
+  }
+  function nieuweOfferte(){ vraagNaam('Geef je offerte een naam', 'Offerte aanmaken', '').then(function(n){ if (n) nieuw(null, n); }); }
+  function toonNaam(){ $('edNaam').innerHTML = esc(cur && cur.naam || 'Naamloze offerte') + '<span>✎</span>'; }
+  function bevestig(titel, tekst){
+    return new Promise(function(res){
+      $('cTitel').textContent = titel; $('cTekst').textContent = tekst; $('mConfirm').classList.add('on');
+      function klaar(v){ $('mConfirm').classList.remove('on'); $('cJa').onclick = $('cNee').onclick = null; res(v); }
+      $('cJa').onclick = function(){ klaar(true); }; $('cNee').onclick = function(){ klaar(false); };
+    });
+  }
+
+  /* ---------- foto's: zeer grote foto's verkleinen tot printkwaliteit ---------- */
+  var origHandle = window.handlePhoto;
+  window.handlePhoto = function(input, targetId){
+    var file = input.files && input.files[0]; if (!file) return;
+    var r = new FileReader();
+    r.onload = function(e){
+      var img = new Image();
+      img.onload = function(){
+        var MAX = 2400, w = img.naturalWidth, h = img.naturalHeight, url = e.target.result;
+        if (Math.max(w, h) > MAX) {
+          var f = MAX / Math.max(w, h), c = document.createElement('canvas'); c.width = Math.round(w * f); c.height = Math.round(h * f);
+          c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); url = c.toDataURL('image/jpeg', 0.92);
+        }
+        var el = document.getElementById(targetId);
+        el.style.backgroundImage = 'url(' + url + ')'; el.style.backgroundPosition = '50% 50%';
+        el.dataset.posX = 50; el.dataset.posY = 50; el.classList.add('has-img');
+        input.closest('.upload-lbl').classList.add('has-img'); input.value = '';
+        enableDragReposition(el); planBewaar();
+      };
+      img.onerror = function(){ origHandle(input, targetId); };
+      img.src = e.target.result;
+    };
+    r.readAsDataURL(file);
+  };
+
+  /* ---------- PDF ---------- */
+  var oudeTitel = document.title;
+  function pdf(){
+    if (document.activeElement) document.activeElement.blur();
+    recalc();
+    var i = info(); document.title = ('Offerte ' + (i.nummer || '') + (i.klant ? ' - ' + i.klant : '')).trim();
+    root.style.zoom = '';
+    bewaar().then(function(){ setTimeout(function(){ window.print(); }, 50); });
+  }
+  window.addEventListener('afterprint', function(){ document.title = oudeTitel; pasZoom(); });
+
+  /* ---------- back-up ---------- */
+  function download(naam, tekst, type){
+    var b = new Blob([tekst], { type: type }), u = URL.createObjectURL(b), a = document.createElement('a');
+    a.href = u; a.download = naam; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){ URL.revokeObjectURL(u); }, 1500);
+  }
+  function backup(){
+    store.all().then(function(docs){
+      if (!docs.length) { toast('Er zijn nog geen offertes om te bewaren'); return; }
+      var d = new Date(), stamp = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+      download(CFG.kortnaam.replace(/\W+/g, '-') + '-offertes-backup-' + stamp + '.json', JSON.stringify({ app: CFG.slug, versie: 1, gemaakt: d.toISOString(), offertes: docs }), 'application/json');
+      toast('Back-up gedownload (' + docs.length + ' offertes)');
+    });
+  }
+  function terugzetten(file){
+    var r = new FileReader();
+    r.onload = function(){
+      try {
+        var data = JSON.parse(r.result), docs = (data && data.offertes) || [];
+        if (!docs.length) throw 0;
+        Promise.all(docs.filter(function(d){ return d && d.id && d.html; }).map(function(d){ d.dirty = true; return store.put(d); })).then(function(){ renderLijst(); sync.plan(); toast(docs.length + ' offertes teruggezet'); });
+      } catch (e) { toast('Dit bestand is geen geldige back-up'); }
+    };
+    r.readAsText(file);
+  }
+
+  /* ---------- installeren ---------- */
+  var installEvt = null, standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+  var ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); installEvt = e; if (!standalone) $('btnInstall').style.display = ''; });
+  if (ios && !standalone) $('btnInstall').style.display = '';
+  if (standalone) $('installUitleg').textContent = 'Gelukt: je gebruikt de app al vanaf je beginscherm.';
+  else if (ios) $('installUitleg').textContent = 'Tik in Safari op Deel en kies "Zet op beginscherm".';
+  else $('installUitleg').textContent = 'Klik op "Installeer app" bovenin. Op je telefoon: browsermenu, dan "Toevoegen aan startscherm".';
+  function installeer(){
+    if (installEvt) { installEvt.prompt(); installEvt.userChoice.then(function(c){ if (c.outcome === 'accepted') { $('btnInstall').style.display = 'none'; toast('App geïnstalleerd'); } installEvt = null; }); }
+    else if (ios) $('mIos').classList.add('on');
+    else toast('Open het browsermenu en kies "App installeren" of "Toevoegen aan startscherm"');
+  }
+
+  /* ---------- knoppen ---------- */
+  $('btnNieuw').onclick = nieuweOfferte;
+  $('edNaam').onclick = function(){ vraagNaam('Naam wijzigen', 'Opslaan', cur && cur.naam).then(function(n){ if (n && cur) { cur.naam = n; toonNaam(); bewaar(); } }); };
+  $('btnTerug').onclick = function(){ bewaar().then(function(){ location.hash = ''; }); };
+  $('btnDupl').onclick = function(){ bewaar().then(function(){ dupliceer(cur.id); }); };
+  $('btnPdf').onclick = pdf;
+  $('btnBackup').onclick = backup;
+  $('btnRestore').onclick = function(){ $('restoreFile').click(); };
+  $('restoreFile').onchange = function(){ if (this.files[0]) terugzetten(this.files[0]); this.value = ''; };
+  $('btnInstall').onclick = installeer;
+  $('btnHelp').onclick = function(){ $('mWelkom').classList.add('on'); };
+  $('iosOk').onclick = function(){ $('mIos').classList.remove('on'); };
+  $('welkomLater').onclick = function(){ $('mWelkom').classList.remove('on'); ls('welkom-' + CFG.slug, '1'); };
+  $('welkomStart').onclick = function(){ $('mWelkom').classList.remove('on'); ls('welkom-' + CFG.slug, '1'); nieuweOfferte(); };
+  $('zoek').oninput = renderLijst;
+  $('lijstItems').addEventListener('click', function(e){
+    var act = e.target.getAttribute('data-act'), item = e.target.closest('.l-item');
+    if (act === 'nieuw') { nieuweOfferte(); return; }
+    if (!item) return;
+    var id = item.getAttribute('data-id');
+    if (act === 'dupl') { e.stopPropagation(); dupliceer(id); return; }
+    if (act === 'del') {
+      e.stopPropagation();
+      var naam = item.querySelector('.l-klant').textContent;
+      bevestig('Offerte verwijderen?', 'Offerte ' + item.querySelector('.l-nr').textContent + ' (' + naam + ') wordt definitief verwijderd' + (sync.aan() ? ', ook op je andere apparaten.' : ' van dit apparaat.')).then(function(ja){ if (ja) verwijder(id).then(function(){ renderLijst(); toast('Offerte verwijderd'); }); });
+      return;
+    }
+    location.hash = '#/offerte/' + id;
+  });
+  window.addEventListener('pagehide', function(){ if (cur && document.body.classList.contains('v-editor')) bewaar(); });
+  document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'hidden' && cur && document.body.classList.contains('v-editor')) bewaar(); });
+
+  /* ---------- account & synchronisatie (Supabase) ---------- */
+  var sync = (function(){
+    var sb = null, sessie = null, lid = false, bezig = false, opnieuw = false, planT = null, staat = 'uit', laatst = 0;
+    var CUR_KEY = 'sync-cursor-' + CFG.slug, APP_URL = location.origin + location.pathname;
+    function aan(){ return !!(sb && sessie && lid); }
+
+    function zet(s){
+      staat = s;
+      var b = $('btnAccount'); if (!b) return;
+      b.style.display = sb ? '' : 'none';
+      b.classList.remove('ok', 'bezig', 'fout');
+      if (!sessie) { $('accTekst').textContent = 'Inloggen'; }
+      else {
+        b.classList.add(s === 'ok' ? 'ok' : s === 'bezig' ? 'bezig' : s === 'fout' ? 'fout' : '');
+        $('accTekst').textContent = s === 'bezig' ? 'Synchroniseren…' : s === 'fout' ? 'Niet gesynchroniseerd' : s === 'offline' ? 'Offline' : 'Gesynchroniseerd';
+      }
+      $('syncBanner').style.display = sb && !sessie ? '' : 'none';
+      $('footTekst').textContent = aan() ? 'Je offertes worden automatisch gesynchroniseerd met al je apparaten.' : 'Je offertes staan op dit apparaat. Log in om ze op al je apparaten te hebben.';
+      var a = $('accSync'); if (a) a.textContent = !lid ? '' : s === 'fout' ? 'De laatste synchronisatie is niet gelukt. Je wijzigingen staan veilig op dit apparaat en worden later opnieuw verstuurd.' : laatst ? 'Laatst gesynchroniseerd om ' + new Date(laatst).toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' }) + '.' : '';
+    }
+
+    function rij(d){ return { id: d.id, slug: CFG.slug, naam: d.naam || '', klant: d.klant || '', project: d.project || '', nummer: d.nummer || '', datum: d.datum || '', totaal: d.totaal || 0, html: d.html || '', created: d.created || d.updated, updated: d.updated, verwijderd: !!d.verwijderd }; }
+    function reeks(lijst, fn){ return lijst.reduce(function(p, x){ return p.then(function(){ return fn(x); }); }, Promise.resolve()); }
+
+    function push(){
+      return store.all().then(function(docs){
+        var vuil = docs.filter(function(d){ return d.dirty !== false; });
+        return reeks(vuil, function(d){
+          return sb.from('offertes').select('updated').eq('id', d.id).maybeSingle().then(function(r){
+            if (r.error) throw r.error;
+            if (r.data && r.data.updated > d.updated) return false;
+            return sb.from('offertes').upsert(rij(d)).then(function(r2){ if (r2.error) throw r2.error; return true; });
+          }).then(function(){
+            return store.get(d.id).then(function(nu){ if (nu && nu.updated === d.updated) { nu.dirty = false; return store.put(nu); } });
+          });
+        });
+      });
+    }
+
+    function pull(){
+      var cursor = ls(CUR_KEY) || '1970-01-01T00:00:00Z', vanaf = new Date(new Date(cursor).getTime() - 30000).toISOString(), veranderd = 0;
+      function pagina(van){
+        return sb.from('offertes').select('*').eq('slug', CFG.slug).gt('server_tijd', van).order('server_tijd', { ascending: true }).limit(100).then(function(r){
+          if (r.error) throw r.error;
+          var rows = r.data || [];
+          return reeks(rows, function(row){
+            return store.get(row.id).then(function(loc){
+              if (loc && (loc.updated > row.updated || (loc.updated === row.updated && loc.dirty === false))) return;
+              if (loc && loc.dirty !== false && loc.updated > row.updated) return;
+              var doc = { id: row.id, naam: row.naam, klant: row.klant, project: row.project, nummer: row.nummer, datum: row.datum, totaal: Number(row.totaal) || 0, html: row.html, created: row.created, updated: row.updated, verwijderd: row.verwijderd, dirty: false };
+              veranderd++;
+              return store.put(doc).then(function(){ werkOpenOfferteBij(doc); });
+            });
+          }).then(function(){
+            if (rows.length) { cursor = rows[rows.length - 1].server_tijd; ls(CUR_KEY, cursor); }
+            if (rows.length === 100) return pagina(cursor);
+          });
+        });
+      }
+      return pagina(vanaf).then(function(){ return veranderd; });
+    }
+
+    function werkOpenOfferteBij(doc){
+      if (!cur || cur.id !== doc.id || !document.body.classList.contains('v-editor')) return;
+      if (doc.verwijderd) { cur = null; location.hash = ''; toast('Deze offerte is op een ander apparaat verwijderd'); return; }
+      if (doc.updated <= cur.updated || saveT && $('status').textContent === 'Wijzigingen…') return;
+      loading = true; cur = doc; root.innerHTML = doc.html; initOfferte(); setTimeout(function(){ loading = false; }, 0);
+      toonNaam(); toast('Bijgewerkt met de wijzigingen van je andere apparaat');
+    }
+
+    function nu(){
+      if (!aan()) return Promise.resolve();
+      if (!navigator.onLine) { zet('offline'); return Promise.resolve(); }
+      if (bezig) { opnieuw = true; return Promise.resolve(); }
+      bezig = true; zet('bezig');
+      return push().then(pull).then(function(n){
+        laatst = Date.now(); zet('ok');
+        if (n && document.body.classList.contains('v-lijst')) renderLijst();
+      }, function(){ zet('fout'); }).then(function(){ bezig = false; if (opnieuw) { opnieuw = false; plan(); } });
+    }
+    function plan(){ if (!aan()) return; clearTimeout(planT); planT = setTimeout(nu, 1500); }
+
+    function controleerLid(){
+      return sb.from('app_leden').select('slug').eq('slug', CFG.slug).then(function(r){
+        if (r.error) { zet('fout'); return; }
+        lid = !!(r.data && r.data.length);
+        if (!lid) {
+          var email = sessie && sessie.user && sessie.user.email;
+          sb.auth.signOut();
+          openLogin();
+          $('lgFout').textContent = (email || 'Dit e-mailadres') + ' heeft geen toegang tot deze app. Gebruik het e-mailadres waarmee je bij OffertesOpMaat bekend bent, of mail ons via info@offertesopmaat.com.';
+          return;
+        }
+        $('mLogin').classList.remove('on');
+        zet('ok'); renderLijst(); return nu();
+      });
+    }
+
+    /* ---- inlogvenster ---- */
+    var tab = 'in';
+    function zetTab(t){
+      tab = t;
+      $('lgTabs').querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-tab') === t); });
+      $('lgTabs').style.display = t === 'reset' ? 'none' : '';
+      $('lgPwBlok').style.display = t === 'reset' ? 'none' : '';
+      $('lgVergeten').style.display = t === 'in' ? '' : 'none';
+      $('lgTitel').textContent = t === 'nieuw' ? 'Account aanmaken' : t === 'reset' ? 'Wachtwoord vergeten' : 'Inloggen';
+      $('lgUitleg').textContent = t === 'nieuw' ? 'Gebruik het e-mailadres waarmee je bij OffertesOpMaat bekend bent en kies zelf een wachtwoord.' : t === 'reset' ? 'Vul je e-mailadres in. Je krijgt een mail met een link om een nieuw wachtwoord te kiezen.' : 'Log in met het e-mailadres waarmee je bij ons bekend bent. Je offertes staan dan op al je apparaten.';
+      $('lgJa').textContent = t === 'nieuw' ? 'Account aanmaken' : t === 'reset' ? 'Stuur de link' : 'Inloggen';
+      $('lgPw').setAttribute('autocomplete', t === 'nieuw' ? 'new-password' : 'current-password');
+      $('lgFout').textContent = ''; $('lgOk').textContent = '';
+    }
+    function openLogin(){ zetTab('in'); $('mLogin').classList.add('on'); setTimeout(function(){ $('lgEmail').focus(); }, 30); }
+    function vertaal(e){
+      var m = (e && (e.message || e.error_description)) || '';
+      if (/invalid login/i.test(m)) return 'E-mailadres of wachtwoord klopt niet.';
+      if (/not confirmed/i.test(m)) return 'Je e-mailadres is nog niet bevestigd. Klik op de link in de bevestigingsmail.';
+      if (/already registered|already exists/i.test(m)) return 'Er bestaat al een account met dit e-mailadres. Kies "Inloggen".';
+      if (/rate limit|too many/i.test(m)) return 'Even te veel pogingen. Probeer het over een paar minuten opnieuw.';
+      if (/password/i.test(m) && /least|short|weak/i.test(m)) return 'Kies een wachtwoord van minimaal 8 tekens.';
+      if (/fetch|network/i.test(m)) return 'Geen verbinding. Controleer je internet en probeer het opnieuw.';
+      return 'Dat lukte niet: ' + m;
+    }
+    function verstuur(e){
+      e.preventDefault();
+      var email = $('lgEmail').value.trim(), pw = $('lgPw').value;
+      $('lgFout').textContent = ''; $('lgOk').textContent = '';
+      if (!/^\S+@\S+\.\S+$/.test(email)) { $('lgFout').textContent = 'Vul een geldig e-mailadres in.'; return; }
+      if (tab !== 'reset' && pw.length < 8) { $('lgFout').textContent = 'Je wachtwoord moet minimaal 8 tekens hebben.'; return; }
+      $('lgJa').disabled = true;
+      var p = tab === 'reset' ? sb.auth.resetPasswordForEmail(email, { redirectTo: APP_URL })
+        : tab === 'nieuw' ? sb.auth.signUp({ email: email, password: pw, options: { emailRedirectTo: APP_URL } })
+        : sb.auth.signInWithPassword({ email: email, password: pw });
+      p.then(function(r){
+        $('lgJa').disabled = false;
+        if (r.error) { $('lgFout').textContent = vertaal(r.error); return; }
+        if (tab === 'reset') { $('lgOk').textContent = 'Gelukt. Check je mail (ook je spam) voor de link om een nieuw wachtwoord te kiezen.'; return; }
+        if (tab === 'nieuw' && !r.data.session) { $('lgOk').textContent = 'Bijna klaar! We hebben een bevestigingsmail gestuurd naar ' + email + '. Klik op de link in die mail (check ook je spam); daarna ben je ingelogd.'; $('lgPw').value = ''; return; }
+        $('lgPw').value = '';
+      }, function(err){ $('lgJa').disabled = false; $('lgFout').textContent = vertaal(err); });
+    }
+
+    function start(){
+      if (!window.supabase || !CFG.sbUrl) { zet('uit'); return; }
+      try {
+        sb = window.supabase.createClient(CFG.sbUrl, CFG.sbKey, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: 'implicit', storageKey: 'oom-auth-' + CFG.slug } });
+      } catch (e) { sb = null; zet('uit'); return; }
+      sb.auth.onAuthStateChange(function(evt, s){
+        var was = sessie && sessie.user && sessie.user.id;
+        sessie = s;
+        if (evt === 'PASSWORD_RECOVERY') { $('mNieuwPw').classList.add('on'); setTimeout(function(){ $('npPw').focus(); }, 30); }
+        if (!s) { lid = false; zet('uit'); renderLijst(); return; }
+        if (!was || was !== s.user.id || !lid) setTimeout(controleerLid, 0); else zet(staat === 'uit' ? 'ok' : staat);
+      });
+      zet('uit');
+      $('btnAccount').onclick = function(){ if (!sessie) openLogin(); else { $('accEmail').textContent = sessie.user.email; zet(staat); $('mAccount').classList.add('on'); } };
+      $('bannerLogin').onclick = openLogin;
+      $('lgTabs').onclick = function(e){ var t = e.target.getAttribute('data-tab'); if (t) zetTab(t); };
+      $('lgVergeten').onclick = function(){ zetTab('reset'); };
+      $('lgNee').onclick = function(){ $('mLogin').classList.remove('on'); };
+      $('lgForm').onsubmit = verstuur;
+      $('accOk').onclick = function(){ $('mAccount').classList.remove('on'); };
+      $('accNu').onclick = function(){ nu().then(function(){ zet(staat); toast(staat === 'ok' ? 'Alles is gesynchroniseerd' : 'Synchroniseren lukte niet'); }); };
+      $('accUit').onclick = function(){ $('mAccount').classList.remove('on'); sb.auth.signOut().then(function(){ toast('Uitgelogd. Je offertes blijven op dit apparaat staan.'); }); };
+      $('npForm').onsubmit = function(e){
+        e.preventDefault(); var pw = $('npPw').value;
+        if (pw.length < 8) { $('npFout').textContent = 'Minimaal 8 tekens.'; return; }
+        sb.auth.updateUser({ password: pw }).then(function(r){
+          if (r.error) { $('npFout').textContent = vertaal(r.error); return; }
+          $('mNieuwPw').classList.remove('on'); $('npPw').value = ''; toast('Nieuw wachtwoord opgeslagen');
+        });
+      };
+      window.addEventListener('online', plan);
+      window.addEventListener('offline', function(){ if (sessie) zet('offline'); });
+      document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'visible') nu(); });
+      setInterval(function(){ if (document.visibilityState === 'visible') nu(); }, 30000);
+    }
+    return { start: start, plan: plan, nu: nu, aan: aan };
+  })();
+
+  /* ---------- router ---------- */
+  function route(){
+    var m = /^#\/offerte\/(.+)$/.exec(location.hash);
+    if (m) open(m[1]);
+    else { cur = null; root.innerHTML = ''; toon('lijst'); renderLijst(); }
+  }
+  window.addEventListener('hashchange', function(){ if (/access_token|error_description|type=recovery/.test(location.hash)) return; route(); });
+  if (/access_token|error_description|type=recovery/.test(location.hash)) { toon('lijst'); renderLijst(); } else route();
+  sync.start();
+  if (!ls('welkom-' + CFG.slug)) $('mWelkom').classList.add('on');
+
+  if ('serviceWorker' in navigator && location.protocol === 'https:') { navigator.serviceWorker.register('sw.js').catch(function(){}); }
+})();
+</script>
+</body>
+</html>
