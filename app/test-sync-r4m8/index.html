@@ -777,17 +777,6 @@ body.v-lijst #lijst, body.v-editor #editor{ display:block; }
   </form>
 </div></div>
 
-<div class="m-back" id="mInstall"><div class="m-box">
-  <h2>Installeer de app</h2>
-  <p>Dan staat hij met je eigen logo tussen je programma's en open je hem met één klik.</p>
-  <ol class="m-steps">
-    <li><span class="n">1</span><span><b>Computer (Chrome of Edge)</b>Klik rechts in de adresbalk op het installeer-icoon (een schermpje met een pijltje), of open het menu ⋮ en kies <b style="display:inline">Opslaan en delen → App installeren</b>.</span></li>
-    <li><span class="n">2</span><span><b>Android</b>Open het menu ⋮ in Chrome en kies "Toevoegen aan startscherm" of "App installeren".</span></li>
-    <li><span class="n">3</span><span><b>Staat er geen installeer-optie?</b>Dan is de app al geïnstalleerd. Zoek hem in je Startmenu of tussen je apps.</span></li>
-  </ol>
-  <div class="m-acts"><button class="app-btn pri" id="instOk">Begrepen</button></div>
-</div></div>
-
 <div class="toast" id="toast"></div>
 
 <script src="qrcode.js"></script>
@@ -1271,16 +1260,15 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ---------- installeren ---------- */
   var installEvt = null, standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
   var ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); installEvt = e; });
-  window.addEventListener('appinstalled', function(){ $('btnInstall').style.display = 'none'; });
-  if (!standalone) $('btnInstall').style.display = '';
+  window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); installEvt = e; if (!standalone) $('btnInstall').style.display = ''; });
+  if (ios && !standalone) $('btnInstall').style.display = '';
   if (standalone) $('installUitleg').textContent = 'Gelukt: je gebruikt de app al vanaf je beginscherm.';
   else if (ios) $('installUitleg').textContent = 'Tik in Safari op Deel en kies "Zet op beginscherm".';
   else $('installUitleg').textContent = 'Klik op "Installeer app" bovenin. Op je telefoon: browsermenu, dan "Toevoegen aan startscherm".';
   function installeer(){
     if (installEvt) { installEvt.prompt(); installEvt.userChoice.then(function(c){ if (c.outcome === 'accepted') { $('btnInstall').style.display = 'none'; toast('App geïnstalleerd'); } installEvt = null; }); }
     else if (ios) $('mIos').classList.add('on');
-    else $('mInstall').classList.add('on');
+    else toast('Open het browsermenu en kies "App installeren" of "Toevoegen aan startscherm"');
   }
 
   /* ---------- knoppen ---------- */
@@ -1295,7 +1283,6 @@ document.addEventListener('DOMContentLoaded', () => {
   $('btnInstall').onclick = installeer;
   $('btnHelp').onclick = function(){ $('mWelkom').classList.add('on'); };
   $('iosOk').onclick = function(){ $('mIos').classList.remove('on'); };
-  $('instOk').onclick = function(){ $('mInstall').classList.remove('on'); };
   $('welkomLater').onclick = function(){ $('mWelkom').classList.remove('on'); ls('welkom-' + CFG.slug, '1'); };
   $('welkomStart').onclick = function(){ $('mWelkom').classList.remove('on'); ls('welkom-' + CFG.slug, '1'); nieuweOfferte(); };
   $('zoek').oninput = renderLijst;
