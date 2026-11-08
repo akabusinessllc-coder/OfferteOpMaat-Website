@@ -452,7 +452,7 @@ body.v-lijst #lijst, body.v-editor #editor{ display:block; }
   <div class="app-bar no-print"><div class="app-bar-in">
     <div class="app-brand"><img src="img/4c04ea2d.png" alt=""><b>Testomgeving sync<small>Offertes</small></b></div>
     <div class="app-acts">
-      <button class="app-btn sec acc-btn" id="btnAccount" style="display:none"><span class="dot"></span><span id="accTekst">Inloggen</span></button>
+      <button class="app-btn sec acc-btn" id="btnAccount" style="display:none"><span class="dot"></span><span id="accTekst">Koppelen</span></button>
       <button class="app-btn sec" id="btnInstall" style="display:none">⤓ Installeer app</button>
       <button class="app-btn sec" id="btnHelp" title="Uitleg">?</button>
     </div>
@@ -462,7 +462,6 @@ body.v-lijst #lijst, body.v-editor #editor{ display:block; }
       <div><h1>Mijn offertes</h1><p id="lTeller">Alles wordt automatisch bewaard op dit apparaat.</p></div>
       <button class="app-btn pri l-new" id="btnNieuw">+ Nieuwe offerte</button>
     </div>
-    <div class="sync-banner" id="syncBanner" style="display:none"><span><b>Op al je apparaten?</b> Log in, dan staan je offertes op je computer én je telefoon.</span><button class="app-btn pri" id="bannerLogin">Inloggen</button></div>
     <input class="l-zoek" id="zoek" type="search" placeholder="Zoek op naam, klant, project of offertenummer" style="display:none">
     <div class="l-list" id="lijstItems"></div>
     <div class="l-foot">
@@ -723,7 +722,7 @@ body.v-lijst #lijst, body.v-editor #editor{ display:block; }
   <h2>Welkom bij je offerte-app</h2>
   <p>Je eigen offerte, in de huisstijl van Testomgeving sync. Zo werkt het:</p>
   <ol class="m-steps">
-    <li><span class="n">1</span><span><b>Zet de app op je beginscherm</b><span id="installUitleg">Dan open je hem met één tik, net als een gewone app.</span></span></li>
+    <li><span class="n">1</span><span><b>Installeer de app</b><span id="installUitleg">Dan open je hem met één tik, net als een gewone app.</span></span></li>
     <li><span class="n">2</span><span><b>Maak een nieuwe offerte</b>Vul de klantgegevens en je posten in. Totalen rekenen vanzelf.</span></li>
     <li><span class="n">3</span><span><b>Download als PDF en verstuur</b>Alles wordt automatisch bewaard, dus je kunt later altijd verder.</span></li>
   </ol>
@@ -754,42 +753,33 @@ body.v-lijst #lijst, body.v-editor #editor{ display:block; }
   <div class="m-acts"><button class="app-btn pri" id="iosOk">Begrepen</button></div>
 </div></div>
 
-<div class="m-back" id="mLogin"><div class="m-box">
-  <img class="m-logo" src="img/4c04ea2d.png" alt="">
-  <h2 id="lgTitel">Inloggen</h2>
-  <p id="lgUitleg">Log in met het e-mailadres waarmee je bij ons bekend bent. Je offertes staan dan op al je apparaten.</p>
-  <div class="m-tabs" id="lgTabs"><button type="button" data-tab="in" class="on">Inloggen</button><button type="button" data-tab="nieuw">Eerste keer</button></div>
-  <form id="lgForm" novalidate>
-    <label class="m-lbl" for="lgEmail">E-mailadres</label>
-    <input class="m-input" id="lgEmail" type="email" autocomplete="email" placeholder="naam@bedrijf.nl">
-    <div id="lgPwBlok"><label class="m-lbl" for="lgPw">Wachtwoord</label>
-    <input class="m-input" id="lgPw" type="password" autocomplete="current-password" placeholder="Minimaal 8 tekens"></div>
-    <div class="m-fout" id="lgFout"></div><div class="m-ok" id="lgOk"></div>
-    <button type="button" class="m-link" id="lgVergeten">Wachtwoord vergeten?</button>
-    <div class="m-acts"><button type="button" class="app-btn lt" id="lgNee">Later</button><button type="submit" class="app-btn pri" id="lgJa">Inloggen</button></div>
-  </form>
+<div class="m-back" id="mSync"><div class="m-box">
+  <h2>Synchronisatie</h2>
+  <p id="syStatus"></p>
+  <div id="syTelefoon" style="margin-top:18px; padding-top:16px; border-top:1px solid #eee">
+    <b style="font-size:15px">Ook bekijken op je telefoon?</b>
+    <p style="margin-top:4px">Scan deze code met de camera van je telefoon. Je offertes staan dan ook daar, altijd gelijk met je computer.</p>
+    <div style="display:flex; gap:18px; align-items:center; flex-wrap:wrap; margin-top:12px">
+      <div id="syQr" style="width:150px; height:150px; flex:none; background:#f4f4f2; border-radius:10px; display:grid; place-items:center; font-size:12px; color:#999">QR-code laden…</div>
+      <div style="font-size:13.5px; color:#555; line-height:1.5; min-width:0; flex:1">Lukt scannen niet, of gebruik je de app vanaf je beginscherm? Tik daar op "Koppelen" en vul deze code in:<div id="syCode" style="font:800 22px/1.2 'Poppins',sans-serif; letter-spacing:2px; color:#1A1A1A; margin-top:8px">…</div><span style="font-size:12px; color:#999">15 minuten geldig</span></div>
+    </div>
+  </div>
+  <div class="m-acts"><button class="app-btn lt" id="syNu">Nu synchroniseren</button><button class="app-btn pri" id="syOk">Sluiten</button></div>
 </div></div>
 
-<div class="m-back" id="mAccount"><div class="m-box">
-  <h2>Je account</h2>
-  <p>Ingelogd als <b id="accEmail"></b>.</p>
-  <p id="accSync" style="margin-top:8px"></p>
-  <div class="m-acts"><button class="app-btn lt" id="accUit">Uitloggen</button><button class="app-btn lt" id="accNu">Nu synchroniseren</button><button class="app-btn pri" id="accOk">Sluiten</button></div>
-</div></div>
-
-<div class="m-back" id="mNieuwPw"><div class="m-box">
-  <h2>Kies een nieuw wachtwoord</h2>
-  <form id="npForm" novalidate>
-    <label class="m-lbl" for="npPw">Nieuw wachtwoord</label>
-    <input class="m-input" id="npPw" type="password" autocomplete="new-password" placeholder="Minimaal 8 tekens">
-    <div class="m-fout" id="npFout"></div>
-    <div class="m-acts"><button type="submit" class="app-btn pri">Opslaan</button></div>
+<div class="m-back" id="mKoppel"><div class="m-box">
+  <h2>Koppel dit apparaat</h2>
+  <p>Open je offerte-app op je computer, klik rechtsboven op "Gesynchroniseerd" en kijk bij "Ook bekijken op je telefoon". Vul de code hieronder in.</p>
+  <form id="kpForm" novalidate>
+    <input class="m-input" id="kpCode" type="text" maxlength="12" placeholder="Bijv. K7QM-2XAF" autocomplete="off" autocapitalize="characters" style="text-transform:uppercase; letter-spacing:2px; font-weight:700">
+    <div class="m-fout" id="kpFout"></div>
+    <div class="m-acts"><button type="button" class="app-btn lt" id="kpNee">Annuleren</button><button type="submit" class="app-btn pri" id="kpJa">Koppelen</button></div>
   </form>
 </div></div>
 
 <div class="toast" id="toast"></div>
 
-<script src="supabase.js"></script>
+<script src="qrcode.js"></script>
 <script>
 /* ===== Offerte-functies van de klant ===== */
 function parsePrice(txt){
@@ -1313,39 +1303,40 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('pagehide', function(){ if (cur && document.body.classList.contains('v-editor')) bewaar(); });
   document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'hidden' && cur && document.body.classList.contains('v-editor')) bewaar(); });
 
-  /* ---------- account & synchronisatie (Supabase) ---------- */
+  /* ---------- synchronisatie: de geheime sleutel uit de link van de klant ---------- */
   var sync = (function(){
-    var sb = null, sessie = null, lid = false, bezig = false, opnieuw = false, planT = null, staat = 'uit', laatst = 0;
-    var CUR_KEY = 'sync-cursor-' + CFG.slug, APP_URL = location.origin + location.pathname;
-    function aan(){ return !!(sb && sessie && lid); }
+    var KEY = 'oom-sleutel-' + CFG.slug, CUR_KEY = 'sync-cursor-' + CFG.slug, APP_URL = location.origin + location.pathname;
+    var sleutel = ls(KEY) || '', geldig = false, bezig = false, opnieuw = false, planT = null, staat = 'uit', laatst = 0;
+    function aan(){ return !!(sleutel && geldig); }
+
+    function rpc(naam, args){
+      return fetch(CFG.sbUrl + '/rest/v1/rpc/' + naam, { method: 'POST', headers: { apikey: CFG.sbKey, 'Content-Type': 'application/json' }, body: JSON.stringify(args) })
+        .then(function(r){ return r.text().then(function(t){ var j = null; try { j = t ? JSON.parse(t) : null; } catch (e) {} if (!r.ok) { var err = new Error((j && j.message) || ('HTTP ' + r.status)); err.status = r.status; err.code = j && j.code; throw err; } return j; }); });
+    }
 
     function zet(s){
       staat = s;
-      var b = $('btnAccount'); if (!b) return;
-      b.style.display = sb ? '' : 'none';
+      var b = $('btnAccount'); b.style.display = '';
       b.classList.remove('ok', 'bezig', 'fout');
-      if (!sessie) { $('accTekst').textContent = 'Inloggen'; }
+      if (!aan()) { $('accTekst').textContent = 'Koppelen'; b.title = 'Dit apparaat koppelen aan je offertes'; }
       else {
-        b.classList.add(s === 'ok' ? 'ok' : s === 'bezig' ? 'bezig' : s === 'fout' ? 'fout' : '');
+        if (s === 'ok') b.classList.add('ok'); else if (s === 'bezig') b.classList.add('bezig'); else if (s === 'fout' || s === 'offline') b.classList.add('fout');
         $('accTekst').textContent = s === 'bezig' ? 'Synchroniseren…' : s === 'fout' ? 'Niet gesynchroniseerd' : s === 'offline' ? 'Offline' : 'Gesynchroniseerd';
+        b.title = 'Synchronisatie en telefoon';
       }
-      $('syncBanner').style.display = sb && !sessie ? '' : 'none';
-      $('footTekst').textContent = aan() ? 'Je offertes worden automatisch gesynchroniseerd met al je apparaten.' : 'Je offertes staan op dit apparaat. Log in om ze op al je apparaten te hebben.';
-      var a = $('accSync'); if (a) a.textContent = !lid ? '' : s === 'fout' ? 'De laatste synchronisatie is niet gelukt. Je wijzigingen staan veilig op dit apparaat en worden later opnieuw verstuurd.' : laatst ? 'Laatst gesynchroniseerd om ' + new Date(laatst).toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' }) + '.' : '';
+      $('footTekst').textContent = aan() ? 'Je offertes worden automatisch online bewaard en gesynchroniseerd.' : 'Je offertes staan op dit apparaat. Maak af en toe een back-up.';
+      $('syStatus').textContent = s === 'fout' ? 'De laatste synchronisatie is niet gelukt. Je wijzigingen staan veilig op dit apparaat en worden automatisch opnieuw verstuurd.'
+        : s === 'offline' ? 'Je bent offline. Je kunt gewoon doorwerken; zodra je weer internet hebt, wordt alles bijgewerkt.'
+        : 'Je offertes worden automatisch online bewaard.' + (laatst ? ' Laatst gesynchroniseerd om ' + new Date(laatst).toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' }) + '.' : '');
     }
 
-    function rij(d){ return { id: d.id, slug: CFG.slug, naam: d.naam || '', klant: d.klant || '', project: d.project || '', nummer: d.nummer || '', datum: d.datum || '', totaal: d.totaal || 0, html: d.html || '', created: d.created || d.updated, updated: d.updated, verwijderd: !!d.verwijderd }; }
+    function rij(d){ return { id: d.id, naam: d.naam || '', klant: d.klant || '', project: d.project || '', nummer: d.nummer || '', datum: d.datum || '', totaal: d.totaal || 0, html: d.html || '', created: d.created || d.updated, updated: d.updated, verwijderd: !!d.verwijderd }; }
     function reeks(lijst, fn){ return lijst.reduce(function(p, x){ return p.then(function(){ return fn(x); }); }, Promise.resolve()); }
 
     function push(){
       return store.all().then(function(docs){
-        var vuil = docs.filter(function(d){ return d.dirty !== false; });
-        return reeks(vuil, function(d){
-          return sb.from('offertes').select('updated').eq('id', d.id).maybeSingle().then(function(r){
-            if (r.error) throw r.error;
-            if (r.data && r.data.updated > d.updated) return false;
-            return sb.from('offertes').upsert(rij(d)).then(function(r2){ if (r2.error) throw r2.error; return true; });
-          }).then(function(){
+        return reeks(docs.filter(function(d){ return d.dirty !== false; }), function(d){
+          return rpc('oom_push', { p_slug: CFG.slug, p_sleutel: sleutel, p_doc: rij(d) }).then(function(){
             return store.get(d.id).then(function(nu){ if (nu && nu.updated === d.updated) { nu.dirty = false; return store.put(nu); } });
           });
         });
@@ -1353,32 +1344,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function pull(){
-      var cursor = ls(CUR_KEY) || '1970-01-01T00:00:00Z', vanaf = new Date(new Date(cursor).getTime() - 30000).toISOString(), veranderd = 0;
+      var cursor = ls(CUR_KEY) || '1970-01-01T00:00:00Z', veranderd = 0;
       function pagina(van){
-        return sb.from('offertes').select('*').eq('slug', CFG.slug).gt('server_tijd', van).order('server_tijd', { ascending: true }).limit(100).then(function(r){
-          if (r.error) throw r.error;
-          var rows = r.data || [];
+        return rpc('oom_pull', { p_slug: CFG.slug, p_sleutel: sleutel, p_sinds: van }).then(function(rows){
+          rows = rows || [];
           return reeks(rows, function(row){
             return store.get(row.id).then(function(loc){
-              if (loc && (loc.updated > row.updated || (loc.updated === row.updated && loc.dirty === false))) return;
-              if (loc && loc.dirty !== false && loc.updated > row.updated) return;
+              if (loc && loc.updated >= row.updated) return;
               var doc = { id: row.id, naam: row.naam, klant: row.klant, project: row.project, nummer: row.nummer, datum: row.datum, totaal: Number(row.totaal) || 0, html: row.html, created: row.created, updated: row.updated, verwijderd: row.verwijderd, dirty: false };
               veranderd++;
               return store.put(doc).then(function(){ werkOpenOfferteBij(doc); });
             });
           }).then(function(){
             if (rows.length) { cursor = rows[rows.length - 1].server_tijd; ls(CUR_KEY, cursor); }
-            if (rows.length === 100) return pagina(cursor);
+            if (rows.length === 50) return pagina(cursor);
           });
         });
       }
-      return pagina(vanaf).then(function(){ return veranderd; });
+      // kleine overlap, zodat niets gemist wordt; dubbele rijen worden hierboven overgeslagen
+      return pagina(new Date(new Date(cursor).getTime() - 30000).toISOString()).then(function(){ return veranderd; });
     }
 
     function werkOpenOfferteBij(doc){
       if (!cur || cur.id !== doc.id || !document.body.classList.contains('v-editor')) return;
       if (doc.verwijderd) { cur = null; location.hash = ''; toast('Deze offerte is op een ander apparaat verwijderd'); return; }
-      if (doc.updated <= cur.updated || saveT && $('status').textContent === 'Wijzigingen…') return;
+      if (doc.updated <= cur.updated || $('status').textContent === 'Wijzigingen…') return;
       loading = true; cur = doc; root.innerHTML = doc.html; initOfferte(); setTimeout(function(){ loading = false; }, 0);
       toonNaam(); toast('Bijgewerkt met de wijzigingen van je andere apparaat');
     }
@@ -1387,110 +1377,83 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!aan()) return Promise.resolve();
       if (!navigator.onLine) { zet('offline'); return Promise.resolve(); }
       if (bezig) { opnieuw = true; return Promise.resolve(); }
-      bezig = true; zet('bezig');
+      bezig = true; if (staat !== 'ok') zet('bezig');
       return push().then(pull).then(function(n){
         laatst = Date.now(); zet('ok');
         if (n && document.body.classList.contains('v-lijst')) renderLijst();
-      }, function(){ zet('fout'); }).then(function(){ bezig = false; if (opnieuw) { opnieuw = false; plan(); } });
+      }, function(e){
+        if (e && e.code === '42501') { vergeet(); toast('Deze koppeling werkt niet meer. Vraag ons om een nieuwe link.'); return; }
+        zet('fout');
+      }).then(function(){ bezig = false; if (opnieuw) { opnieuw = false; plan(); } });
     }
     function plan(){ if (!aan()) return; clearTimeout(planT); planT = setTimeout(nu, 1500); }
 
-    function controleerLid(){
-      return sb.from('app_leden').select('slug').eq('slug', CFG.slug).then(function(r){
-        if (r.error) { zet('fout'); return; }
-        lid = !!(r.data && r.data.length);
-        if (!lid) {
-          var email = sessie && sessie.user && sessie.user.email;
-          sb.auth.signOut();
-          openLogin();
-          $('lgFout').textContent = (email || 'Dit e-mailadres') + ' heeft geen toegang tot deze app. Gebruik het e-mailadres waarmee je bij OffertesOpMaat bekend bent, of mail ons via info@offertesopmaat.com.';
-          return;
-        }
-        $('mLogin').classList.remove('on');
-        zet('ok'); renderLijst(); return nu();
+    function gebruik(s){
+      return rpc('oom_check', { p_slug: CFG.slug, p_sleutel: s }).then(function(ok){
+        if (!ok) return false;
+        var nieuw = s !== sleutel; sleutel = s; geldig = true; ls(KEY, s);
+        if (nieuw) ls(CUR_KEY, '1970-01-01T00:00:00Z');
+        zet('ok'); renderLijst(); nu(); return true;
       });
     }
+    function vergeet(){ sleutel = ''; geldig = false; try { localStorage.removeItem(KEY); localStorage.removeItem(CUR_KEY); } catch (e) {} zet('uit'); }
 
-    /* ---- inlogvenster ---- */
-    var tab = 'in';
-    function zetTab(t){
-      tab = t;
-      $('lgTabs').querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-tab') === t); });
-      $('lgTabs').style.display = t === 'reset' ? 'none' : '';
-      $('lgPwBlok').style.display = t === 'reset' ? 'none' : '';
-      $('lgVergeten').style.display = t === 'in' ? '' : 'none';
-      $('lgTitel').textContent = t === 'nieuw' ? 'Account aanmaken' : t === 'reset' ? 'Wachtwoord vergeten' : 'Inloggen';
-      $('lgUitleg').textContent = t === 'nieuw' ? 'Gebruik het e-mailadres waarmee je bij OffertesOpMaat bekend bent en kies zelf een wachtwoord.' : t === 'reset' ? 'Vul je e-mailadres in. Je krijgt een mail met een link om een nieuw wachtwoord te kiezen.' : 'Log in met het e-mailadres waarmee je bij ons bekend bent. Je offertes staan dan op al je apparaten.';
-      $('lgJa').textContent = t === 'nieuw' ? 'Account aanmaken' : t === 'reset' ? 'Stuur de link' : 'Inloggen';
-      $('lgPw').setAttribute('autocomplete', t === 'nieuw' ? 'new-password' : 'current-password');
-      $('lgFout').textContent = ''; $('lgOk').textContent = '';
+    /* sleutel uit de link (#k=...) halen en uit de adresbalk verwijderen */
+    function leesLink(){
+      var m = /^#k=([0-9a-f]{24,})$/i.exec(location.hash);
+      if (!m) return false;
+      sleutel = m[1]; ls(KEY, sleutel); geldig = true;
+      history.replaceState(null, '', APP_URL);
+      if (typeof route === 'function' && started) route();
+      return true;
     }
-    function openLogin(){ zetTab('in'); $('mLogin').classList.add('on'); setTimeout(function(){ $('lgEmail').focus(); }, 30); }
-    function vertaal(e){
-      var m = (e && (e.message || e.error_description)) || '';
-      if (/invalid login/i.test(m)) return 'E-mailadres of wachtwoord klopt niet.';
-      if (/not confirmed/i.test(m)) return 'Je e-mailadres is nog niet bevestigd. Klik op de link in de bevestigingsmail.';
-      if (/already registered|already exists/i.test(m)) return 'Er bestaat al een account met dit e-mailadres. Kies "Inloggen".';
-      if (/rate limit|too many/i.test(m)) return 'Even te veel pogingen. Probeer het over een paar minuten opnieuw.';
-      if (/password/i.test(m) && /least|short|weak/i.test(m)) return 'Kies een wachtwoord van minimaal 8 tekens.';
-      if (/fetch|network/i.test(m)) return 'Geen verbinding. Controleer je internet en probeer het opnieuw.';
-      return 'Dat lukte niet: ' + m;
-    }
-    function verstuur(e){
-      e.preventDefault();
-      var email = $('lgEmail').value.trim(), pw = $('lgPw').value;
-      $('lgFout').textContent = ''; $('lgOk').textContent = '';
-      if (!/^\S+@\S+\.\S+$/.test(email)) { $('lgFout').textContent = 'Vul een geldig e-mailadres in.'; return; }
-      if (tab !== 'reset' && pw.length < 8) { $('lgFout').textContent = 'Je wachtwoord moet minimaal 8 tekens hebben.'; return; }
-      $('lgJa').disabled = true;
-      var p = tab === 'reset' ? sb.auth.resetPasswordForEmail(email, { redirectTo: APP_URL })
-        : tab === 'nieuw' ? sb.auth.signUp({ email: email, password: pw, options: { emailRedirectTo: APP_URL } })
-        : sb.auth.signInWithPassword({ email: email, password: pw });
-      p.then(function(r){
-        $('lgJa').disabled = false;
-        if (r.error) { $('lgFout').textContent = vertaal(r.error); return; }
-        if (tab === 'reset') { $('lgOk').textContent = 'Gelukt. Check je mail (ook je spam) voor de link om een nieuw wachtwoord te kiezen.'; return; }
-        if (tab === 'nieuw' && !r.data.session) { $('lgOk').textContent = 'Bijna klaar! We hebben een bevestigingsmail gestuurd naar ' + email + '. Klik op de link in die mail (check ook je spam); daarna ben je ingelogd.'; $('lgPw').value = ''; return; }
-        $('lgPw').value = '';
-      }, function(err){ $('lgJa').disabled = false; $('lgFout').textContent = vertaal(err); });
+    var started = false;
+
+    /* telefoon koppelen */
+    function toonTelefoon(){
+      $('syQr').innerHTML = 'QR-code laden…'; $('syCode').textContent = '…';
+      try {
+        var q = qrcode(0, 'M'); q.addData(APP_URL + '#k=' + sleutel); q.make();
+        $('syQr').innerHTML = q.createSvgTag({ cellSize: 4, margin: 2, scalable: true });
+        var svg = $('syQr').querySelector('svg'); if (svg) { svg.style.width = '150px'; svg.style.height = '150px'; }
+      } catch (e) { $('syQr').textContent = 'QR-code niet beschikbaar'; }
+      rpc('oom_maak_code', { p_slug: CFG.slug, p_sleutel: sleutel }).then(function(c){ $('syCode').textContent = c ? c.slice(0, 4) + '-' + c.slice(4) : '—'; }, function(){ $('syCode').textContent = 'Geen verbinding'; });
     }
 
     function start(){
-      if (!window.supabase || !CFG.sbUrl) { zet('uit'); return; }
-      try {
-        sb = window.supabase.createClient(CFG.sbUrl, CFG.sbKey, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: 'implicit', storageKey: 'oom-auth-' + CFG.slug } });
-      } catch (e) { sb = null; zet('uit'); return; }
-      sb.auth.onAuthStateChange(function(evt, s){
-        var was = sessie && sessie.user && sessie.user.id;
-        sessie = s;
-        if (evt === 'PASSWORD_RECOVERY') { $('mNieuwPw').classList.add('on'); setTimeout(function(){ $('npPw').focus(); }, 30); }
-        if (!s) { lid = false; zet('uit'); renderLijst(); return; }
-        if (!was || was !== s.user.id || !lid) setTimeout(controleerLid, 0); else zet(staat === 'uit' ? 'ok' : staat);
-      });
-      zet('uit');
-      $('btnAccount').onclick = function(){ if (!sessie) openLogin(); else { $('accEmail').textContent = sessie.user.email; zet(staat); $('mAccount').classList.add('on'); } };
-      $('bannerLogin').onclick = openLogin;
-      $('lgTabs').onclick = function(e){ var t = e.target.getAttribute('data-tab'); if (t) zetTab(t); };
-      $('lgVergeten').onclick = function(){ zetTab('reset'); };
-      $('lgNee').onclick = function(){ $('mLogin').classList.remove('on'); };
-      $('lgForm').onsubmit = verstuur;
-      $('accOk').onclick = function(){ $('mAccount').classList.remove('on'); };
-      $('accNu').onclick = function(){ nu().then(function(){ zet(staat); toast(staat === 'ok' ? 'Alles is gesynchroniseerd' : 'Synchroniseren lukte niet'); }); };
-      $('accUit').onclick = function(){ $('mAccount').classList.remove('on'); sb.auth.signOut().then(function(){ toast('Uitgelogd. Je offertes blijven op dit apparaat staan.'); }); };
-      $('npForm').onsubmit = function(e){
-        e.preventDefault(); var pw = $('npPw').value;
-        if (pw.length < 8) { $('npFout').textContent = 'Minimaal 8 tekens.'; return; }
-        sb.auth.updateUser({ password: pw }).then(function(r){
-          if (r.error) { $('npFout').textContent = vertaal(r.error); return; }
-          $('mNieuwPw').classList.remove('on'); $('npPw').value = ''; toast('Nieuw wachtwoord opgeslagen');
-        });
+      started = true;
+      if (!CFG.sbUrl) return;
+      zet(sleutel ? 'bezig' : 'uit');
+      if (sleutel) {
+        if (!navigator.onLine) { geldig = true; zet('offline'); }
+        else rpc('oom_check', { p_slug: CFG.slug, p_sleutel: sleutel }).then(function(ok){
+          if (ok) { geldig = true; zet('ok'); renderLijst(); nu(); }
+          else { vergeet(); toast('Deze koppeling werkt niet meer. Vraag ons om een nieuwe link.'); }
+        }, function(){ geldig = true; zet('fout'); });
+      }
+      $('btnAccount').onclick = function(){
+        if (!aan()) { $('kpFout').textContent = ''; $('kpCode').value = ''; $('mKoppel').classList.add('on'); setTimeout(function(){ $('kpCode').focus(); }, 30); return; }
+        zet(staat); $('mSync').classList.add('on'); toonTelefoon();
       };
-      window.addEventListener('online', plan);
-      window.addEventListener('offline', function(){ if (sessie) zet('offline'); });
+      $('syOk').onclick = function(){ $('mSync').classList.remove('on'); };
+      $('syNu').onclick = function(){ nu().then(function(){ toast(staat === 'ok' ? 'Alles is gesynchroniseerd' : 'Synchroniseren lukte niet'); }); };
+      $('kpNee').onclick = function(){ $('mKoppel').classList.remove('on'); };
+      $('kpForm').onsubmit = function(e){
+        e.preventDefault();
+        var code = $('kpCode').value.replace(/[\s-]/g, '').toUpperCase();
+        if (code.length !== 8) { $('kpFout').textContent = 'De code heeft 8 tekens, bijvoorbeeld K7QM-2XAF.'; return; }
+        $('kpJa').disabled = true; $('kpFout').textContent = '';
+        rpc('oom_gebruik_code', { p_slug: CFG.slug, p_code: code }).then(function(s){
+          if (!s) { $('kpJa').disabled = false; $('kpFout').textContent = 'Deze code klopt niet of is verlopen. Maak op je computer een nieuwe code.'; return; }
+          return gebruik(s).then(function(ok){ $('kpJa').disabled = false; if (ok) { $('mKoppel').classList.remove('on'); toast('Gekoppeld! Je offertes worden opgehaald.'); } });
+        }, function(){ $('kpJa').disabled = false; $('kpFout').textContent = 'Geen verbinding. Controleer je internet en probeer het opnieuw.'; });
+      };
+      window.addEventListener('online', function(){ if (aan()) nu(); });
+      window.addEventListener('offline', function(){ if (aan()) zet('offline'); });
       document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'visible') nu(); });
       setInterval(function(){ if (document.visibilityState === 'visible') nu(); }, 30000);
     }
-    return { start: start, plan: plan, nu: nu, aan: aan };
+    return { start: start, plan: plan, nu: nu, aan: aan, leesLink: leesLink };
   })();
 
   /* ---------- router ---------- */
@@ -1499,8 +1462,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (m) open(m[1]);
     else { cur = null; root.innerHTML = ''; toon('lijst'); renderLijst(); }
   }
-  window.addEventListener('hashchange', function(){ if (/access_token|error_description|type=recovery/.test(location.hash)) return; route(); });
-  if (/access_token|error_description|type=recovery/.test(location.hash)) { toon('lijst'); renderLijst(); } else route();
+  sync.leesLink();
+  window.addEventListener('hashchange', function(){ if (sync.leesLink()) return; route(); });
+  route();
   sync.start();
   if (!ls('welkom-' + CFG.slug)) $('mWelkom').classList.add('on');
 
